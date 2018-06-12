@@ -52,7 +52,8 @@ public class Member
     }
 
     @Override
-    public String toString(){
+    public String toString()
+    {
         return String.format(
             "Member [Id: %s, FirstName: %s, SecondName: %s, " +
             "FirstNameKana: %s, SecondNameKana: %s, NickName: %s, " +
