@@ -10,11 +10,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
+import java.time.LocalDate;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -102,6 +105,9 @@ public class RegisterMemberView extends JDialog
     private JLabel mLabelPhoneNumberHyphen2;
     private JTextField mTextBoxPhoneNumberSubscriber2;
     
+    private JButton mButtonRegister;
+    private JButton mButtonCancel;
+    
     public RegisterMemberView(JFrame parentFrame, RegisterMemberViewModel viewModel)
     {
         super(parentFrame);
@@ -110,9 +116,10 @@ public class RegisterMemberView extends JDialog
         
         this.initializeComponent();
         
-        this.setSize(RegisterMemberView.DefaultWindowWidth, RegisterMemberView.DefaultWindowHeight);
+        this.setMinimumSize(new Dimension(
+            RegisterMemberView.DefaultWindowWidth, RegisterMemberView.DefaultWindowHeight));
         this.setTitle(RegisterMemberView.DefaultWindowTitle);
-        this.setLocationRelativeTo(this.getParent());
+        this.setLocationRelativeTo(this.getParent());   
     }
     
     private void initializeComponent()
@@ -147,7 +154,7 @@ public class RegisterMemberView extends JDialog
         this.mLabelHeaderTitle.setFont(this.mFontHeaderTitle);
         this.mPanelHeader.add(this.mLabelHeaderTitle);
         
-        this.mPanelHeader.add(Box.createRigidArea(new Dimension(0, 5)));
+        this.mPanelHeader.add(Box.createVerticalStrut(5));
         
         this.mFontHeaderDescription = new Font(Font.DIALOG, Font.PLAIN, 12);
         this.mLabelHeaderDescription = new JLabel();
@@ -585,6 +592,28 @@ public class RegisterMemberView extends JDialog
             layoutConstraints, 0, GridBagConstraints.RELATIVE, 0.0, 1.0,
             emptyInsets, GridBagConstraints.BOTH);
         this.mPanelCenter.add(new JPanel(), layoutConstraints);
+        
+        /* Bottom */
+        this.setLayoutConstraints(
+            layoutConstraints, 0, 0, 1.0, 0.0, defaultInsets, GridBagConstraints.HORIZONTAL);
+        this.mPanelBottom.add(new JPanel(), layoutConstraints);
+        
+        /* Register Button */
+        this.mButtonRegister = new JButton();
+        this.mButtonRegister.setText("Register");
+        
+        this.setLayoutConstraints(
+            layoutConstraints, 1, 0, 0.0, 0.0, defaultInsets, GridBagConstraints.NONE);
+        this.mPanelBottom.add(this.mButtonRegister, layoutConstraints);
+        this.getRootPane().setDefaultButton(this.mButtonRegister);
+        
+        /* Cancel Button */
+        this.mButtonCancel = new JButton();
+        this.mButtonCancel.setText("Cancel");
+        
+        this.setLayoutConstraints(
+            layoutConstraints, 2, 0, 0.0, 0.0, defaultInsets, GridBagConstraints.NONE);
+        this.mPanelBottom.add(this.mButtonCancel, layoutConstraints);
     }
     
     private GridBagConstraints setLayoutConstraints(
@@ -606,8 +635,108 @@ public class RegisterMemberView extends JDialog
         this.mComboBoxPrefecture.addItemListener(itemListener);
     }
     
-    public String getSelectedPrefectureName()
+    public void addRegisterButtonClickListener(ActionListener actionListener)
+    {
+        this.mButtonRegister.addActionListener(actionListener);
+    }
+    
+    public void addCancelButtonClickListener(ActionListener actionListener)
+    {
+        this.mButtonCancel.addActionListener(actionListener);
+    }
+    
+    public String getMailAddress()
+    {
+        return this.mTextBoxMailAddress.getText();
+    }
+    
+    public String getMailAddressConfirm()
+    {
+        return this.mTextBoxMailAddressComfirm.getText();
+    }
+    
+    public String getPassword()
+    {
+        return this.mTextBoxPassword.getText();
+    }
+    
+    public String getPasswordConfirm()
+    {
+        return this.mTextBoxPasswordConfirm.getText();
+    }
+    
+    public String getFirstName()
+    {
+        return this.mTextBoxFirstName.getText();
+    }
+    
+    public String getSecondName()
+    {
+        return this.mTextBoxSecondName.getText();
+    }
+    
+    public String getFirstNameKana()
+    {
+        return this.mTextBoxFirstNameKana.getText();
+    }
+    
+    public String getSecondNameKana()
+    {
+        return this.mTextBoxSecondNameKana.getText();
+    }
+    
+    public String getNickName()
+    {
+        return this.mTextBoxNickName.getText();
+    }
+    
+    public Gender getSelectedGender()
+    {
+        return this.mGenderSelectionControl.getSelectedGender();
+    }
+    
+    public LocalDate getSelectedBirthDate()
+    {
+        return this.mDateSelectionControl.getSelectedDate();
+    }
+    
+    public String getPostcode1()
+    {
+        return this.mTextBoxPostcode1.getText();
+    }
+    
+    public String getPostcode2()
+    {
+        return this.mTextBoxPostcode2.getText();
+    }
+    
+    public String getSelectedPrefecture()
     {
         return (String)this.mComboBoxPrefecture.getModel().getSelectedItem();
+    }
+    
+    public String getAddress1()
+    {
+        return this.mTextBoxAddress1.getText();
+    }
+    
+    public String getAddress2()
+    {
+        return this.mTextBoxAddress2.getText();
+    }
+    
+    public String getPhoneNumberAreaCode()
+    {
+        return this.mTextBoxPhoneNumberAreaCode.getText();
+    }
+    
+    public String getPhoneNumberSubscriber1()
+    {
+        return this.mTextBoxPhoneNumberSubscriber1.getText();
+    }
+    
+    public String getPhoneNumberSubscriber2()
+    {
+        return this.mTextBoxPhoneNumberSubscriber2.getText();
     }
 }
