@@ -19,6 +19,8 @@ public class MainController
         
         this.mView.addLogInListener(new LogInListener());
         this.mView.addMemberRegisterListener(new MemberRegisterListener());
+        
+        this.mModel.addModelListener(new ModelChangeListener());
     }
     
     private class MemberRegisterListener implements ActionListener
@@ -52,6 +54,20 @@ public class MainController
             
             // Call MainController.setLoggedInMember() with null because no one has logged in
             MainController.this.mModel.setLoggedInMember(null);
+        }
+    }
+    
+    private class ModelChangeListener implements ModelListener
+    {
+        @Override
+        public void modelChanged(ModelEvent e)
+        {
+            // TODO: Implement appropriate program for modelChanged event
+            System.out.println("ModelChangeListener::modelChanged() called.");
+            
+            // For instance, you can change the title of the window
+            // MainController.this.mView.setTitle(
+            //     MainController.this.mModel.loggedInMember().nickName());
         }
     }
 }
