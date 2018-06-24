@@ -52,6 +52,14 @@ public class MainController
             // TODO: Implement appropriate program for login
             System.out.println("LogInListener::actionPerformed() called.");
             
+            LoginViewModel loginViewModel = new LoginViewModel();
+            LoginView loginView = new LoginView(MainController.this.mView, loginViewModel);
+            LoginViewController loginViewController = new LoginViewController(loginView, loginViewModel);
+            
+            // Show the login dialog
+            loginView.setModalityType(ModalityType.APPLICATION_MODAL);
+            loginView.setVisible(true);
+            
             // Call MainController.setLoggedInMember() with null because no one has logged in
             MainController.this.mModel.setLoggedInMember(null);
         }
