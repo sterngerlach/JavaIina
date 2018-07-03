@@ -16,6 +16,8 @@ public class Member
     private ZonedDateTime mBirthDate;
     private ZonedDateTime mRegisterDate;
     private Gender mGender;
+    private String mAddress;
+    private String mPostcode;
     private String mPhoneNumber;
     private String mEmailAddress;
     
@@ -28,6 +30,8 @@ public class Member
     public ZonedDateTime birthDate() { return this.mBirthDate; }
     public ZonedDateTime registerDate() { return this.mRegisterDate; }
     public Gender gender() { return this.mGender; }
+    public String address() { return this.mAddress; }
+    public String postcode() { return this.mPostcode; }
     public String phoneNumber() { return this.mPhoneNumber; }
     public String emailAddress() { return this.mEmailAddress; }
     
@@ -35,7 +39,8 @@ public class Member
         long id, String firstName, String secondName,
         String firstNameKana, String secondNameKana, String nickName,
         ZonedDateTime birthDate, ZonedDateTime registerDate,
-        Gender gender, String phoneNumber, String emailAddress)
+        Gender gender, String address, String postcode,
+        String phoneNumber, String emailAddress)
     {
         // TODO: Validity check may be needed
         this.mId = id;
@@ -47,6 +52,8 @@ public class Member
         this.mBirthDate = birthDate;
         this.mRegisterDate = registerDate;
         this.mGender = gender;
+        this.mAddress = address;
+        this.mPostcode = postcode;
         this.mPhoneNumber = phoneNumber;
         this.mEmailAddress = emailAddress;
     }
@@ -58,10 +65,12 @@ public class Member
             "Member [Id: %s, FirstName: %s, SecondName: %s, " +
             "FirstNameKana: %s, SecondNameKana: %s, NickName: %s, " +
             "BirthDate: %s, RegisterDate: %s, Gender: %s, " +
+            "Address: %s, Postcode: %s, " +
             "PhoneNumber: %s, EmailAddress: %s]",
             this.mId, this.mFirstName, this.mSecondName,
             this.mFirstNameKana, this.mSecondNameKana,
             this.mNickName, this.mBirthDate, this.mRegisterDate,
-            this.mGender, this.mPhoneNumber, this.mEmailAddress);
+            this.mGender, this.mAddress, this.mPostcode,
+            this.mPhoneNumber, this.mEmailAddress);
     } 
 }
