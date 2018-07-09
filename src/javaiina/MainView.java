@@ -39,8 +39,10 @@ public class MainView extends JFrame
     private JMenuItem mMenuItemExit;
     
     private JToolBar mToolBarMain;
-    private JButton mButtonLogIn;
+    private JButton mButtonLogin;
     private JButton mButtonRegisterMember;
+    
+    private StartMenuPanel mStartMenuPanel;
     
     private JPanel mPanelStatusBar;
     private JLabel mLabelStatusBar;
@@ -90,13 +92,17 @@ public class MainView extends JFrame
         this.mToolBarMain.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.mPanelToolBar.add(this.mToolBarMain);
         
-        this.mButtonLogIn = new JButton("Login");
-        this.mButtonLogIn.setMnemonic(KeyEvent.VK_L);
-        this.mToolBarMain.add(this.mButtonLogIn);
+        this.mButtonLogin = new JButton("Login");
+        this.mButtonLogin.setMnemonic(KeyEvent.VK_L);
+        this.mToolBarMain.add(this.mButtonLogin);
         
         this.mButtonRegisterMember = new JButton("Member Registration");
         this.mButtonRegisterMember.setMnemonic(KeyEvent.VK_R);
         this.mToolBarMain.add(this.mButtonRegisterMember);
+        
+        /* Start Menu Panel */
+        this.mStartMenuPanel = new StartMenuPanel();
+        this.getContentPane().add(this.mStartMenuPanel, BorderLayout.CENTER);
         
         /* Statusbar */
         this.mPanelStatusBar = new JPanel();
@@ -113,10 +119,12 @@ public class MainView extends JFrame
     public void addMemberRegisterListener(ActionListener actionListener)
     {
         this.mButtonRegisterMember.addActionListener(actionListener);
+        this.mStartMenuPanel.addRegisterMemberListener(actionListener);
     }
     
-    public void addLogInListener(ActionListener actionListener)
+    public void addLoginListener(ActionListener actionListener)
     {
-        this.mButtonLogIn.addActionListener(actionListener);
+        this.mButtonLogin.addActionListener(actionListener);
+        this.mStartMenuPanel.addLoginListener(actionListener);
     }
 }

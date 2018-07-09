@@ -17,7 +17,7 @@ public class MainController
         this.mView = mainView;
         this.mModel = mainModel;
         
-        this.mView.addLogInListener(new LogInListener());
+        this.mView.addLoginListener(new LogInListener());
         this.mView.addMemberRegisterListener(new MemberRegisterListener());
         
         this.mModel.addModelListener(new ModelChangeListener());
