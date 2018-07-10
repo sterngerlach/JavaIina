@@ -43,6 +43,7 @@ public class MainView extends JFrame
     private JButton mButtonRegisterMember;
     
     private StartMenuPanel mStartMenuPanel;
+    private MainMenuPanel mMainMenuPanel;
     
     private JPanel mPanelStatusBar;
     private JLabel mLabelStatusBar;
@@ -90,7 +91,7 @@ public class MainView extends JFrame
         this.mToolBarMain = new JToolBar();
         this.mToolBarMain.setFloatable(true);
         this.mToolBarMain.setAlignmentX(Component.LEFT_ALIGNMENT);
-        this.mPanelToolBar.add(this.mToolBarMain);
+        // this.mPanelToolBar.add(this.mToolBarMain);
         
         this.mButtonLogin = new JButton("Login");
         this.mButtonLogin.setMnemonic(KeyEvent.VK_L);
@@ -102,7 +103,9 @@ public class MainView extends JFrame
         
         /* Start Menu Panel */
         this.mStartMenuPanel = new StartMenuPanel();
-        this.getContentPane().add(this.mStartMenuPanel, BorderLayout.CENTER);
+        
+        /* Main Menu Panel */
+        this.mMainMenuPanel = new MainMenuPanel();
         
         /* Statusbar */
         this.mPanelStatusBar = new JPanel();
@@ -126,5 +129,52 @@ public class MainView extends JFrame
     {
         this.mButtonLogin.addActionListener(actionListener);
         this.mStartMenuPanel.addLoginListener(actionListener);
+    }
+    
+    public void addSearchAndBorrowListener(ActionListener actionListener)
+    {
+        this.mMainMenuPanel.addSearchAndBorrowListener(actionListener);
+    }
+    
+    public void addShowBorrowingItemsListener(ActionListener actionListener)
+    {
+        this.mMainMenuPanel.addShowBorrowingItemsListener(actionListener);
+    }
+    
+    public void addShowMemberInfoListener(ActionListener actionListener)
+    {
+        this.mMainMenuPanel.addShowMemberInfoListener(actionListener);
+    }
+    
+    public void addLogoutListener(ActionListener actionListener)
+    {
+        this.mMainMenuPanel.addLogoutListener(actionListener);
+    }
+    
+    private void removeComponentFromCenter()
+    {
+        BorderLayout borderLayout = (BorderLayout)this.getContentPane().getLayout();
+        Component layoutComponent = borderLayout.getLayoutComponent(BorderLayout.CENTER);
+        
+        if (layoutComponent != null)
+            this.getContentPane().remove(layoutComponent);
+    }
+    
+    public void switchToStartMenu()
+    {
+        this.removeComponentFromCenter();
+        this.mPanelToolBar.add(this.mToolBarMain);
+        this.getContentPane().add(this.mStartMenuPanel);
+        this.revalidate();
+        this.repaint();
+    }
+    
+    public void switchToMainMenu()
+    {
+        this.removeComponentFromCenter();
+        this.mPanelToolBar.remove(this.mToolBarMain);
+        this.getContentPane().add(this.mMainMenuPanel);
+        this.revalidate();
+        this.repaint();
     }
 }

@@ -19,6 +19,9 @@ public class MainController
         
         this.mView.addLoginListener(new LogInListener());
         this.mView.addMemberRegisterListener(new MemberRegisterListener());
+        this.mView.addLogoutListener(e -> this.performLogout());
+        
+        this.mView.switchToStartMenu();
         
         this.mModel.addModelListener(new ModelChangeListener());
     }
@@ -60,6 +63,9 @@ public class MainController
             loginView.setModalityType(ModalityType.APPLICATION_MODAL);
             loginView.setVisible(true);
             
+            // Switch to main menu if both user name and password are valid
+            MainController.this.mView.switchToMainMenu();
+            
             // Call MainController.setLoggedInMember() with null because no one has logged in
             MainController.this.mModel.setLoggedInMember(null);
         }
@@ -77,5 +83,17 @@ public class MainController
             // MainController.this.mView.setTitle(
             //     MainController.this.mModel.loggedInMember().nickName());
         }
+    }
+    
+    private void performLogout()
+    {
+        // TODO: Implement program for logout
+        System.out.println("MainController::performLogout() called.");
+        
+        // Switch to start menu
+        MainController.this.mView.switchToStartMenu();
+        
+        // Call MainController.setLoggedInMember() with null because no one has logged in
+        MainController.this.mModel.setLoggedInMember(null);
     }
 }
