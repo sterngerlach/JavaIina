@@ -5,6 +5,8 @@ package javaiina;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -67,9 +69,10 @@ public final class Prefecture
     
     public static int getPrefectureIdFromName(String prefectureName)
     {
-        var prefectureEntry = Prefecture.JapanPrefectures.entrySet().stream()
-            .filter(entry -> entry.getValue().equals(prefectureName))
-            .findFirst();
+        Optional<Entry<Integer, String>> prefectureEntry =
+            Prefecture.JapanPrefectures.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(prefectureName))
+                .findFirst();
         
         if (!prefectureEntry.isPresent())
             throw new IllegalArgumentException("prefectureName");
@@ -79,9 +82,10 @@ public final class Prefecture
     
     public static String getPrefectureNameFromId(int prefectureId)
     {
-        var prefectureEntry = Prefecture.JapanPrefectures.entrySet().stream()
-            .filter(entry -> entry.getKey().intValue() == prefectureId)
-            .findFirst();
+        Optional<Entry<Integer, String>> prefectureEntry =
+            Prefecture.JapanPrefectures.entrySet().stream()
+                .filter(entry -> entry.getKey().intValue() == prefectureId)
+                .findFirst();
         
         if (!prefectureEntry.isPresent())
             throw new IllegalArgumentException("prefectureId");
