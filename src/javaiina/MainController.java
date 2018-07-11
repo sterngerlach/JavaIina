@@ -37,14 +37,16 @@ public class MainController
         {
             // TODO: Implement appropriate program for member registration
             System.out.println("MemberRegisterListener::actionPerformed() called.");
-            
-            RegisterMemberViewModel memberModel = new RegisterMemberViewModel();
-            RegisterMemberView memberView = new RegisterMemberView(MainController.this.mView, memberModel);
-            RegisterMemberViewController memberController = new RegisterMemberViewController(memberView, memberModel);
-            
+
             // Show the member registration dialog
+            RegisterMemberView memberView = new RegisterMemberView(MainController.this.mView);            
             memberView.setModalityType(ModalityType.APPLICATION_MODAL);
             memberView.setVisible(true);
+            
+            if (memberView.getResult() == DialogResult.Cancel)
+                return;
+            
+            // TODO: Database access may be needed
             
             // Call MainController.setLoggedInMember() with null because no one has logged in
             MainController.this.mModel.setLoggedInMember(null);
@@ -58,10 +60,9 @@ public class MainController
         {
             // TODO: Implement appropriate program for login
             System.out.println("LogInListener::actionPerformed() called.");
-            
-            LoginView loginView = new LoginView(MainController.this.mView);
-            
+
             // Show the login dialog
+            LoginView loginView = new LoginView(MainController.this.mView);
             loginView.setModalityType(ModalityType.APPLICATION_MODAL);
             loginView.setVisible(true);
             

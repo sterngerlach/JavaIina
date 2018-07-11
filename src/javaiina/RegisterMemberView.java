@@ -11,6 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.time.LocalDate;
 
@@ -36,7 +37,7 @@ public class RegisterMemberView extends JDialog
     
     private static final String DefaultWindowTitle = "Member Registration";
     
-    private RegisterMemberViewModel mModel;
+    private DialogResult mResult;
     
     private JPanel mPanelHeader;
     private JPanel mPanelCenter;
@@ -108,13 +109,12 @@ public class RegisterMemberView extends JDialog
     private JButton mButtonRegister;
     private JButton mButtonCancel;
     
-    public RegisterMemberView(JFrame parentFrame, RegisterMemberViewModel viewModel)
+    public RegisterMemberView(JFrame parentFrame)
     {
         super(parentFrame);
         
-        this.mModel = viewModel;
-        
         this.initializeComponent();
+        this.addEventHandler();
         
         this.setMinimumSize(new Dimension(
             RegisterMemberView.DefaultWindowWidth, RegisterMemberView.DefaultWindowHeight));
@@ -388,7 +388,7 @@ public class RegisterMemberView extends JDialog
         this.mPanelCenter.add(this.mLabelBirthDate, layoutConstraints);
         
         /* Date Selection Control */
-        this.mDateSelectionControl = new DateSelectionControl(this.mModel.MinBirthDate);
+        this.mDateSelectionControl = new DateSelectionControl(MainModel.MinBirthDate);
         
         this.setLayoutConstraints(
             layoutConstraints, 1, 8, 0.0, 0.0, defaultInsets, GridBagConstraints.NONE);
@@ -616,6 +616,16 @@ public class RegisterMemberView extends JDialog
         this.mPanelBottom.add(this.mButtonCancel, layoutConstraints);
     }
     
+    private void addEventHandler()
+    {
+        this.mComboBoxPrefecture.addItemListener(
+            e -> this.onComboBoxPrefectureSelectionChanged(e));
+        this.mButtonRegister.addActionListener(
+            e -> this.onButtonRegisterClick());
+        this.mButtonCancel.addActionListener(
+            e -> this.onButtonCancelClick());
+    }
+    
     private GridBagConstraints setLayoutConstraints(
         GridBagConstraints layoutConstraints,
         int gridx, int gridy, double weightx, double weighty, Insets insets, int fill)
@@ -630,19 +640,25 @@ public class RegisterMemberView extends JDialog
         return layoutConstraints;
     }
     
-    public void addPrefectureChangeListener(ItemListener itemListener)
+    private void onComboBoxPrefectureSelectionChanged(ItemEvent e)
     {
-        this.mComboBoxPrefecture.addItemListener(itemListener);
+        if (e.getStateChange() != ItemEvent.SELECTED)
+            return;
     }
     
-    public void addRegisterButtonClickListener(ActionListener actionListener)
+    private void onButtonRegisterClick()
     {
-        this.mButtonRegister.addActionListener(actionListener);
+        this.mResult = DialogResult.OK;
     }
     
-    public void addCancelButtonClickListener(ActionListener actionListener)
+    private void onButtonCancelClick()
     {
-        this.mButtonCancel.addActionListener(actionListener);
+        this.mResult = DialogResult.Cancel;
+    }
+    
+    public DialogResult getResult()
+    {
+        return this.mResult;
     }
     
     public String getMailAddress()
