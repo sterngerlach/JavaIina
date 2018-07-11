@@ -19,9 +19,13 @@ public class MainController
         
         this.mView.addLoginListener(new LogInListener());
         this.mView.addMemberRegisterListener(new MemberRegisterListener());
-        this.mView.addLogoutListener(e -> this.performLogout());
+        this.mView.getMainMenuPanel().addShowItemsListener(e -> this.onShowItems());
+        this.mView.getMainMenuPanel().addShowBorrowingItemsListener(e -> this.onShowBorrowingItems());
+        this.mView.getMainMenuPanel().addShowMemberInfoListener(e -> this.onShowMemberInfo());
+        this.mView.getMainMenuPanel().addLogoutListener(e -> this.onLogout());
+        this.mView.getItemsPanel().addBorrowItemListener(e -> this.onBorrowItem());
         
-        this.mView.switchToStartMenu();
+        this.mView.switchToStartMenuPanel();
         
         this.mModel.addModelListener(new ModelChangeListener());
     }
@@ -64,7 +68,7 @@ public class MainController
             loginView.setVisible(true);
             
             // Switch to main menu if both user name and password are valid
-            MainController.this.mView.switchToMainMenu();
+            MainController.this.mView.switchToMainMenuPanel();
             
             // Call MainController.setLoggedInMember() with null because no one has logged in
             MainController.this.mModel.setLoggedInMember(null);
@@ -85,15 +89,37 @@ public class MainController
         }
     }
     
-    private void performLogout()
+    private void onShowItems()
+    {
+        // Switch to items panel
+        this.mView.switchToItemsPanel();
+    }
+    
+    private void onShowBorrowingItems()
+    {
+        // Switch to borrowing items panel
+    }
+    
+    private void onShowMemberInfo()
+    {
+        // Switch to member information panel
+    }
+    
+    private void onLogout()
     {
         // TODO: Implement program for logout
         System.out.println("MainController::performLogout() called.");
         
         // Switch to start menu
-        MainController.this.mView.switchToStartMenu();
+        this.mView.switchToStartMenuPanel();
         
         // Call MainController.setLoggedInMember() with null because no one has logged in
-        MainController.this.mModel.setLoggedInMember(null);
+        this.mModel.setLoggedInMember(null);
+    }
+    
+    private void onBorrowItem()
+    {
+        // TODO: Implement program for borrowing
+        // RentalObject borrowedObject = this.mView.getItemsPanel().getSelectedRentalObject();
     }
 }
