@@ -17,6 +17,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
@@ -42,22 +43,45 @@ public class MainView extends JFrame
     private JButton mButtonLogin;
     private JButton mButtonRegisterMember;
     
+    private JTabbedPane mTabbedPaneMain;
     private StartMenuPanel mStartMenuPanel;
     private MainMenuPanel mMainMenuPanel;
+    private ItemsPanel mItemsPanel;
     
     private JPanel mPanelStatusBar;
     private JLabel mLabelStatusBar;
     
-    public MainView(MainModel mainModel, String title)
+    public StartMenuPanel getStartMenuPanel()
     {
-        this.mModel = mainModel;
-        
+        return this.mStartMenuPanel;
+    }
+    
+    public MainMenuPanel getMainMenuPanel()
+    {
+        return this.mMainMenuPanel;
+    }
+    
+    public ItemsPanel getItemsPanel()
+    {
+        return this.mItemsPanel;
+    }
+    
+    public MainView(String title)
+    {
         this.initializeComponent();
         
         this.setSize(MainView.DefaultWindowWidth, MainView.DefaultWindowHeight);
         this.setTitle(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+    }
+    
+    public void setModel(MainModel mainModel)
+    {
+        this.mModel = mainModel;
+        this.mStartMenuPanel.setModel(this.mModel);
+        this.mMainMenuPanel.setModel(this.mModel);
+        this.mItemsPanel.setModel(this.mModel);
     }
     
     private void initializeComponent()
@@ -101,11 +125,18 @@ public class MainView extends JFrame
         this.mButtonRegisterMember.setMnemonic(KeyEvent.VK_R);
         this.mToolBarMain.add(this.mButtonRegisterMember);
         
+        /* Tabbed Pane */
+        this.mTabbedPaneMain = new JTabbedPane(JTabbedPane.TOP);
+        this.getContentPane().add(this.mTabbedPaneMain, BorderLayout.CENTER);
+        
         /* Start Menu Panel */
         this.mStartMenuPanel = new StartMenuPanel();
         
         /* Main Menu Panel */
         this.mMainMenuPanel = new MainMenuPanel();
+        
+        /* Items Panel */
+        this.mItemsPanel = new ItemsPanel();
         
         /* Statusbar */
         this.mPanelStatusBar = new JPanel();
@@ -131,50 +162,24 @@ public class MainView extends JFrame
         this.mStartMenuPanel.addLoginListener(actionListener);
     }
     
-    public void addSearchAndBorrowListener(ActionListener actionListener)
+    public void switchToStartMenuPanel()
     {
-        this.mMainMenuPanel.addSearchAndBorrowListener(actionListener);
-    }
-    
-    public void addShowBorrowingItemsListener(ActionListener actionListener)
-    {
-        this.mMainMenuPanel.addShowBorrowingItemsListener(actionListener);
-    }
-    
-    public void addShowMemberInfoListener(ActionListener actionListener)
-    {
-        this.mMainMenuPanel.addShowMemberInfoListener(actionListener);
-    }
-    
-    public void addLogoutListener(ActionListener actionListener)
-    {
-        this.mMainMenuPanel.addLogoutListener(actionListener);
-    }
-    
-    private void removeComponentFromCenter()
-    {
-        BorderLayout borderLayout = (BorderLayout)this.getContentPane().getLayout();
-        Component layoutComponent = borderLayout.getLayoutComponent(BorderLayout.CENTER);
-        
-        if (layoutComponent != null)
-            this.getContentPane().remove(layoutComponent);
-    }
-    
-    public void switchToStartMenu()
-    {
-        this.removeComponentFromCenter();
+        this.mTabbedPaneMain.removeAll();
+        this.mTabbedPaneMain.addTab(this.mStartMenuPanel.getPanelName(), this.mStartMenuPanel);
         this.mPanelToolBar.add(this.mToolBarMain);
-        this.getContentPane().add(this.mStartMenuPanel);
-        this.revalidate();
-        this.repaint();
     }
     
-    public void switchToMainMenu()
+    public void switchToMainMenuPanel()
     {
-        this.removeComponentFromCenter();
+        this.mTabbedPaneMain.removeAll();
+        this.mTabbedPaneMain.addTab(this.mMainMenuPanel.getPanelName(), this.mMainMenuPanel);
+        this.mTabbedPaneMain.addTab(this.mItemsPanel.getPanelName(), this.mItemsPanel);
+        this.mTabbedPaneMain.setSelectedComponent(this.mMainMenuPanel);
         this.mPanelToolBar.remove(this.mToolBarMain);
-        this.getContentPane().add(this.mMainMenuPanel);
-        this.revalidate();
-        this.repaint();
+    }
+    
+    public void switchToItemsPanel()
+    {
+        this.mTabbedPaneMain.setSelectedComponent(this.mItemsPanel);
     }
 }
