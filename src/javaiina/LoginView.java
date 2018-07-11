@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -17,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -51,6 +51,8 @@ public class LoginView extends JDialog
     
     private JButton mButtonLogin;
     private JButton mButtonCancel;
+    
+    private InputValidator<LoginView> mInputValidator;
     
     public LoginView(JFrame parentFrame)
     {
@@ -190,11 +192,26 @@ public class LoginView extends JDialog
     private void onButtonLoginClick()
     {
         this.mResult = DialogResult.OK;
+        
+        if (!this.mInputValidator.validateInput(this)) {
+            JOptionPane.showMessageDialog(
+                this, this.mInputValidator.getMessage(),
+                LoginView.DefaultWindowTitle, JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        this.setVisible(false);
     }
     
     private void onButtonCancelClick()
     {
         this.mResult = DialogResult.Cancel;
+        this.setVisible(false);
+    }
+    
+    public void setInputValidator(InputValidator<LoginView> inputValidator)
+    {
+        this.mInputValidator = inputValidator;
     }
     
     public DialogResult getResult()

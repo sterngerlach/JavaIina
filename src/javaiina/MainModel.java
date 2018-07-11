@@ -3,6 +3,8 @@
 
 package javaiina;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +13,8 @@ import javax.swing.event.EventListenerList;
 
 public class MainModel
 {
+    public static final LocalDate MinBirthDate = LocalDate.of(1900, Month.JANUARY, 1);
+    
     private EventListenerList mEventListenerList;
     private Member mLoggedInMember;
     

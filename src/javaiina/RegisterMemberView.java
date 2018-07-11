@@ -8,11 +8,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.time.LocalDate;
 
 import javax.swing.Box;
@@ -23,6 +20,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -108,6 +106,8 @@ public class RegisterMemberView extends JDialog
     
     private JButton mButtonRegister;
     private JButton mButtonCancel;
+    
+    private InputValidator<RegisterMemberView> mInputValidator;
     
     public RegisterMemberView(JFrame parentFrame)
     {
@@ -649,11 +649,26 @@ public class RegisterMemberView extends JDialog
     private void onButtonRegisterClick()
     {
         this.mResult = DialogResult.OK;
+        
+        if (!this.mInputValidator.validateInput(this)) {
+            JOptionPane.showMessageDialog(
+                this, this.mInputValidator.getMessage(),
+                RegisterMemberView.DefaultWindowTitle, JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        this.setVisible(false);
     }
     
     private void onButtonCancelClick()
     {
         this.mResult = DialogResult.Cancel;
+        this.setVisible(false);
+    }
+    
+    public void setInputValidator(InputValidator<RegisterMemberView> inputValidator)
+    {
+        this.mInputValidator = inputValidator;
     }
     
     public DialogResult getResult()

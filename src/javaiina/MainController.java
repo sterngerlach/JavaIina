@@ -39,14 +39,30 @@ public class MainController
             System.out.println("MemberRegisterListener::actionPerformed() called.");
 
             // Show the member registration dialog
-            RegisterMemberView memberView = new RegisterMemberView(MainController.this.mView);            
+            RegisterMemberView memberView = new RegisterMemberView(MainController.this.mView);
+            
+            memberView.setInputValidator(new InputValidator<RegisterMemberView>() {
+                @Override
+                public boolean validateInput(RegisterMemberView userInput)
+                {
+                    // TODO: Validate user input
+                    return true;
+                }
+            });
+            
             memberView.setModalityType(ModalityType.APPLICATION_MODAL);
             memberView.setVisible(true);
             
             if (memberView.getResult() == DialogResult.Cancel)
                 return;
             
+            // If the dialog is closed, all input fields are valid
+            // Therefore, sanity check is not needed
+            
             // TODO: Database access may be needed
+            
+            // Switch to main menu if all input fields are valid
+            MainController.this.mView.switchToMainMenuPanel();
             
             // Call MainController.setLoggedInMember() with null because no one has logged in
             MainController.this.mModel.setLoggedInMember(null);
@@ -63,6 +79,18 @@ public class MainController
 
             // Show the login dialog
             LoginView loginView = new LoginView(MainController.this.mView);
+            
+            loginView.setInputValidator(new InputValidator<LoginView>() {
+                @Override
+                public boolean validateInput(LoginView userInput)
+                {
+                    // TODO: Validate user input
+                    // String inputUserId = userInput.getUserId();
+                    // String inputUserPassword = userInput.getPassword();
+                    return true;
+                }
+            });
+            
             loginView.setModalityType(ModalityType.APPLICATION_MODAL);
             loginView.setVisible(true);
             
