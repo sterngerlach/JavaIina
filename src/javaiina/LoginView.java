@@ -31,7 +31,7 @@ public class LoginView extends JDialog
     
     private static final String DefaultWindowTitle = "Login";
     
-    private LoginViewModel mModel;
+    private DialogResult mResult;
     
     private JPanel mPanelHeader;
     private JPanel mPanelCenter;
@@ -52,13 +52,12 @@ public class LoginView extends JDialog
     private JButton mButtonLogin;
     private JButton mButtonCancel;
     
-    public LoginView(JFrame parentFrame, LoginViewModel viewModel)
+    public LoginView(JFrame parentFrame)
     {
         super(parentFrame);
         
-        this.mModel = viewModel;
-        
         this.initializeComponent();
+        this.addEventHandler();
         
         this.setMinimumSize(new Dimension(
             LoginView.DefaultWindowWidth, LoginView.DefaultWindowHeight));
@@ -168,6 +167,12 @@ public class LoginView extends JDialog
         this.mPanelBottom.add(this.mButtonCancel, layoutConstraints);
     }
     
+    private void addEventHandler()
+    {
+        this.mButtonLogin.addActionListener(e -> this.onButtonLoginClick());
+        this.mButtonCancel.addActionListener(e -> this.onButtonCancelClick());
+    }
+    
     private GridBagConstraints setLayoutConstraints(
         GridBagConstraints layoutConstraints,
         int gridx, int gridy, double weightx, double weighty, Insets insets, int fill)
@@ -182,14 +187,19 @@ public class LoginView extends JDialog
         return layoutConstraints;
     }
     
-    public void addLoginButtonClickListener(ActionListener actionListener)
+    private void onButtonLoginClick()
     {
-        this.mButtonLogin.addActionListener(actionListener);
+        this.mResult = DialogResult.OK;
     }
     
-    public void addCancelButtonClickListener(ActionListener actionListener)
+    private void onButtonCancelClick()
     {
-        this.mButtonCancel.addActionListener(actionListener);
+        this.mResult = DialogResult.Cancel;
+    }
+    
+    public DialogResult getResult()
+    {
+        return this.mResult;
     }
     
     public String getUserId()

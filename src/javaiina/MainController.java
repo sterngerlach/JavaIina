@@ -59,13 +59,16 @@ public class MainController
             // TODO: Implement appropriate program for login
             System.out.println("LogInListener::actionPerformed() called.");
             
-            LoginViewModel loginViewModel = new LoginViewModel();
-            LoginView loginView = new LoginView(MainController.this.mView, loginViewModel);
-            LoginViewController loginViewController = new LoginViewController(loginView, loginViewModel);
+            LoginView loginView = new LoginView(MainController.this.mView);
             
             // Show the login dialog
             loginView.setModalityType(ModalityType.APPLICATION_MODAL);
             loginView.setVisible(true);
+            
+            if (loginView.getResult() == DialogResult.Cancel)
+                return;
+            
+            // TODO: Database access may be needed
             
             // Switch to main menu if both user name and password are valid
             MainController.this.mView.switchToMainMenuPanel();
