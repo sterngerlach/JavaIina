@@ -1,20 +1,32 @@
+
+----------Reservation----------
+memberId          : long(bigint)
+rentalObject      : String
+reservationData   : String
+
 ----------Rental----------
-rId(int)              :　レンタルの種類固有のId
-rRentalName(varchar)  : レンタルの種類
-rCloths(varchar)      : レンタルされる衣装
-rSizeId(int)          : 適応サイズ(詳細を記したtableを参照するため、id(int)。)
-rCost(int)            : レンタルの料金
+memberId          : long(bigint)
+rentalObject      : String
+beginDate         : date
+desiredReturnDate : date
+actualReturnDate  : date
+overduePayment    : int
 
-----------Size----------
-rSizeId(int)          :　サイズのId
-rSizeName             : サイズの名前([Y,A,AB,B,O]の1つ+[1~8]のうち1つ)
-weight(int)           : 体重(kg)
-waistMin(int)         : 各々のサイズで入るウエストの最小値(cm)
-waistMax(int)         : 各々のサイズで入るウエストの最大値(cm)
-chestMeasure(int)     : 胸囲(cm)
-shoulderWidth(int)    : 肩幅(cm)
-lenSleeve(int)        : 袖丈(cm)
-inseam(int)           : 股下(cm)
+----------Member----------
+memberId          : long(bigint)
+firstName         : String
+secondName        : String
+nickName          : String
 
-参考にしたサイト
-・https://wowma.jp/user/31626032
+----------SizeInfo----------
+sizeId            : int
+sizeName          : String
+weight            : int
+waistMin          : int
+waistMax          : int
+chestMeasure      : int
+shoulderWidth     : int
+lenSleeve         : int
+inseam            : int
+
+
