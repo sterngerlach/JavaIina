@@ -42,21 +42,21 @@ public class CreateDatabaseTable{
     }
 
     private void CreateRentalTable(){
-	    String createRentalTable = String(
-	        "create table Rental values (" +
-	        "memberId bigint primary key," +
-	        "rentalObject varchar," +
-	        "beginDate date," +
-	        "desiredReturnDate date," +
-	        "actualReturnDate date," +
-	        "overduePayment int"+
-	        ")"
-	    );
-	    PreparedStatement createRentalTablePrepStmt = mConnToDatabase.prepareStatement(createRentalTable);
+        String createRentalTable = String(
+            "create table Rental values (" +
+            "memberId bigint primary key," +
+            "rentalObject varchar," +
+            "beginDate date," +
+            "desiredReturnDate date," +
+            "actualReturnDate date," +
+            "overduePayment int"+
+            ")"
+        );
+        PreparedStatement createRentalTablePrepStmt = mConnToDatabase.prepareStatement(createRentalTable);
 
-	    mStmt.executeQuery(createRentalTablePrepStmt);
-	    mStmt.close();
-	    mConnToDatabase.close();
+        mStmt.executeQuery(createRentalTablePrepStmt);
+        mStmt.close();
+        mConnToDatabase.close();
     }
 
     private void CreateReservationTable(){
