@@ -10,13 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CreateDatabaseTable{
-    private String mConnectionUri;
+    private String mConnUri;
     private Connection mConnToDatabase;
     private Statement mStmt;
 
     protected CreateDatabaseTable(){
-        mConnectionUri= "jdbc:derby:c:/derby/dat/test;create = true";
-        mConnToDatabase = DriverManager.getConnection(mConnectionUri);
+        mConnUri= "jdbc:derby:c:/derby/dat/test;create = true";
+        mConnToDatabase = DriverManager.getConnection(mConnUri);
         mStmt = mConnToDatabase.createStatement();
     }
 
