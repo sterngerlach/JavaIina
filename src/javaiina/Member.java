@@ -3,7 +3,7 @@
 
 package javaiina;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 
 public class Member
 {
@@ -13,8 +13,8 @@ public class Member
     private String mFirstNameKana;
     private String mSecondNameKana;
     private String mNickName;
-    private ZonedDateTime mBirthDate;
-    private ZonedDateTime mRegisterDate;
+    private LocalDate mBirthDate;
+    private LocalDate mRegisterDate;
     private Gender mGender;
     private String mAddress;
     private String mPostcode;
@@ -27,8 +27,8 @@ public class Member
     public String firstNameKana() { return this.mFirstNameKana; }
     public String secondNameKana() { return this.mSecondNameKana; }
     public String nickName() { return this.mNickName; }
-    public ZonedDateTime birthDate() { return this.mBirthDate; }
-    public ZonedDateTime registerDate() { return this.mRegisterDate; }
+    public LocalDate birthDate() { return this.mBirthDate; }
+    public LocalDate registerDate() { return this.mRegisterDate; }
     public Gender gender() { return this.mGender; }
     public String address() { return this.mAddress; }
     public String postcode() { return this.mPostcode; }
@@ -38,7 +38,7 @@ public class Member
     public Member(
         long id, String firstName, String secondName,
         String firstNameKana, String secondNameKana, String nickName,
-        ZonedDateTime birthDate, ZonedDateTime registerDate,
+        LocalDate birthDate, LocalDate registerDate,
         Gender gender, String address, String postcode,
         String phoneNumber, String emailAddress)
     {
