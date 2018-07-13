@@ -47,14 +47,14 @@ public class ItemsListViewRenderer implements ListCellRenderer<RentalObject>
         RentalObject value, int index,
         boolean isSelected, boolean cellHasFocus)
     {
+        String availableSizes = String.join(", ",
+            Arrays.stream(value.availableSizeInfo())
+            .map(sizeInfo -> sizeInfo.sizeName())
+            .toArray(String[]::new));
+        
         this.mLabelItemName.setText("Name: " + value.name());
-        this.mLabelAvailableSizeName.setText("Size Available: " +
-            String.join(", ",
-                Arrays.stream(value.availableSizeInfo())
-                .map(sizeInfo -> sizeInfo.sizeName())
-                .toArray(String[]::new)));
-        this.mLabelCostPerDay.setText(
-            "Cost: " + Integer.toString(value.cost()) + " Yen/day");
+        this.mLabelAvailableSizeName.setText("Size Available: " + availableSizes);
+        this.mLabelCostPerDay.setText("Cost: " + value.cost() + " Yen/day");
         
         if (isSelected)
             this.mPanelItem.setBackground(Color.LIGHT_GRAY);
