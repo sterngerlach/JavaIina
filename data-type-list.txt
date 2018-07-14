@@ -42,5 +42,3 @@ chestMeasure      : int
 shoulderWidth     : int
 lenSleeve         : int
 inseam            : int
-
-
