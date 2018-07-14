@@ -1,15 +1,12 @@
 
 ----------Reservation----------
-reservationId     : long(bigint)
 memberId          : long(bigint)
-rentalObject      : String(varchar)
+rentalObject      : String
 reservationData   : String
 
 ----------Rental----------
-rentalId          : long(bigint)
 memberId          : long(bigint)
-rentalObject      : String(varchar)
-sizeId            : int
+rentalObject      : String
 beginDate         : date
 desiredReturnDate : date
 actualReturnDate  : date
@@ -17,24 +14,13 @@ overduePayment    : int
 
 ----------Member----------
 memberId          : long(bigint)
-firstName         : String(varchar)
-secondName        : String(varchar)
-nickName          : String(varchar)
-birthDate         : date
-registerDate      : date
-genderId          : int
-address           : String(varchar)
-postCode          : String(varchar)
-phoneNumber       : String(varchar)
-emailAddress      : String(varchar)
-
-----------Gender----------
-genderId          : int
-gender            : String(varchar)
+firstName         : String
+secondName        : String
+nickName          : String
 
 ----------SizeInfo----------
 sizeId            : int
-sizeName          : String(varchar)
+sizeName          : String
 weight            : int
 waistMin          : int
 waistMax          : int
@@ -42,3 +28,5 @@ chestMeasure      : int
 shoulderWidth     : int
 lenSleeve         : int
 inseam            : int
+
+
