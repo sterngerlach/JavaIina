@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,7 +69,6 @@ public class ItemsPanel extends PanelBase
     public void setModel(MainModel mainModel)
     {
         this.mMainModel = mainModel;
-        this.initializeItems();
     }
     
     @Override
@@ -150,7 +150,7 @@ public class ItemsPanel extends PanelBase
         this.mTreeViewRentalCategory.setModel(this.mTreeModelRentalCategory);
         
         /* Items ListView */
-        this.mListViewItems = new JList<RentalObject>();
+        this.mListViewItems = new JList<>();
         this.mListViewItemsModel = new DefaultListModel<>();
         this.mListViewItems.setModel(this.mListViewItemsModel);
         this.mListViewItems.setCellRenderer(new ItemsListViewRenderer());
@@ -183,6 +183,11 @@ public class ItemsPanel extends PanelBase
             e -> this.onTreeViewRentalCategorySelectionChanged(e));
     }
     
+    @Override
+    protected void onPanelSelected()
+    {
+        this.initializeItems();
+    }
     
     private void initializeItems()
     {

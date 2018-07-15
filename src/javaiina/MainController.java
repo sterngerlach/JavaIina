@@ -19,10 +19,13 @@ public class MainController
         
         this.mView.addLoginListener(new LogInListener());
         this.mView.addMemberRegisterListener(new MemberRegisterListener());
+        this.mView.addTabSelectionChangeListener(e -> this.onTabSelectionChange());
+        
         this.mView.getMainMenuPanel().addShowItemsListener(e -> this.onShowItems());
         this.mView.getMainMenuPanel().addShowBorrowingItemsListener(e -> this.onShowBorrowingItems());
         this.mView.getMainMenuPanel().addShowMemberInfoListener(e -> this.onShowMemberInfo());
         this.mView.getMainMenuPanel().addLogoutListener(e -> this.onLogout());
+        
         this.mView.getItemsPanel().addBorrowItemListener(e -> this.onBorrowItem());
         
         this.mView.switchToStartMenuPanel();
@@ -53,7 +56,7 @@ public class MainController
             memberView.setModalityType(ModalityType.APPLICATION_MODAL);
             memberView.setVisible(true);
             
-            if (memberView.getResult() == DialogResult.Cancel)
+            if (memberView.getResult() != DialogResult.OK)
                 return;
             
             // If the dialog is closed, all input fields are valid
@@ -61,11 +64,15 @@ public class MainController
             
             // TODO: Database access may be needed
             
+            // Set dummy user
+            Member dummyMember = MainController.this.mModel.getMemberInfo(1);
+            MainController.this.mModel.setLoggedInMember(dummyMember);
+            
             // Switch to main menu if all input fields are valid
             MainController.this.mView.switchToMainMenuPanel();
             
             // Call MainController.setLoggedInMember() with null because no one has logged in
-            MainController.this.mModel.setLoggedInMember(null);
+            // MainController.this.mModel.setLoggedInMember(null);
         }
     }
     
@@ -94,16 +101,20 @@ public class MainController
             loginView.setModalityType(ModalityType.APPLICATION_MODAL);
             loginView.setVisible(true);
             
-            if (loginView.getResult() == DialogResult.Cancel)
+            if (loginView.getResult() != DialogResult.OK)
                 return;
             
             // TODO: Database access may be needed
+            
+            // Set dummy user
+            Member dummyMember = MainController.this.mModel.getMemberInfo(1);
+            MainController.this.mModel.setLoggedInMember(dummyMember);
             
             // Switch to main menu if both user name and password are valid
             MainController.this.mView.switchToMainMenuPanel();
             
             // Call MainController.setLoggedInMember() with null because no one has logged in
-            MainController.this.mModel.setLoggedInMember(null);
+            // MainController.this.mModel.setLoggedInMember(null);
         }
     }
     
@@ -121,6 +132,12 @@ public class MainController
         }
     }
     
+    private void onTabSelectionChange()
+    {
+        if (this.mView.getSelectedPanel() != null)
+            this.mView.getSelectedPanel().onPanelSelected();
+    }
+    
     private void onShowItems()
     {
         // Switch to items panel
@@ -130,6 +147,7 @@ public class MainController
     private void onShowBorrowingItems()
     {
         // Switch to borrowing items panel
+        this.mView.switchToBorrowingItemsPanel();
     }
     
     private void onShowMemberInfo()

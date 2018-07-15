@@ -21,6 +21,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.ChangeListener;
 
 public class MainView extends JFrame
 {
@@ -47,9 +48,15 @@ public class MainView extends JFrame
     private StartMenuPanel mStartMenuPanel;
     private MainMenuPanel mMainMenuPanel;
     private ItemsPanel mItemsPanel;
+    private BorrowingItemsPanel mBorrowingItemsPanel;
     
     private JPanel mPanelStatusBar;
     private JLabel mLabelStatusBar;
+    
+    public PanelBase getSelectedPanel()
+    {
+        return (PanelBase)this.mTabbedPaneMain.getSelectedComponent();
+    }
     
     public StartMenuPanel getStartMenuPanel()
     {
@@ -82,6 +89,7 @@ public class MainView extends JFrame
         this.mStartMenuPanel.setModel(this.mModel);
         this.mMainMenuPanel.setModel(this.mModel);
         this.mItemsPanel.setModel(this.mModel);
+        this.mBorrowingItemsPanel.setModel(this.mModel);
     }
     
     private void initializeComponent()
@@ -138,6 +146,9 @@ public class MainView extends JFrame
         /* Items Panel */
         this.mItemsPanel = new ItemsPanel();
         
+        /* Borrowing Items Panel */
+        this.mBorrowingItemsPanel = new BorrowingItemsPanel();
+        
         /* Statusbar */
         this.mPanelStatusBar = new JPanel();
         this.mPanelStatusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -148,6 +159,11 @@ public class MainView extends JFrame
         this.mLabelStatusBar.setHorizontalAlignment(SwingConstants.LEFT);
         this.mLabelStatusBar.setVerticalAlignment(SwingConstants.CENTER);
         this.mPanelStatusBar.add(this.mLabelStatusBar);
+    }
+    
+    public void addTabSelectionChangeListener(ChangeListener changeListener)
+    {
+        this.mTabbedPaneMain.addChangeListener(changeListener);
     }
     
     public void addMemberRegisterListener(ActionListener actionListener)
@@ -174,6 +190,7 @@ public class MainView extends JFrame
         this.mTabbedPaneMain.removeAll();
         this.mTabbedPaneMain.addTab(this.mMainMenuPanel.getPanelName(), this.mMainMenuPanel);
         this.mTabbedPaneMain.addTab(this.mItemsPanel.getPanelName(), this.mItemsPanel);
+        this.mTabbedPaneMain.addTab(this.mBorrowingItemsPanel.getPanelName(), this.mBorrowingItemsPanel);
         this.mTabbedPaneMain.setSelectedComponent(this.mMainMenuPanel);
         this.mPanelToolBar.remove(this.mToolBarMain);
     }
@@ -181,5 +198,10 @@ public class MainView extends JFrame
     public void switchToItemsPanel()
     {
         this.mTabbedPaneMain.setSelectedComponent(this.mItemsPanel);
+    }
+    
+    public void switchToBorrowingItemsPanel()
+    {
+        this.mTabbedPaneMain.setSelectedComponent(this.mBorrowingItemsPanel);
     }
 }

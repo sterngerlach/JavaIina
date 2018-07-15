@@ -34,11 +34,6 @@ public class MainMenuPanel extends PanelBase
     public void setModel(MainModel mainModel)
     {
         this.mMainModel = mainModel;
-        
-        if (this.mMainModel.loggedInMember() == null)
-            this.setUserName("(Anonymous)");
-        else
-            this.setUserName(this.mMainModel.loggedInMember().nickName());
     }
     
     @Override
@@ -93,6 +88,12 @@ public class MainMenuPanel extends PanelBase
         
         this.mPanelCenter.add(Box.createHorizontalGlue());
         this.mPanelCenter.add(Box.createVerticalGlue());
+    }
+    
+    @Override
+    protected void onPanelSelected()
+    {
+        this.setUserName(this.mMainModel.loggedInMember().nickName());
     }
     
     private void setUserName(String userName)
