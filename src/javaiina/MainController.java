@@ -28,6 +28,7 @@ public class MainController
         this.mView.getMainMenuPanel().addLogoutListener(e -> this.onLogout());
         
         this.mView.getItemsPanel().addBorrowItemListener(e -> this.onBorrowItem());
+        this.mView.getBorrowingItemsPanel().addReturnItemListener(e -> this.onReturnItem());
         
         this.mView.switchToStartMenuPanel();
         
@@ -210,5 +211,31 @@ public class MainController
         // so that you can do the database access in the validateInput() method
         
         // TODO: Initialize a new Rental object or a new Reservation object
+    }
+    
+    private void onReturnItem()
+    {
+        // TODO: Implement program for returning
+        Rental returnedObjectInfo = this.mView.getBorrowingItemsPanel().getSelectedRental();
+        
+        if (returnedObjectInfo == null)
+            return;
+        
+        // TODO: Implement program for calculating overdue payment
+        int overduePayment = 100;
+        
+        // Show the return dialog
+        ReturnView returnView = new ReturnView(this.mView);
+        returnView.setReturnedObjectInfo(returnedObjectInfo, LocalDate.now(), overduePayment);
+        returnView.setModalityType(ModalityType.APPLICATION_MODAL);
+        returnView.setVisible(true);
+        
+        if (returnView.getResult() != DialogResult.OK)
+            return;
+        
+        // TODO: Database access may be needed
+        // Update Rental database (actualReturnDate, overduePayment)
+        // Check Reservation database
+        // If someone is waiting for the rental object, then he/she automatically borrows it
     }
 }
