@@ -41,4 +41,11 @@ public class RentalObjectSizeInfo
         this.mSleeveLength = sleeveLength;
         this.mInseamLength = inseamLength;
     }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("%s (%d kg, Waist: %d - %d cm)",
+            this.mSizeName, this.mWeight, this.mWaistMin, this.mWaistMax);
+    }
 }
