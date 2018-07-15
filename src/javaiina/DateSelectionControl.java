@@ -11,9 +11,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.Year;
 import java.time.YearMonth;
-import java.time.temporal.TemporalField;
 import java.util.Arrays;
 import java.util.stream.Stream;
 

@@ -5,15 +5,12 @@ package javaiina;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 public class PanelBase extends JPanel
