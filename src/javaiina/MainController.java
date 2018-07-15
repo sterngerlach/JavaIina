@@ -6,6 +6,7 @@ package javaiina;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 
 public class MainController
 {
@@ -170,6 +171,44 @@ public class MainController
     private void onBorrowItem()
     {
         // TODO: Implement program for borrowing
-        // RentalObject borrowedObject = this.mView.getItemsPanel().getSelectedRentalObject();
+        ItemsPanel itemsPanel = this.mView.getItemsPanel();
+        RentalObject borrowedObject = itemsPanel.getSelectedRentalObject();
+        
+        if (borrowedObject == null)
+            return;
+        
+        // Set the minimum date and the maximum date
+        LocalDate minDate = LocalDate.now();
+        LocalDate maxDate = LocalDate.now().plusWeeks(2);
+        
+        // Show the rental dialog
+        RentalView rentalView = new RentalView(this.mView, minDate, maxDate);
+        rentalView.setRentalObject(itemsPanel.getSelectedRentalObject());
+        
+        rentalView.setInputValidator(new InputValidator<RentalView>() {
+            @Override
+            public boolean validateInput(RentalView userInput)
+            {
+                // TODO: Validate user input
+                // Both RentalView.getBeginDate() and RentalView.getDesiredReturnDate() might return null
+                return true;
+            }
+        });
+        
+        rentalView.setModalityType(ModalityType.APPLICATION_MODAL);
+        rentalView.setVisible(true);
+        
+        if (rentalView.getResult() != DialogResult.OK)
+            return;
+        
+        // TODO: Database access may be needed
+        // First you need to check if the user can borrow it or the user needs to reserve it
+        // by checking Reservation Database and Rental Database
+        
+        // Maybe you will need to create a new class derived from InputValidator<RentalView>, 
+        // whose constructor takes a MainModel object as an argument,
+        // so that you can do the database access in the validateInput() method
+        
+        // TODO: Initialize a new Rental object or a new Reservation object
     }
 }
