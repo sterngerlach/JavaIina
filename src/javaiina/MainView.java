@@ -73,6 +73,11 @@ public class MainView extends JFrame
         return this.mItemsPanel;
     }
     
+    public BorrowingItemsPanel getBorrowingItemsPanel()
+    {
+        return this.mBorrowingItemsPanel;
+    }
+    
     public MainView(String title)
     {
         this.initializeComponent();
