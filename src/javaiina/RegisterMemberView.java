@@ -343,7 +343,7 @@ public class RegisterMemberView extends DialogBase
         this.mPanelCenter.add(this.mLabelBirthDate, layoutConstraints);
         
         /* Date Selection Control */
-        this.mDateSelectionControl = new DateSelectionControl(MainModel.MinBirthDate);
+        this.mDateSelectionControl = new DateSelectionControl(MainModel.MinBirthDate, LocalDate.now());
         
         this.setLayoutConstraints(
             layoutConstraints, 1, 8, 0.0, 0.0, defaultInsets, GridBagConstraints.NONE);
@@ -592,8 +592,6 @@ public class RegisterMemberView extends DialogBase
     
     private void onButtonRegisterClick()
     {
-        this.mResult = DialogResult.OK;
-        
         if (!this.mInputValidator.validateInput(this)) {
             JOptionPane.showMessageDialog(
                 this, this.mInputValidator.getMessage(),
@@ -601,6 +599,7 @@ public class RegisterMemberView extends DialogBase
             return;
         }
         
+        this.mResult = DialogResult.OK;
         this.setVisible(false);
     }
     

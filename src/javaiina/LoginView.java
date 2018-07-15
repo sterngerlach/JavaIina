@@ -134,8 +134,6 @@ public class LoginView extends DialogBase
     
     private void onButtonLoginClick()
     {
-        this.mResult = DialogResult.OK;
-        
         if (!this.mInputValidator.validateInput(this)) {
             JOptionPane.showMessageDialog(
                 this, this.mInputValidator.getMessage(),
@@ -143,6 +141,7 @@ public class LoginView extends DialogBase
             return;
         }
         
+        this.mResult = DialogResult.OK;
         this.setVisible(false);
     }
     
