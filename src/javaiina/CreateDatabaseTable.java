@@ -3,26 +3,17 @@
 
 package javaiina;
 
-import java.sql.DriverManager;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
-public class CreateDatabaseTable{
-    private String mConnUri;
-    private Connection mConnToDatabase;
-    private Statement mStmt;
-
-    protected CreateDatabaseTable(){
-        mConnUri= "jdbc:derby:c:/derby/dat/test;create = true";
-        mConnToDatabase = DriverManager.getConnection(mConnUri);
-        mStmt = mConnToDatabase.createStatement();
-    }
-
-    private void CreateMemberTable(){
-        String createMemberTable = String(
-            "create table Member values (" +
+public class CreateDatabaseTable extends DatabaseAccess{
+    
+    private CreateDatabaseTable() throws SQLException, ClassNotFoundException{
+        super();
+    }    
+    
+    private void CreateMemberTable() throws SQLException{
+        String createMemberTable = new String(
+            "create table Member (" +
             "memberId bigint primary key," +
             "FirstName varchar," +
             "SecondName varchar," +
@@ -34,50 +25,45 @@ public class CreateDatabaseTable{
             "EmailAddress varchar," +
             ")"
         );
-        PreparedStatement createMemberTablePrepStmt = mConnToDatabase.prepareStatement(createMemberTable);
-	    
-        mStmt.executeQuery(createMemberTablePrepStmt);
+        mStmt.execute(createMemberTable);
         mStmt.close();
         mConnToDatabase.close();
     }
 
-    private void CreateRentalTable(){
-        String createRentalTable = String(
-            "create table Rental values (" +
+    private void CreateRentalTable() throws SQLException{
+        String createRentalTable = new String(
+            "create table Rental (" +
             "memberId bigint primary key," +
-            "rentalObject varchar," +
+            "rentalObject varchar(200)," +
             "beginDate date," +
             "desiredReturnDate date," +
             "actualReturnDate date," +
             "overduePayment int"+
             ")"
         );
-        PreparedStatement createRentalTablePrepStmt = mConnToDatabase.prepareStatement(createRentalTable);
-
-        mStmt.executeQuery(createRentalTablePrepStmt);
+        mStmt.execute(createRentalTable);
         mStmt.close();
         mConnToDatabase.close();
     }
 
-    private void CreateReservationTable(){
-        String createReservationTable = String(
-            "create table Reservation values (" +
+    private void CreateReservationTable() throws SQLException{
+        String createReservationTable = new String(
+            "create table Reservation (" +
             "memberId bigint primary key," +
-            "rentalObject varchar," +
-            "reservationData varchar)"
+            "rentalObject varchar(200)," +
+            "reservationData varchar(200)" +
+            ")"
         );
-        PreparedStatement createReservationTablePrepStmt = mConnToDatabase.prepareStatement(createReservationTable);
-	
-        mStmt.executeQuery(createReservationTablePrepStmt);
+        mStmt.execute(createReservationTable);
         mStmt.close();
         mConnToDatabase.close();  	
     }
 
-    private void CreateSizeInfoTable(){
-        String createSizeInfoTable = String(
-            "create table Rental values (" +
+    private void CreateSizeInfoTable() throws SQLException{
+        String createSizeInfoTable =  new String(
+            "create table Rental (" +
             "sizeId int primary key,"+
-            "sizeName varchar," +
+            "sizeName varchar(10)," +
             "weight int," +
             "waistMin int," +
             "waistMax int," +
@@ -87,9 +73,7 @@ public class CreateDatabaseTable{
             "inseam int" +
             ")"
         );
-        PreparedStatement createSizeInfoTablePrepStmt = mConnToDatabase.prepareStatement(createSizeInfoTable);
-	
-        mStmt.executeQuery(createSizeInfoTablePrepStmt);
+        mStmt.executeQuery(createSizeInfoTable);
         mConnToDatabase.close();
         mConnToDatabase.close();
     }
