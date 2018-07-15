@@ -26,7 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-public class RegisterMemberView extends JDialog
+public class RegisterMemberView extends DialogBase
 {
     private static final long serialVersionUID = -3421065686754085314L;
     
@@ -34,19 +34,6 @@ public class RegisterMemberView extends JDialog
     private static final int DefaultWindowHeight = 640;
     
     private static final String DefaultWindowTitle = "Member Registration";
-    
-    private DialogResult mResult;
-    
-    private JPanel mPanelHeader;
-    private JPanel mPanelCenter;
-    private JPanel mPanelBottom;
-    
-    private Font mFontHeaderTitle;
-    private JLabel mLabelHeaderTitle;
-    private Font mFontHeaderDescription;
-    private JLabel mLabelHeaderDescription;
-    
-    private Font mFontLabel;
     
     private JLabel mLabelMailAddress;
     private JTextField mTextBoxMailAddress;
@@ -113,19 +100,16 @@ public class RegisterMemberView extends JDialog
     {
         super(parentFrame);
         
-        this.initializeComponent();
-        this.addEventHandler();
-        
         this.setMinimumSize(new Dimension(
             RegisterMemberView.DefaultWindowWidth, RegisterMemberView.DefaultWindowHeight));
         this.setTitle(RegisterMemberView.DefaultWindowTitle);
-        this.setLocationRelativeTo(this.getParent());   
+        this.setLocationRelativeTo(this.getParent());
     }
     
-    private void initializeComponent()
+    @Override
+    protected void initializeComponent()
     {
-        /* Border */
-        Border defaultBorder = new EmptyBorder(5, 5, 5, 5);
+        super.initializeComponent();
         
         /* Insets */
         Insets defaultInsets = new Insets(5, 5, 5, 5);
@@ -133,41 +117,12 @@ public class RegisterMemberView extends JDialog
         Insets rightInsets = new Insets(0, 0, 0, 5);
         Insets leftInsets = new Insets(0, 5, 0, 0);
         
-        /* Container */
-        this.mPanelHeader = new JPanel();
-        this.mPanelHeader.setLayout(new BoxLayout(this.mPanelHeader, BoxLayout.Y_AXIS));
-        this.mPanelHeader.setBorder(defaultBorder);
-        this.getContentPane().add(this.mPanelHeader, BorderLayout.NORTH);
-        
-        this.mPanelCenter = new JPanel();
-        this.mPanelCenter.setLayout(new GridBagLayout());
-        this.getContentPane().add(this.mPanelCenter, BorderLayout.CENTER);
-        
-        this.mPanelBottom = new JPanel();
-        this.mPanelBottom.setLayout(new GridBagLayout());
-        this.getContentPane().add(this.mPanelBottom, BorderLayout.SOUTH);
-        
         /* Header */
-        this.mFontHeaderTitle = new Font(Font.DIALOG, Font.BOLD, 14);
-        this.mLabelHeaderTitle = new JLabel();
-        this.mLabelHeaderTitle.setText("Member Registration");
-        this.mLabelHeaderTitle.setFont(this.mFontHeaderTitle);
-        this.mPanelHeader.add(this.mLabelHeaderTitle);
-        
-        this.mPanelHeader.add(Box.createVerticalStrut(5));
-        
-        this.mFontHeaderDescription = new Font(Font.DIALOG, Font.PLAIN, 12);
-        this.mLabelHeaderDescription = new JLabel();
-        this.mLabelHeaderDescription.setText(
+        this.setHeaderTitle("Member Registration");
+        this.setHeaderDescription(
             "Please fill out the following form completely to create an account.");
-        this.mLabelHeaderDescription.setFont(this.mFontHeaderDescription);
-        this.mPanelHeader.add(this.mLabelHeaderDescription);
-        
-        this.mPanelHeader.add(Box.createVerticalStrut(15));
-        
+
         /* Center */
-        this.mFontLabel = new Font(Font.DIALOG, Font.PLAIN, 12);
-        
         GridBagConstraints layoutConstraints = new GridBagConstraints();
         layoutConstraints.anchor = GridBagConstraints.WEST;
         
@@ -616,28 +571,17 @@ public class RegisterMemberView extends JDialog
         this.mPanelBottom.add(this.mButtonCancel, layoutConstraints);
     }
     
-    private void addEventHandler()
+    @Override
+    protected void addEventHandler()
     {
+        super.addEventHandler();
+        
         this.mComboBoxPrefecture.addItemListener(
             e -> this.onComboBoxPrefectureSelectionChanged(e));
         this.mButtonRegister.addActionListener(
             e -> this.onButtonRegisterClick());
         this.mButtonCancel.addActionListener(
             e -> this.onButtonCancelClick());
-    }
-    
-    private GridBagConstraints setLayoutConstraints(
-        GridBagConstraints layoutConstraints,
-        int gridx, int gridy, double weightx, double weighty, Insets insets, int fill)
-    {
-        layoutConstraints.gridx = gridx;
-        layoutConstraints.gridy = gridy;
-        layoutConstraints.weightx = weightx;
-        layoutConstraints.weighty = weighty;
-        layoutConstraints.insets = insets;
-        layoutConstraints.fill = fill;
-        
-        return layoutConstraints;
     }
     
     private void onComboBoxPrefectureSelectionChanged(ItemEvent e)
@@ -669,11 +613,6 @@ public class RegisterMemberView extends JDialog
     public void setInputValidator(InputValidator<RegisterMemberView> inputValidator)
     {
         this.mInputValidator = inputValidator;
-    }
-    
-    public DialogResult getResult()
-    {
-        return this.mResult;
     }
     
     public String getMailAddress()
