@@ -7,10 +7,8 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/derby/lib/derby.jar"/>
-	<classpathentry kind="output" path="bin"/><classpathentry kind="lib"
-		path="lib/derby/derby.jar">
-</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="lib/derby/derby.jar"></classpathentry>
 	<classpathentry kind="lib" path="lib/derby/derbytools.jar"></classpathentry>
 	<classpathentry kind="lib" path="lib/derby/derbyLocale_ja_JP.jar"></classpathentry>
 </classpath>
