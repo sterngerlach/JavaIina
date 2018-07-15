@@ -43,6 +43,8 @@ public class DialogBase extends JDialog
     {
         super(parentFrame);
         
+        this.mResult = DialogResult.None;
+        
         this.initializeComponent();
         this.addEventHandler();
     }
