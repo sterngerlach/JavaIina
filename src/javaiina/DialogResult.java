@@ -5,7 +5,7 @@ package javaiina;
 
 public enum DialogResult
 {
-    Unknown,
+    None,
     OK,
     Cancel
 }
