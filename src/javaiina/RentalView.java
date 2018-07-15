@@ -161,6 +161,7 @@ public class RentalView extends DialogBase
         this.setLayoutConstraints(
             layoutConstraints, 1, 0, 0.0, 0.0, defaultInsets, GridBagConstraints.NONE);
         this.mPanelBottom.add(this.mButtonBorrow, layoutConstraints);
+        this.getRootPane().setDefaultButton(this.mButtonBorrow);
         
         /* Cancel Button */
         this.mButtonCancel = new JButton("Cancel");
