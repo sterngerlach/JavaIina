@@ -9,7 +9,6 @@ reservationDate   : date
 rentalObjectId    : long(bigint)
 memberId          : long(bigint)
 rentalObject      : String(varchar)
-sizeId            : int
 beginDate         : date
 desiredReturnDate : date
 actualReturnDate  : date
