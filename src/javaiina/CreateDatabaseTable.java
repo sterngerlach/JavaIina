@@ -11,59 +11,76 @@ public class CreateDatabaseTable extends DatabaseAccess{
         super();
     }    
     
-    private void CreateMemberTable() throws SQLException{
-        String createMemberTable = new String(
+    private void createMemberTable() throws SQLException{
+        String memberTable = 
             "create table Member (" +
             "memberId bigint primary key," +
-            "FirstName varchar," +
-            "SecondName varchar," +
-            "NickName varchar," +
+            "FirstName varchar(128)," +
+            "SecondName varchar(128)," +
+            "NickName varchar(128)," +
             "BirthData datetime," +
             "RegisterData datetime," +
             "Gender int," +
-            "PhoneNumber varchar," +
-            "EmailAddress varchar," +
-            ")"
-        );
-        mStmt.execute(createMemberTable);
+            "PhoneNumber varchar(128)," +
+            "EmailAddress varchar(128)," +
+            ")";
+        
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.execute(memberTable);
         mStmt.close();
-        mConnToDatabase.close();
     }
 
-    private void CreateRentalTable() throws SQLException{
-        String createRentalTable = new String(
-            "create table Rental (" +
+    private void createRentalObjectTable() throws SQLException{
+        String rentalObjectTable = 
+            "create table RentalObject (" +
             "memberId bigint primary key," +
-            "rentalObject varchar(200)," +
+            "rentalObject varchar(256)," +
             "beginDate date," +
             "desiredReturnDate date," +
             "actualReturnDate date," +
             "overduePayment int"+
-            ")"
-        );
-        mStmt.execute(createRentalTable);
+            ")";
+        
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.execute(rentalObjectTable);
         mStmt.close();
-        mConnToDatabase.close();
     }
 
-    private void CreateReservationTable() throws SQLException{
-        String createReservationTable = new String(
+    private void createReservationTable() throws SQLException{
+        String reservationTable =
             "create table Reservation (" +
             "memberId bigint primary key," +
-            "rentalObject varchar(200)," +
-            "reservationData varchar(200)" +
-            ")"
-        );
-        mStmt.execute(createReservationTable);
+            "rentalObject varchar(256)," +
+            "reservationData varchar(256)" +
+            ")";
+        
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.execute(reservationTable);
+        mStmt.close();	
+    }
+    
+    private void createAvailableSizeInfoTable() throws SQLException{
+        String availableSizeInfoTable =
+            "create talbe AvailableSizeInfo (" +
+            "rentalObjectId bigint," +
+            "sizeId int," +
+            "rentalObject," +
+            "height int," +
+            "weight int," +
+            "waistMin int," +
+            "waistMax int" +
+            ")";
+        
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.execute(availableSizeInfoTable);
         mStmt.close();
-        mConnToDatabase.close();  	
     }
 
-    private void CreateSizeInfoTable() throws SQLException{
-        String createSizeInfoTable =  new String(
-            "create table Rental (" +
+    private void createSizeInfoTable() throws SQLException{
+        String sizeInfoTable =
+            "create table SizeInfo (" +
             "sizeId int primary key,"+
-            "sizeName varchar(10)," +
+            "sizeName varchar(64)," +
             "weight int," +
             "waistMin int," +
             "waistMax int," +
@@ -71,10 +88,22 @@ public class CreateDatabaseTable extends DatabaseAccess{
             "shoulderWidth int,"+
             "lenSleeve int," +
             "inseam int" +
-            ")"
-        );
-        mStmt.executeQuery(createSizeInfoTable);
-        mConnToDatabase.close();
-        mConnToDatabase.close();
+            ")";
+        
+        mStmt = mConnToDatabase.createStatement();    
+        mStmt.executeQuery(sizeInfoTable);
+        mStmt.close();
+    }
+    
+    private void createGenderTable() throws SQLException{
+        String genderTable =
+            "create table Gender(" +
+            "genderId int," +
+            "gender vatchar(64)" +
+            ")";
+        
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.execute(genderTable);
+        mStmt.close();
     }
 }

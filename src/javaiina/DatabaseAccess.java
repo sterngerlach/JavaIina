@@ -8,10 +8,9 @@ public class DatabaseAccess {
     protected Connection mConnToDatabase;
     protected Statement mStmt;
 
-    protected DatabaseAccess() throws SQLException,ClassNotFoundException{
+    public DatabaseAccess() throws SQLException,ClassNotFoundException{
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
         mConnUri= "jdbc:derby:../database;create = true";
         mConnToDatabase = DriverManager.getConnection(mConnUri);
-        mStmt = mConnToDatabase.createStatement();
     }
 }
