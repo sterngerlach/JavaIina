@@ -5,8 +5,8 @@ memberId          : long(bigint)
 rentalObject      : String(varchar)
 reservationDate   : date
 
-----------RentalObject----------
-rentalObjectId    : long(bigint)
+----------Rental----------
+rentalId          : long(bigint)
 memberId          : long(bigint)
 rentalObject      : String(varchar)
 beginDate         : date
@@ -14,8 +14,13 @@ desiredReturnDate : date
 actualReturnDate  : date
 overduePayment    : int
 
+----------RentalObject----------
+rentalObjectId    : int
+rentalObjectName  : String(varchar)
+cost              : int
+
 ----------AvailableSizeInfo----------
-rentalId          : long(bigint)
+rentalObjectId    : long(bigint)
 sizeId            : int
 
 ----------SizeInfo----------
