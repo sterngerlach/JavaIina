@@ -18,6 +18,7 @@ overduePayment    : int
 ----------AvailableSizeInfo----------
 rentalId          : long(bigint)
 sizeId			  : int
+rentalObject      : String(varchar)
 height            : int
 weight            : int
 waistMin          : int
