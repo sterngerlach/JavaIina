@@ -43,15 +43,9 @@ secondName        : String(varchar)
 nickName          : String(varchar)
 birthDate         : date
 registerDate      : date
-genderId          : int
+gender            : String(varchar)
 address           : String(varchar)
 postCode          : String(varchar)
 phoneNumber       : String(varchar)
 emailAddress      : String(varchar)
-
-----------Gender----------
-genderId          : int
-gender            : String(varchar)
-
-
 
