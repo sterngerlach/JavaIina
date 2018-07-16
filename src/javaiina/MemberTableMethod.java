@@ -64,6 +64,7 @@ public class MemberTableMethod extends DatabaseAccess{
             + "set " + column + " = " + updateData + " " 
             + condition
         );
+        mStmt.close();
     }
     
     public void memberUpdateFirstName(Member m) throws SQLException{
@@ -142,14 +143,14 @@ public class MemberTableMethod extends DatabaseAccess{
         mStmt = mConnToDatabase.createStatement();
         ResultSet rs = mStmt.executeQuery("select * from MemberDataTest where mId = " + m.id());
         while(rs.next()) {
-            resultList.add(valueOf(rs.getInt("memberId")));
+            resultList.add(String.valueOf(rs.getInt("memberId")));
             resultList.add(rs.getString("firstName"));
             resultList.add(rs.getString("secontName"));
             resultList.add(rs.getString("firstNameKana"));
             resultList.add(rs.getString("secontNameKana"));
             resultList.add(rs.getString("nickName"));
-            resultList.add(SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(rs.getDate("birthDate")));
-            resultList.add(SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format(rs.getDate("registerDate")));
+            resultList.add(rs.getDate("birthDate").toLocalDate());
+            resultList.add(rs.getDate("registerDate").toLocalDate());
             resultList.add(rs.getString("gender"));
             resultList.add(rs.getString("phoneNumber"));
             resultList.add(rs.getString("emailAddress"));
