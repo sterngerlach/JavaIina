@@ -40,9 +40,9 @@ public class MainModel
     
     // This data makes absolutely no sense
     private List<RentalObjectSizeInfo> mDummySizeInfoList = Arrays.asList(
-        new RentalObjectSizeInfo(0, "Y1", 45, 50, 55, 60, 70, 80, 80),
-        new RentalObjectSizeInfo(1, "A2", 50, 55, 60, 70, 80, 90, 90),
-        new RentalObjectSizeInfo(2, "B3", 55, 60, 65, 80, 90, 90, 90));
+        new RentalObjectSizeInfo(0, "Y1", 150, 45, 50, 55, 60, 70, 80, 80),
+        new RentalObjectSizeInfo(1, "A2", 155, 50, 55, 60, 70, 80, 90, 90),
+        new RentalObjectSizeInfo(2, "B3", 160, 55, 60, 65, 80, 90, 90, 90));
     
     // This data makes absolutely no sense
     private List<RentalObject> mDummyRentalObjectList = Arrays.asList(

@@ -7,6 +7,7 @@ public class RentalObjectSizeInfo
 {
     private int mId;
     private String mSizeName;
+    private int mHeight;
     private int mWeight;
     private int mWaistMin;
     private int mWaistMax;
@@ -17,6 +18,7 @@ public class RentalObjectSizeInfo
     
     public int id() { return this.mId; }
     public String sizeName() { return this.mSizeName; }
+    public int height() { return this.mHeight; }
     public int weight() { return this.mWeight; }
     public int waistMin() { return this.mWaistMin; }
     public int waistMax() { return this.mWaistMax; }
@@ -26,13 +28,15 @@ public class RentalObjectSizeInfo
     public int inseamLength() { return this.mInseamLength; }
     
     public RentalObjectSizeInfo(
-        int id, String sizeName, int weight,
+        int id, String sizeName,
+        int height, int weight,
         int waistMin, int waistMax,
         int chestWidth, int shoulderWidth,
         int sleeveLength, int inseamLength)
     {
         this.mId = id;
         this.mSizeName = sizeName;
+        this.mHeight = height;
         this.mWeight = weight;
         this.mWaistMin = waistMin;
         this.mWaistMax = waistMax;
@@ -45,7 +49,8 @@ public class RentalObjectSizeInfo
     @Override
     public String toString()
     {
-        return String.format("%s (%d kg, Waist: %d - %d cm)",
-            this.mSizeName, this.mWeight, this.mWaistMin, this.mWaistMax);
+        return String.format("%s (%d cm, %d kg, Waist: %d - %d cm)",
+            this.mSizeName, this.mHeight,
+            this.mWeight, this.mWaistMin, this.mWaistMax);
     }
 }
