@@ -15,14 +15,14 @@ public class CreateDatabaseTable extends DatabaseAccess{
         String memberTable = 
             "create table Member (" +
             "memberId bigint primary key," +
-            "FirstName varchar(128)," +
-            "SecondName varchar(128)," +
-            "NickName varchar(128)," +
-            "BirthData datetime," +
-            "RegisterData datetime," +
-            "Gender int," +
-            "PhoneNumber varchar(128)," +
-            "EmailAddress varchar(128)," +
+            "firstName varchar(128)," +
+            "secondName varchar(128)," +
+            "nickName varchar(128)," +
+            "birthData datetime," +
+            "registerData datetime," +
+            "gender varchar(64)," +
+            "phoneNumber varchar(128)," +
+            "emailAddress varchar(128)," +
             ")";
         
         mStmt = mConnToDatabase.createStatement();
@@ -64,11 +64,11 @@ public class CreateDatabaseTable extends DatabaseAccess{
             "create talbe AvailableSizeInfo (" +
             "rentalObjectId bigint," +
             "sizeId int," +
-            "rentalObject," +
+            /*"rentalObject," +
             "height int," +
             "weight int," +
             "waistMin int," +
-            "waistMax int" +
+            "waistMax int" +*/
             ")";
         
         mStmt = mConnToDatabase.createStatement();
@@ -95,7 +95,7 @@ public class CreateDatabaseTable extends DatabaseAccess{
         mStmt.close();
     }
     
-    private void createGenderTable() throws SQLException{
+    /*private void createGenderTable() throws SQLException{
         String genderTable =
             "create table Gender(" +
             "genderId int," +
@@ -105,5 +105,5 @@ public class CreateDatabaseTable extends DatabaseAccess{
         mStmt = mConnToDatabase.createStatement();
         mStmt.execute(genderTable);
         mStmt.close();
-    }
+    }*/
 }
