@@ -13,7 +13,7 @@ public class MemberTableMethod extends DatabaseAccess{
     
     public void memberInsert(Member m) throws SQLException{
         mStmt = mConnToDatabase.createStatement();
-        mStmt.executeUpdate("insert into MemberDataTest values("
+        mStmt.executeUpdate("insert into Member values("
             + m.id() + ","
             + "'" + m.firstName() + "',"
             + "'" + m.secondName() + "',"

@@ -10,7 +10,7 @@ public class ReservationTableMethod extends DatabaseAccess{
     
     public void reservationInsert(Reservation res) throws SQLException{
         mStmt = mConnToDatabase.createStatement();
-        mStmt.executeUpdate("insert into MemberDataTest values("
+        mStmt.executeUpdate("insert into Reservation values("
             + res.reservationId() + ","
             + res.member().id() + ","
             + "'" + res.rentalObject() + "',"
