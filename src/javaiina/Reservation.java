@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public class Reservation
 {
+    private int mId;
     private Member mMember;
     private RentalObject mRentalObject;
     private RentalObjectSizeInfo mSizeInfo;
@@ -14,10 +15,11 @@ public class Reservation
     private boolean mDone;
 	
     public Reservation(
-        Member member, RentalObject rentalObject,
-        RentalObjectSizeInfo sizeInfo,
+        int id, Member member,
+        RentalObject rentalObject, RentalObjectSizeInfo sizeInfo,
         LocalDate reservationDate, boolean done)
     {
+        this.mId = id;
         this.mMember = member;
         this.mRentalObject = rentalObject;
         this.mSizeInfo = sizeInfo;
@@ -25,6 +27,7 @@ public class Reservation
         this.mDone = done;
     }
     
+    public int id() { return this.mId; }
     public Member member() { return this.mMember; }
     public RentalObject rentalObject() { return this.mRentalObject; }
     public RentalObjectSizeInfo sizeInfo() { return this.mSizeInfo; }
@@ -35,10 +38,10 @@ public class Reservation
     public String toString()
     {
         return String.format(
-            "Reservation[Member ID: %s, RentalObject ID: %s," +
-            "Size ID: %s, Reservation Date: %s, Done: %s]",
-            this.mMember.id(), this.mRentalObject.id(),
-            this.mSizeInfo.id(),
-            this.mReservationDate, this.mDone);
+            "Reservation[ID: %d, Member ID: %d, RentalObject ID: %d," +
+            "Size ID: %d, Reservation Date: %s, Done: %b]",
+            this.mId, this.mMember.id(),
+            this.mRentalObject.id(), this.mSizeInfo.id(),
+            this.mReservationDate.toString(), this.mDone);
     }
 }
