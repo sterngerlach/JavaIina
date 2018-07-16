@@ -14,8 +14,8 @@ public class ReservationTableMethod extends DatabaseAccess{
             + res.reservationId() + ","
             + res.member().id() + ","
             + "'" + res.rentalObject() + "',"
+            + res.sizeInfo() +
             + res.reservationDate() + ","
-            + res.reservationDate() +","
             + ")"
         );
         mStmt.close();
