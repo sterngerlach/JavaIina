@@ -40,23 +40,28 @@ public class MemberTableMethod extends DatabaseAccess{
     public void memberUpdate(String column, String updateData, String condition) {
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate(
-            "update Member set " + column + " = " + updateData + condition
+            "update Member "
+             + "set " + column + " = " + updateData + " "
+             + condition
         );
+        mStmt.close();
     }
     
     public void memberUpdate(String column, Date updateData, String condition) {
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate(
-            "update Member set " + column + " = " + "'" +updateData + "'"
+            "update Member "
+            + "set " + column + " = " + updateData + " "
             + condition
         );
+        mStmt.close();
     }
     
     public void memberUpdate(String column, long updateData, String condition) {
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate(
-            "update Member" 
-            + "set " + column + " = " + updateData 
+            "update Member " 
+            + "set " + column + " = " + updateData + " " 
             + condition
         );
     }
@@ -64,8 +69,8 @@ public class MemberTableMethod extends DatabaseAccess{
     public void memberUpdateFirstName(Member m) throws SQLException{
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate(
-            "update Member"
-            +" set firstName = " + "'" + m.firstName() + "'" 
+            "update Member "
+            + "set firstName = " + "'" + m.firstName() + "' " 
             + "where memberId = " + m.id()
         ); 
         mStmt.close();
@@ -74,8 +79,8 @@ public class MemberTableMethod extends DatabaseAccess{
     public void memberUpdateSecondName(Member m) throws SQLException{
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate(
-            "update Member"
-            +" set secondName = " + "'" + m.secontName() + "'" 
+            "update Member "
+            + "set secondName = " + "'" + m.secontName() + "' " 
             + "where memberId = " + m.id()
         ); 
         mStmt.close();
@@ -85,7 +90,7 @@ public class MemberTableMethod extends DatabaseAccess{
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate(
             "update Member"
-            +" set firstNameKana = " + "'" + m.firstNameKana() + "'" 
+            +" set firstNameKana = " + "'" + m.firstNameKana() + "' " 
             + "where memberId = " + m.id()
         ); 
         mStmt.close();
@@ -95,7 +100,7 @@ public class MemberTableMethod extends DatabaseAccess{
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate(
             "update Member"
-            +" set secondNameKana = " + "'" + m.secondNameKana() + "'" 
+            +" set secondNameKana = " + "'" + m.secondNameKana() + "' " 
             + "where memberId = " + m.id()
         ); 
         mStmt.close();
@@ -105,7 +110,7 @@ public class MemberTableMethod extends DatabaseAccess{
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate(
             "update Member"
-            + "set nickName = " + "'" + m.nickName() + "'" 
+            + "set nickName = " + "'" + m.nickName() + "' " 
             + "where memberId = " + m.id()
         ); 
         mStmt.close();
@@ -115,7 +120,7 @@ public class MemberTableMethod extends DatabaseAccess{
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate(
             "update Member"
-            +" set phoneNumber = " + "'" + m.phoneNumber() + "'" 
+            +" set phoneNumber = " + "'" + m.phoneNumber() + "' " 
             + "where memberId = " + m.id()
         ); 
         mStmt.close();
@@ -125,7 +130,7 @@ public class MemberTableMethod extends DatabaseAccess{
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate(
             "update Member"
-            +" set emailAddress = " + "'" + m.emailAddress() + "'" 
+            +" set emailAddress = " + "'" + m.emailAddress() + "' " 
             + "where memberId = " + m.id()
         ); 
         mStmt.close();

@@ -8,23 +8,93 @@ public class ReservationTableMethod extends DatabaseAccess{
         super();
     }
     
-    public void reservationInsert(Member m, long reservationId) throws SQLException{
+    public void reservationInsert(Reservation res) throws SQLException{
         mStmt = mConnToDatabase.createStatement();
         mStmt.executeUpdate("insert into MemberDataTest values("
-            + reservationId +
-            + m.id() + ","
-            + "'" + rentalObject() + "',"
-            + reservationDate() +","
+            + res.reservationId() + ","
+            + res.member().id() + ","
+            + "'" + res.rentalObject() + "',"
+            + res.reservationDate() + ","
+            + res.reservationDate() +","
             + ")"
         );
         mStmt.close();
     }
 
-    public void reservationDelete(Member m) throws SQLException{
+    public void reservationDelete(Reservation res) throws SQLException{
         mStmt = mConnToDatabase.createStatement();
-        mStmt.executeUpdate(
-            "delete from Reservation where reservationId = " + m.id());
+        mStmt.executeUpdate("delete from Reservation where reservationId = " + res.reservationId());
         mStmt.close();
     }
     
+    public void reservationUpdate(String column, String updateData, String condition) {
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.executeUpdate(
+            "update Reservation "
+            + "set " + column + " = " + "'" + updateData + "' "
+            + condition
+        );
+        mStmt.close();
+    }
+    
+    public void reservationUpdate(String column, Date updateData, String condition) {
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.executeUpdate(
+            "update Reservation "
+            + "set " + column + " = " + updateData + " "
+            + condition
+        );
+        mStmt.close();
+    }
+    
+    public void reservationUpdate(String column, long updateData, String condition) {
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.executeUpdate(
+            "update Reservation "
+            +"set " + column + " = " + updateData + " " 
+            + condition
+        );
+        mStmt.close();
+    }
+    
+    public void reservationUpdateMember(Reservation res) throws SQLException{
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.executeUpdate(
+            "update Reservation"
+            +" set memberId = " + "'" + res.member().id() + "' " 
+            + "where reservationId = " + res.reservationId()
+        ); 
+        mStmt.close();
+    }
+    
+    public void reservationUpdateRentalObject(Reservation res) throws SQLException{
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.executeUpdate(
+            "update Reservation"
+            +" set rentalObjectName = " + "'" + res.rentalObject() + "' "  
+            + "where reservationId = " + res.reservationId()
+        ); 
+        mStmt.close();
+    }
+    
+    public void reservationUpdateSizeInfo(Reservation res) throws SQLException{
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.executeUpdate(
+            "update Reservation"
+            +" set sizeInfo = " + res.sizeInfo() + " "
+            + "where reservationId = " + res.reservationId()
+        ); 
+        mStmt.close();
+    }
+    
+    public void reservationUpdateRentalObject(Reservation res) throws SQLException{
+        mStmt = mConnToDatabase.createStatement();
+        mStmt.executeUpdate(
+            "update Reservation"
+            +" set reservationDate = " + res.reservationDate() + " "
+            + "where reservationId = " + res.reservationId()
+        ); 
+        mStmt.close();
+    }
+
 }
