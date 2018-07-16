@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 public class Rental
 {
+    private int mId;
     private Member mMember;
     private RentalObject mRentalObject;
     private RentalObjectSizeInfo mSizeInfo;
@@ -16,11 +17,12 @@ public class Rental
     private int mOverduePayment;
     
     public Rental(
-        Member member, RentalObject rentalObject,
+        int id, Member member, RentalObject rentalObject,
         RentalObjectSizeInfo sizeInfo, 
         LocalDate beginDate, LocalDate desiredReturnDate,
         LocalDate actualReturnDate, int overduePayment)
     {
+        this.mId = id;
         this.mMember = member;
         this.mRentalObject = rentalObject;
         this.mSizeInfo = sizeInfo;
@@ -30,6 +32,7 @@ public class Rental
         this.mOverduePayment = overduePayment;
     }
     
+    public int getId() { return this.mId; }
     public Member getMember() { return this.mMember; }
     public RentalObject getRentalObject() { return this.mRentalObject; }
     public RentalObjectSizeInfo getSizeInfo() { return this.mSizeInfo; }
