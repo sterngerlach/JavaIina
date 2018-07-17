@@ -5,15 +5,14 @@ package javaiina;
 
 import java.sql.*;
 
-public class CreateDatabaseTable{
-    
-    private CreateDatabaseTable() throws SQLException, ClassNotFoundException{
+public class TableCreateMethod{    
+    private TableCreateMethod() throws SQLException, ClassNotFoundException{
         if(tableExist("Member")) createMemberTable();
         if(tableExist("Rental")) createRentalTable();
-        if(tableExist("Reservation")) createReservation();
-        if(tableExist("RentalObject")) createRentalObject();
-        if(tableExist("AvailableSizeInfo")) createAvailableSizeInfo();
-        if(tableExist("SizeInfo")) createSizeInfo();
+        if(tableExist("Reservation")) createReservationTable();
+        if(tableExist("RentalObject")) createRentalObjectTable();
+        if(tableExist("AvailableSizeInfo")) createAvailableSizeInfoTable();
+        if(tableExist("SizeInfo")) createSizeInfoTable();
     }    
     
     private void createMemberTable() throws SQLException,ClassNotFoundException{
@@ -122,5 +121,20 @@ public class CreateDatabaseTable{
         Statement stmt = conn.createStatement();
         stmt.execute(availableSizeInfoTable);
         stmt.close();
+   }
+    
+   public boolean tableExist (String tableName) throws SQLException, ClassNotFoundException{
+       boolean tExists = false;
+       Connection conn = DatabaseAccess.getInstance().getConnection();
+       try (ResultSet rs = conn.getMetaData().getTables(null, null, tableName, null)){
+           while(rs.next()) {
+               String tName = rs.getString("TABLE_NAME");
+               if (tName != null && tName.equals(tableName)){
+                   tExists = true;
+                   break;
+               }
+           }
+       }
+       return tExists;
    }
 }
