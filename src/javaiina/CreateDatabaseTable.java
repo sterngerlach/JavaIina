@@ -8,9 +8,15 @@ import java.sql.*;
 public class CreateDatabaseTable{
     
     private CreateDatabaseTable() throws SQLException, ClassNotFoundException{
+        if(tableExist("Member")) createMemberTable();
+        if(tableExist("Rental")) createRentalTable();
+        if(tableExist("Reservation")) createReservation();
+        if(tableExist("RentalObject")) createRentalObject();
+        if(tableExist("AvailableSizeInfo")) createAvailableSizeInfo();
+        if(tableExist("SizeInfo")) createSizeInfo();
     }    
     
-    private void createMemberTable() throws SQLException{
+    private void createMemberTable() throws SQLException,ClassNotFoundException{
         String memberTable = 
             "create table Member ("
             + "memberId bigint primary key,"
@@ -34,7 +40,7 @@ public class CreateDatabaseTable{
         stmt.close();
     }
 
-    private void createRentalTable() throws SQLException{
+    private void createRentalTable() throws SQLException, ClassNotFoundException{
         String rentalObjectTable = 
             "create table RentalObject ("
             + "rentalId bigint,"
@@ -53,7 +59,7 @@ public class CreateDatabaseTable{
         stmt.close();
     }
 
-    private void createReservationTable() throws SQLException{
+    private void createReservationTable() throws SQLException, ClassNotFoundException{
         String reservationTable =
             "create table Reservation ("
             + "reservationId bigint"
@@ -70,7 +76,7 @@ public class CreateDatabaseTable{
         stmt.close();
     }
     
-    private void createRentalObjectTable() throws SQLException{
+    private void createRentalObjectTable() throws SQLException, ClassNotFoundException{
         String rentalTable =
             "create table RentalObject ("
             + "rentalObjectId int,"
@@ -84,7 +90,7 @@ public class CreateDatabaseTable{
         stmt.close();
     }
 
-    private void createSizeInfoTable() throws SQLException{
+    private void createSizeInfoTable() throws SQLException, ClassNotFoundException{
         String sizeInfoTable =
             "create table SizeInfo ("
             + "sizeId int primary key,"
@@ -105,7 +111,7 @@ public class CreateDatabaseTable{
         stmt.close();
     }
     
-    private void createAvailableSizeInfoTable() throws SQLException{
+    private void createAvailableSizeInfoTable() throws SQLException, ClassNotFoundException{
         String availableSizeInfoTable =
             "create table AvailableSizeInfo("
             + "rentalObjectId bigint,"
