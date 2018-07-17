@@ -183,6 +183,5 @@ public class MemberTableMethod{
         rs.close();
         stmt.close();
         return resultList;
-    }
-    
+    }  
 }

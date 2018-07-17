@@ -8,8 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class AvailableSizeInfoTableMethod {
-    
+public class AvailableSizeInfoTableMethod {    
     private AvailableSizeInfoTableMethod() throws SQLException, ClassNotFoundException{
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -31,7 +30,7 @@ public class AvailableSizeInfoTableMethod {
     
     public void reservationInsert(AvailableSize aSize) throws SQLException{
         Connection conn = DatabaseAccess.getInstance().getConnection();
-        Statement stmt = mConnToDatabase.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate("insert into AvailableSizeInfo values("
             + aSize.getRentalObject().id() + ","
             + aSize.getSizeInfo().id() + ","

@@ -24,11 +24,11 @@ public class ReservationTableMethod{
     
     public void reservationInsert(Reservation res) throws SQLException{
         Connection conn = DatabaseAccess.getInstance().getConnection();
-        Statement stmt = mConnToDatabase.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate("insert into Reservation values("
             + res.id() + ","
             + res.member().id() + ","
-            + res.rental.id() + ","
+            + res.rentalObject().id() + ","
             + "'" + res.reservationDate() + "',"
             + res.sizeInfo().id() + ","
             + res.isDone() + ","
@@ -44,6 +44,7 @@ public class ReservationTableMethod{
         stmt.close();
     }
     
+    public void reservationUpdate(String column, String updateDta, String condition) throws SQLException {
         Connection conn = Database.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
