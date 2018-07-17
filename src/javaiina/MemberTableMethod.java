@@ -35,12 +35,12 @@ public class MemberTableMethod{
             + "'" + m.firstNameKana() + "',"
             + "'" + m.secondNameKana() + "',"
             + "'" + m.nickName() + "',"
-            + m.birthDate() + ","
-            + m.registerDate() + ","
+            + "'" + m.birthDate() + "',"
+            + "'" + m.registerDate() + "',"
             + "'" + m.gender().toString() + "',"
             + "'" + m.phoneNumber() + "',"
-            + "'" + m.emailAddress() + "'," +
-            ")"
+            + "'" + m.emailAddress() + "'" +
+             ")"
         );
         stmt.close();
     }
@@ -81,7 +81,7 @@ public class MemberTableMethod{
         stmt.executeUpdate(
             "update Member " 
             + "set " + column + " = " + updateData + " " 
-            + condition
+            + "'" + condition + "'"
         );
         stmt.close();
     }
@@ -115,7 +115,7 @@ public class MemberTableMethod{
             "update Member"
             +" set firstNameKana = " + "'" + m.firstNameKana() + "' " 
             + "where memberId = " + m.id()
-        ); 
+         ); 
         stmt.close();
     }
     
