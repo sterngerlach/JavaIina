@@ -14,7 +14,12 @@ import java.util.List;
 public class MemberTableMethod{
     
     public MemberTableMethod() throws SQLException, ClassNotFoundException{
-        super();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        if(tableExist("Member"))
+            stmt.executeUpdate("insert into Member values" 
+                + ("0, '', '', '', '', ''")
+            );
     }
     
     public void memberInsert(Member m) throws SQLException, ClassNotFoundException{
