@@ -5,10 +5,9 @@ package javaiina;
 
 import java.sql.*;
 
-public class CreateDatabaseTable extends DatabaseAccess{
+public class CreateDatabaseTable{
     
     private CreateDatabaseTable() throws SQLException, ClassNotFoundException{
-        super();
     }    
     
     private void createMemberTable() throws SQLException{
@@ -29,9 +28,10 @@ public class CreateDatabaseTable extends DatabaseAccess{
             + "emailAddress varchar(128),"
             + ")";
         
-        mStmt = mConnToDatabase.createStatement();
-        mStmt.execute(memberTable);
-        mStmt.close();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        stmt.execute(memberTable);
+        stmt.close();
     }
 
     private void createRentalTable() throws SQLException{
@@ -47,9 +47,10 @@ public class CreateDatabaseTable extends DatabaseAccess{
             + "overduePayment int"
             + ")";
         
-        mStmt = mConnToDatabase.createStatement();
-        mStmt.execute(rentalObjectTable);
-        mStmt.close();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        stmt.execute(rentalObjectTable);
+        stmt.close();
     }
 
     private void createReservationTable() throws SQLException{
@@ -63,9 +64,10 @@ public class CreateDatabaseTable extends DatabaseAccess{
             + "done bit,"
             + ")";
         
-        mStmt = mConnToDatabase.createStatement();
-        mStmt.execute(reservationTable);
-        mStmt.close();	
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        stmt.execute(reservationTable);
+        stmt.close();
     }
     
     private void createRentalObjectTable() throws SQLException{
@@ -76,10 +78,10 @@ public class CreateDatabaseTable extends DatabaseAccess{
             + "categoryName varchar(256),"
             + "cost int"
             + ")";
-        
-        mStmt = mConnToDatabase.createStatement();
-        mStmt.execute(rentalTable);
-        mStmt.close();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        stmt.execute(rentalTable);
+        stmt.close();
     }
 
     private void createSizeInfoTable() throws SQLException{
@@ -97,9 +99,10 @@ public class CreateDatabaseTable extends DatabaseAccess{
             + "inseam int"
             + ")";
         
-        mStmt = mConnToDatabase.createStatement();    
-        mStmt.executeQuery(sizeInfoTable);
-        mStmt.close();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        stmt.execute(sizeInfoTable);
+        stmt.close();
     }
     
     private void createAvailableSizeInfoTable() throws SQLException{
@@ -107,10 +110,11 @@ public class CreateDatabaseTable extends DatabaseAccess{
             "create table AvailableSizeInfo("
             + "rentalObjectId bigint,"
             + "sizeId int"
-            +")";
+            + ")";
         
-        mStmt = mConnToDatabase.createStatement();
-        mStmt.execute(availableSizeInfoTable);
-        mStmt.close();
-    }
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        stmt.execute(availableSizeInfoTable);
+        stmt.close();
+   }
 }

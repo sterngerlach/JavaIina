@@ -4,13 +4,16 @@ import java.sql.*;
 import java.util.Properties;
 
 public class DatabaseAccess {
-    protected String mConnUri;
-    protected Connection mConnToDatabase;
-    protected Statement mStmt;
+    private static DatabaseAccess mInstance = new DatabaseAccess();
+    private String mConnUri = "jdbc:derby:../database;create = true";
+    private Connection mConnToDatabase = DriverManager.getConnection(mConnUri);
 
-    public DatabaseAccess() throws SQLException,ClassNotFoundException{
+    private DatabaseAccess() throws SQLException,ClassNotFoundException{
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-        mConnUri= "jdbc:derby:../database;create = true";
-        mConnToDatabase = DriverManager.getConnection(mConnUri);
+        
     }
+    
+    public static DatabaseAccess getInstance() { return this.mInstance;}
+    
+    public Connection getConnection() { return this.mConnToDatabase;}
 }
