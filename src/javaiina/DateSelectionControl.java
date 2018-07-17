@@ -27,9 +27,7 @@ public class DateSelectionControl extends JPanel implements ItemListener, PopupM
     private static final long serialVersionUID = -8988322473723783107L;
     
     private LocalDate mMinDate;
-    private Integer mSelectedYear;
-    private Integer mSelectedMonth;
-    private Integer mSelectedDay;
+    private LocalDate mMaxDate;
     
     private Font mFontDefault;
     
@@ -40,12 +38,13 @@ public class DateSelectionControl extends JPanel implements ItemListener, PopupM
     private JLabel mLabelDay;
     private JComboBox<Integer> mComboBoxDay;
     
-    public DateSelectionControl(LocalDate minDate)
+    public DateSelectionControl(LocalDate minDate, LocalDate maxDate)
     {
-        this.mSelectedYear = null;
-        this.mSelectedMonth = null;
-        this.mSelectedDay = null;
+        if (minDate.isAfter(maxDate))
+            throw new IllegalArgumentException("minDate is after the maxDate");
+        
         this.mMinDate = minDate;
+        this.mMaxDate = maxDate;
         
         this.initializeComponent();
     }
@@ -77,7 +76,7 @@ public class DateSelectionControl extends JPanel implements ItemListener, PopupM
         
         /* Year ComboBox */
         Integer minYear = this.mMinDate.getYear();
-        Integer maxYear = LocalDate.now().getYear();
+        Integer maxYear = this.mMaxDate.getYear();
         Integer[] yearItems = Stream
             .iterate(minYear, n -> n + 1)
             .limit(maxYear - minYear + 1)
@@ -100,13 +99,7 @@ public class DateSelectionControl extends JPanel implements ItemListener, PopupM
         this.add(this.mLabelMonth, layoutConstraints);
         
         /* Month ComboBox */
-        Integer[] monthItems = Arrays
-            .stream(Month.values())
-            .map(monthEnum -> monthEnum.getValue())
-            .toArray(Integer[]::new);
-        
-        DefaultComboBoxModel<Integer> comboBoxMonthModel = new DefaultComboBoxModel<>(monthItems);
-        this.mComboBoxMonth = new JComboBox<>(comboBoxMonthModel);
+        this.mComboBoxMonth = new JComboBox<>();
         this.mComboBoxMonth.setFont(this.mFontDefault);
         
         layoutConstraints.gridx = 3;
@@ -135,21 +128,128 @@ public class DateSelectionControl extends JPanel implements ItemListener, PopupM
         this.mComboBoxDay.addItemListener(this);
         
         /* Add PopupMenuListener */
+        this.mComboBoxMonth.addPopupMenuListener(this);
         this.mComboBoxDay.addPopupMenuListener(this);
         
         /* Set Default Value */
         comboBoxYearModel.setSelectedItem(null);
+    }
+    
+    private void updateComboBoxMonth()
+    {
+        if (this.mComboBoxYear.getModel() == null)
+            return;
+        
+        Integer selectedYear = (Integer)this.mComboBoxYear.getModel().getSelectedItem();
+        
+        if (selectedYear == null)
+            return;
+        
+        /* Add month ComboBox items */
+        Integer[] monthItems = null;
+        
+        if (this.mMinDate.getYear() == this.mMaxDate.getYear())
+            monthItems = Arrays.stream(Month.values())
+                .map(monthEnum -> monthEnum.getValue())
+                .skip(this.mMinDate.getMonthValue() - 1)
+                .limit(this.mMaxDate.getMonthValue() - this.mMinDate.getMonthValue() + 1)
+                .toArray(Integer[]::new);
+        else if (selectedYear == this.mMaxDate.getYear())
+            monthItems = Stream.iterate(1, n -> n + 1)
+                .limit(this.mMaxDate.getMonthValue())
+                .toArray(Integer[]::new);
+        else if (selectedYear == this.mMinDate.getYear())
+            monthItems = Arrays.stream(Month.values())
+                .map(monthEnum -> monthEnum.getValue())
+                .skip(this.mMinDate.getMonthValue() - 1)
+                .toArray(Integer[]::new);
+        else
+            monthItems = Arrays.stream(Month.values())
+                .map(monthEnum -> monthEnum.getValue())
+                .toArray(Integer[]::new);
+        
+        DefaultComboBoxModel<Integer> comboBoxMonthModel = new DefaultComboBoxModel<>(monthItems);
+        this.mComboBoxMonth.setModel(comboBoxMonthModel);
         comboBoxMonthModel.setSelectedItem(null);
+    }
+    
+    private void updateComboBoxDay()
+    {
+        if (this.mComboBoxYear.getModel() == null)
+            return;
+        
+        if (this.mComboBoxMonth.getModel() == null)
+            return;
+        
+        Integer selectedYear = (Integer)this.mComboBoxYear.getModel().getSelectedItem();
+        Integer selectedMonth = (Integer)this.mComboBoxMonth.getModel().getSelectedItem();
+        
+        if (selectedYear == null || selectedMonth == null)
+            return;
+        
+        /* Add day ComboBox items */
+        YearMonth selectedYearMonth = YearMonth.of(selectedYear, selectedMonth);
+        Integer[] dayItems = null;
+        
+        if (this.mMinDate.getYear() == this.mMaxDate.getYear() &&
+            this.mMinDate.getMonthValue() == this.mMaxDate.getMonthValue())
+            dayItems = Stream.iterate(1, n -> n + 1)
+                .skip(this.mMinDate.getDayOfMonth() - 1)
+                .limit(this.mMaxDate.getDayOfMonth() - this.mMinDate.getDayOfMonth() + 1)
+                .toArray(Integer[]::new);
+        else if (selectedYearMonth.getYear() == this.mMaxDate.getYear() &&
+            selectedYearMonth.getMonthValue() == this.mMaxDate.getMonthValue())
+            dayItems = Stream.iterate(1, n -> n + 1)
+                .limit(this.mMaxDate.getDayOfMonth()).toArray(Integer[]::new);
+        else if (selectedYearMonth.getYear() == this.mMinDate.getYear() &&
+            selectedYearMonth.getMonthValue() == this.mMinDate.getMonthValue())
+            dayItems = Stream.iterate(1, n -> n + 1)
+                .skip(this.mMinDate.getDayOfMonth() - 1)
+                .limit(selectedYearMonth.lengthOfMonth() - this.mMinDate.getDayOfMonth() + 1)
+                .toArray(Integer[]::new);
+        else
+            dayItems = Stream.iterate(1, n -> n + 1)
+                .limit(selectedYearMonth.lengthOfMonth()).toArray(Integer[]::new);
+        
+        DefaultComboBoxModel<Integer> comboBoxDayModel = new DefaultComboBoxModel<>(dayItems);
+        this.mComboBoxDay.setModel(comboBoxDayModel);
+        comboBoxDayModel.setSelectedItem(null);
     }
     
     public LocalDate getSelectedDate()
     {
-        if (this.mSelectedYear == null || this.mSelectedMonth == null || this.mSelectedDay == null)
+        if (this.mComboBoxYear.getModel() == null)
             return null;
         
-        return LocalDate.of(this.mSelectedYear, this.mSelectedMonth, this.mSelectedDay);
+        if (this.mComboBoxMonth.getModel() == null)
+            return null;
+        
+        if (this.mComboBoxDay.getModel() == null)
+            return null;
+        
+        Integer selectedYear = (Integer)this.mComboBoxYear.getModel().getSelectedItem();
+        Integer selectedMonth = (Integer)this.mComboBoxMonth.getModel().getSelectedItem();
+        Integer selectedDay = (Integer)this.mComboBoxYear.getModel().getSelectedItem();
+        
+        if (selectedYear == null || selectedMonth == null || selectedDay == null)
+            return null;
+        
+        return LocalDate.of(selectedYear, selectedMonth, selectedDay);
     }
-
+    
+    public void setSelectedDate(LocalDate selectedDate)
+    {
+        if (this.mMinDate.isAfter(selectedDate))
+            throw new IllegalArgumentException("minDate is after the selectedDate");
+        
+        if (this.mMaxDate.isBefore(selectedDate))
+            throw new IllegalArgumentException("maxDate is before the selectedDate");
+        
+        this.mComboBoxYear.getModel().setSelectedItem(selectedDate.getYear());
+        this.mComboBoxMonth.getModel().setSelectedItem(selectedDate.getMonthValue());
+        this.mComboBoxDay.getModel().setSelectedItem(selectedDate.getDayOfMonth());
+    }
+    
     @Override
     public void itemStateChanged(ItemEvent e)
     {
@@ -157,17 +257,24 @@ public class DateSelectionControl extends JPanel implements ItemListener, PopupM
             return;
         
         if (e.getSource() == this.mComboBoxYear) {
-            /* this.mSelectedYear is set to null if there is no selection */
-            this.mSelectedYear = (Integer)this.mComboBoxYear.getModel().getSelectedItem();
+            /* Update month ComboBox */
+            this.updateComboBoxMonth();
+            
+            /* Clear month ComboBox selection */
+            if (this.mComboBoxMonth.getModel() != null)
+                this.mComboBoxMonth.getModel().setSelectedItem(null);
+            
             /* Clear day ComboBox selection */
-            this.mComboBoxDay.getModel().setSelectedItem(null);
+            if (this.mComboBoxDay.getModel() != null)
+                this.mComboBoxDay.getModel().setSelectedItem(null);
         } else if (e.getSource() == this.mComboBoxMonth) {
-            /* this.mSelectedMonth is set to null if there is no selection */
-            this.mSelectedMonth = (Integer)this.mComboBoxMonth.getModel().getSelectedItem();
+            /* Update day ComboBox */
+            this.updateComboBoxDay();
+            
             /* Clear day ComboBox selection */
-            this.mComboBoxDay.getModel().setSelectedItem(null);
+            if (this.mComboBoxDay.getModel() != null)
+                this.mComboBoxDay.getModel().setSelectedItem(null);
         } else if (e.getSource() == this.mComboBoxDay) {
-            this.mSelectedDay = (Integer)this.mComboBoxDay.getModel().getSelectedItem();
         } else {
             throw new UnsupportedOperationException("Unknown event source");
         }
@@ -176,22 +283,12 @@ public class DateSelectionControl extends JPanel implements ItemListener, PopupM
     @Override
     public void popupMenuWillBecomeVisible(PopupMenuEvent e)
     {
-        if (e.getSource() != this.mComboBoxDay)
-            return;
-        
-        if (this.mSelectedYear == null || this.mSelectedMonth == null)
-            return;
-        
-        /* Add day ComboBox items */
-        YearMonth selectedYearMonth = YearMonth.of(this.mSelectedYear, this.mSelectedMonth);
-        Integer[] dayItems = Stream
-            .iterate(1, n -> n + 1)
-            .limit(selectedYearMonth.lengthOfMonth())
-            .toArray(Integer[]::new);
-        
-        DefaultComboBoxModel<Integer> comboBoxDayModel = new DefaultComboBoxModel<>(dayItems);
-        this.mComboBoxDay.setModel(comboBoxDayModel);
-        comboBoxDayModel.setSelectedItem(null);
+        if (e.getSource() == this.mComboBoxMonth)
+            this.updateComboBoxMonth();
+        else if (e.getSource() == this.mComboBoxDay)
+            this.updateComboBoxDay();
+        else
+            throw new UnsupportedOperationException("Unknown event source");
     }
 
     @Override

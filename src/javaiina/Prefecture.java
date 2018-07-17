@@ -3,59 +3,64 @@
 
 package javaiina;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class Prefecture
 {
-    public static final Map<Integer, String> JapanPrefectures = Map.ofEntries(
-        Map.entry(1, "Hokkaido"),
-        Map.entry(2, "Aomori"),
-        Map.entry(3, "Iwate"),
-        Map.entry(4, "Miyagi"),
-        Map.entry(5, "Akita"),
-        Map.entry(6, "Yamagata"),
-        Map.entry(7, "Fukushima"),
-        Map.entry(8, "Ibaraki"),
-        Map.entry(9, "Tochigi"),
-        Map.entry(10, "Gumma"),
-        Map.entry(11, "Saitama"),
-        Map.entry(12, "Chiba"),
-        Map.entry(13, "Tokyo"),
-        Map.entry(14, "Kanagawa"),
-        Map.entry(15, "Niigata"),
-        Map.entry(16, "Toyama"),
-        Map.entry(17, "Ishikawa"),
-        Map.entry(18, "Fukui"),
-        Map.entry(19, "Yamanashi"),
-        Map.entry(20, "Nagano"),
-        Map.entry(21, "Gifu"),
-        Map.entry(22, "Shizuoka"),
-        Map.entry(23, "Aichi"),
-        Map.entry(24, "Mie"),
-        Map.entry(25, "Shiga"),
-        Map.entry(26, "Kyoto"),
-        Map.entry(27, "Osaka"),
-        Map.entry(28, "Hyogo"),
-        Map.entry(29, "Nara"),
-        Map.entry(30, "Wakayama"),
-        Map.entry(31, "Tottori"),
-        Map.entry(32, "Shimane"),
-        Map.entry(33, "Okayama"),
-        Map.entry(34, "Hiroshima"),
-        Map.entry(35, "Yamaguchi"),
-        Map.entry(36, "Tokushima"),
-        Map.entry(37, "Kagawa"),
-        Map.entry(38, "Ehime"),
-        Map.entry(39, "Kochi"),
-        Map.entry(40, "Fukuoka"),
-        Map.entry(41, "Saga"),
-        Map.entry(42, "Nagasaki"),
-        Map.entry(43, "Kumamoto"),
-        Map.entry(44, "Oita"),
-        Map.entry(45, "Miyazaki"),
-        Map.entry(46, "Kagoshima"),
-        Map.entry(47, "Okinawa")
-    );
+    public static final Map<Integer, String> JapanPrefectures = Stream.of(
+        new SimpleEntry<>(1, "Hokkaido"),
+        new SimpleEntry<>(2, "Aomori"),
+        new SimpleEntry<>(3, "Iwate"),
+        new SimpleEntry<>(4, "Miyagi"),
+        new SimpleEntry<>(5, "Akita"),
+        new SimpleEntry<>(6, "Yamagata"),
+        new SimpleEntry<>(7, "Fukushima"),
+        new SimpleEntry<>(8, "Ibaraki"),
+        new SimpleEntry<>(9, "Tochigi"),
+        new SimpleEntry<>(10, "Gumma"),
+        new SimpleEntry<>(11, "Saitama"),
+        new SimpleEntry<>(12, "Chiba"),
+        new SimpleEntry<>(13, "Tokyo"),
+        new SimpleEntry<>(14, "Kanagawa"),
+        new SimpleEntry<>(15, "Niigata"),
+        new SimpleEntry<>(16, "Toyama"),
+        new SimpleEntry<>(17, "Ishikawa"),
+        new SimpleEntry<>(18, "Fukui"),
+        new SimpleEntry<>(19, "Yamanashi"),
+        new SimpleEntry<>(20, "Nagano"),
+        new SimpleEntry<>(21, "Gifu"),
+        new SimpleEntry<>(22, "Shizuoka"),
+        new SimpleEntry<>(23, "Aichi"),
+        new SimpleEntry<>(24, "Mie"),
+        new SimpleEntry<>(25, "Shiga"),
+        new SimpleEntry<>(26, "Kyoto"),
+        new SimpleEntry<>(27, "Osaka"),
+        new SimpleEntry<>(28, "Hyogo"),
+        new SimpleEntry<>(29, "Nara"),
+        new SimpleEntry<>(30, "Wakayama"),
+        new SimpleEntry<>(31, "Tottori"),
+        new SimpleEntry<>(32, "Shimane"),
+        new SimpleEntry<>(33, "Okayama"),
+        new SimpleEntry<>(34, "Hiroshima"),
+        new SimpleEntry<>(35, "Yamaguchi"),
+        new SimpleEntry<>(36, "Tokushima"),
+        new SimpleEntry<>(37, "Kagawa"),
+        new SimpleEntry<>(38, "Ehime"),
+        new SimpleEntry<>(39, "Kochi"),
+        new SimpleEntry<>(40, "Fukuoka"),
+        new SimpleEntry<>(41, "Saga"),
+        new SimpleEntry<>(42, "Nagasaki"),
+        new SimpleEntry<>(43, "Kumamoto"),
+        new SimpleEntry<>(44, "Oita"),
+        new SimpleEntry<>(45, "Miyazaki"),
+        new SimpleEntry<>(46, "Kagoshima"),
+        new SimpleEntry<>(47, "Okinawa"))
+        .collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
     
     private Prefecture()
     {
@@ -64,9 +69,10 @@ public final class Prefecture
     
     public static int getPrefectureIdFromName(String prefectureName)
     {
-        var prefectureEntry = Prefecture.JapanPrefectures.entrySet().stream()
-            .filter(entry -> entry.getValue().equals(prefectureName))
-            .findFirst();
+        Optional<Entry<Integer, String>> prefectureEntry =
+            Prefecture.JapanPrefectures.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(prefectureName))
+                .findFirst();
         
         if (!prefectureEntry.isPresent())
             throw new IllegalArgumentException("prefectureName");
@@ -76,9 +82,10 @@ public final class Prefecture
     
     public static String getPrefectureNameFromId(int prefectureId)
     {
-        var prefectureEntry = Prefecture.JapanPrefectures.entrySet().stream()
-            .filter(entry -> entry.getKey().intValue() == prefectureId)
-            .findFirst();
+        Optional<Entry<Integer, String>> prefectureEntry =
+            Prefecture.JapanPrefectures.entrySet().stream()
+                .filter(entry -> entry.getKey().intValue() == prefectureId)
+                .findFirst();
         
         if (!prefectureEntry.isPresent())
             throw new IllegalArgumentException("prefectureId");

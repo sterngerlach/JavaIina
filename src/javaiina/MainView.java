@@ -17,9 +17,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.ChangeListener;
 
 public class MainView extends JFrame
 {
@@ -39,22 +41,60 @@ public class MainView extends JFrame
     private JMenuItem mMenuItemExit;
     
     private JToolBar mToolBarMain;
-    private JButton mButtonLogIn;
+    private JButton mButtonLogin;
     private JButton mButtonRegisterMember;
+    
+    private JTabbedPane mTabbedPaneMain;
+    private StartMenuPanel mStartMenuPanel;
+    private MainMenuPanel mMainMenuPanel;
+    private ItemsPanel mItemsPanel;
+    private BorrowingItemsPanel mBorrowingItemsPanel;
     
     private JPanel mPanelStatusBar;
     private JLabel mLabelStatusBar;
     
-    public MainView(MainModel mainModel, String title)
+    public PanelBase getSelectedPanel()
     {
-        this.mModel = mainModel;
-        
+        return (PanelBase)this.mTabbedPaneMain.getSelectedComponent();
+    }
+    
+    public StartMenuPanel getStartMenuPanel()
+    {
+        return this.mStartMenuPanel;
+    }
+    
+    public MainMenuPanel getMainMenuPanel()
+    {
+        return this.mMainMenuPanel;
+    }
+    
+    public ItemsPanel getItemsPanel()
+    {
+        return this.mItemsPanel;
+    }
+    
+    public BorrowingItemsPanel getBorrowingItemsPanel()
+    {
+        return this.mBorrowingItemsPanel;
+    }
+    
+    public MainView(String title)
+    {
         this.initializeComponent();
         
         this.setSize(MainView.DefaultWindowWidth, MainView.DefaultWindowHeight);
         this.setTitle(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+    }
+    
+    public void setModel(MainModel mainModel)
+    {
+        this.mModel = mainModel;
+        this.mStartMenuPanel.setModel(this.mModel);
+        this.mMainMenuPanel.setModel(this.mModel);
+        this.mItemsPanel.setModel(this.mModel);
+        this.mBorrowingItemsPanel.setModel(this.mModel);
     }
     
     private void initializeComponent()
@@ -88,15 +128,31 @@ public class MainView extends JFrame
         this.mToolBarMain = new JToolBar();
         this.mToolBarMain.setFloatable(true);
         this.mToolBarMain.setAlignmentX(Component.LEFT_ALIGNMENT);
-        this.mPanelToolBar.add(this.mToolBarMain);
+        // this.mPanelToolBar.add(this.mToolBarMain);
         
-        this.mButtonLogIn = new JButton("Login");
-        this.mButtonLogIn.setMnemonic(KeyEvent.VK_L);
-        this.mToolBarMain.add(this.mButtonLogIn);
+        this.mButtonLogin = new JButton("Login");
+        this.mButtonLogin.setMnemonic(KeyEvent.VK_L);
+        this.mToolBarMain.add(this.mButtonLogin);
         
         this.mButtonRegisterMember = new JButton("Member Registration");
         this.mButtonRegisterMember.setMnemonic(KeyEvent.VK_R);
         this.mToolBarMain.add(this.mButtonRegisterMember);
+        
+        /* Tabbed Pane */
+        this.mTabbedPaneMain = new JTabbedPane(JTabbedPane.TOP);
+        this.getContentPane().add(this.mTabbedPaneMain, BorderLayout.CENTER);
+        
+        /* Start Menu Panel */
+        this.mStartMenuPanel = new StartMenuPanel();
+        
+        /* Main Menu Panel */
+        this.mMainMenuPanel = new MainMenuPanel();
+        
+        /* Items Panel */
+        this.mItemsPanel = new ItemsPanel();
+        
+        /* Borrowing Items Panel */
+        this.mBorrowingItemsPanel = new BorrowingItemsPanel();
         
         /* Statusbar */
         this.mPanelStatusBar = new JPanel();
@@ -110,13 +166,47 @@ public class MainView extends JFrame
         this.mPanelStatusBar.add(this.mLabelStatusBar);
     }
     
+    public void addTabSelectionChangeListener(ChangeListener changeListener)
+    {
+        this.mTabbedPaneMain.addChangeListener(changeListener);
+    }
+    
     public void addMemberRegisterListener(ActionListener actionListener)
     {
         this.mButtonRegisterMember.addActionListener(actionListener);
+        this.mStartMenuPanel.addRegisterMemberListener(actionListener);
     }
     
-    public void addLogInListener(ActionListener actionListener)
+    public void addLoginListener(ActionListener actionListener)
     {
-        this.mButtonLogIn.addActionListener(actionListener);
+        this.mButtonLogin.addActionListener(actionListener);
+        this.mStartMenuPanel.addLoginListener(actionListener);
+    }
+    
+    public void switchToStartMenuPanel()
+    {
+        this.mTabbedPaneMain.removeAll();
+        this.mTabbedPaneMain.addTab(this.mStartMenuPanel.getPanelName(), this.mStartMenuPanel);
+        this.mPanelToolBar.add(this.mToolBarMain);
+    }
+    
+    public void switchToMainMenuPanel()
+    {
+        this.mTabbedPaneMain.removeAll();
+        this.mTabbedPaneMain.addTab(this.mMainMenuPanel.getPanelName(), this.mMainMenuPanel);
+        this.mTabbedPaneMain.addTab(this.mItemsPanel.getPanelName(), this.mItemsPanel);
+        this.mTabbedPaneMain.addTab(this.mBorrowingItemsPanel.getPanelName(), this.mBorrowingItemsPanel);
+        this.mTabbedPaneMain.setSelectedComponent(this.mMainMenuPanel);
+        this.mPanelToolBar.remove(this.mToolBarMain);
+    }
+    
+    public void switchToItemsPanel()
+    {
+        this.mTabbedPaneMain.setSelectedComponent(this.mItemsPanel);
+    }
+    
+    public void switchToBorrowingItemsPanel()
+    {
+        this.mTabbedPaneMain.setSelectedComponent(this.mBorrowingItemsPanel);
     }
 }

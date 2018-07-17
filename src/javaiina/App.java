@@ -21,7 +21,8 @@ public class App
         // App.initializeLookAndFeel();
         
         MainModel mainModel = new MainModel();
-        MainView mainView = new MainView(mainModel, App.ApplicationName);
+        MainView mainView = new MainView(App.ApplicationName);
+        mainView.setModel(mainModel);
         MainController mainController = new MainController(mainView, mainModel);
         
         mainView.setVisible(true);
