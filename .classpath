@@ -5,10 +5,9 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/derby/derby.jar"/>
+	<classpathentry kind="lib" path="lib/derby/derbytools.jar"/>
+	<classpathentry kind="lib" path="lib/derby/derbyLocale_ja_JP.jar"/>
 	<classpathentry kind="output" path="bin"/>
-	<classpathentry kind="lib" path="lib/derby/derby.jar"></classpathentry>
-	<classpathentry kind="lib" path="lib/derby/derbytools.jar"></classpathentry>
-	<classpathentry kind="lib" path="lib/derby/derbyLocale_ja_JP.jar"></classpathentry>
 </classpath>
