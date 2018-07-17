@@ -44,7 +44,7 @@ public class TableCreateMethod{
             "create table RentalObject ("
             + "rentalId bigint,"
             + "memberId bigint,"
-            + "rentalObject varchar(256),"
+            + "rentalObjectId bigint,"
             + "sizeId int,"
             + "beginDate date,"
             + "desiredReturnDate date,"
