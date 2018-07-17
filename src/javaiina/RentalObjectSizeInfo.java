@@ -5,7 +5,7 @@ package javaiina;
 
 public class RentalObjectSizeInfo
 {
-    private int mId;
+    private long mId;
     private String mSizeName;
     private int mHeight;
     private int mWeight;
@@ -16,7 +16,7 @@ public class RentalObjectSizeInfo
     private int mSleeveLength;
     private int mInseamLength;
     
-    public int id() { return this.mId; }
+    public long id() { return this.mId; }
     public String sizeName() { return this.mSizeName; }
     public int height() { return this.mHeight; }
     public int weight() { return this.mWeight; }
@@ -28,7 +28,7 @@ public class RentalObjectSizeInfo
     public int inseamLength() { return this.mInseamLength; }
     
     public RentalObjectSizeInfo(
-        int id, String sizeName,
+        long id, String sizeName,
         int height, int weight,
         int waistMin, int waistMax,
         int chestWidth, int shoulderWidth,
