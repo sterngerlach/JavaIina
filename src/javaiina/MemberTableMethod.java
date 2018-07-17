@@ -18,8 +18,11 @@ public class MemberTableMethod{
         Statement stmt = conn.createStatement();
         if(tableExist("Member"))
             stmt.executeUpdate("insert into Member values" 
-                + ("0, '', '', '', '', ''")
-            );
+                + "(0, '大樹', '鈴木', 'ひろき', 'すずき', 'すーさん', '1997-09-12', '2016-11-07', 'MALE', '東京都世田谷区池尻1111-11', '154-0001', '000-0000-0000', 'aaa@aaa')"
+                + ",(1, '遙香', '佐藤', 'はるか', 'さとう', 'はるちゃん', '1990-05-22', '2016-12-03', 'FEMALE', '東京都世田谷区池尻1111-12', '154-0001', '001-0000-0000', 'bbb@bbb')"
+                + ",(2, '太郎', '山田', 'たろう', 'やま', 'やまちゃん', '1997-09-12', '2016-11-07', 'MALE', '青森県三戸郡南部町22-33', 174-0101', '002-0000-0000', 'ccc@ccc')"
+              );
+        stmt.close();
     }
     
     public void memberInsert(Member m) throws SQLException, ClassNotFoundException{
