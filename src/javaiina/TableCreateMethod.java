@@ -7,12 +7,12 @@ import java.sql.*;
 
 public class TableCreateMethod{    
     private TableCreateMethod() throws SQLException, ClassNotFoundException{
-        if(tableExist("Member")) createMemberTable();
-        if(tableExist("Rental")) createRentalTable();
-        if(tableExist("Reservation")) createReservationTable();
-        if(tableExist("RentalObject")) createRentalObjectTable();
-        if(tableExist("AvailableSizeInfo")) createAvailableSizeInfoTable();
-        if(tableExist("SizeInfo")) createSizeInfoTable();
+        if(!(tableExist("Member"))) createMemberTable();
+        if(!(tableExist("Rental"))) createRentalTable();
+        if(!(tableExist("Reservation"))) createReservationTable();
+        if(!(tableExist("RentalObject"))) createRentalObjectTable();
+        if(!(tableExist("AvailableSizeInfo"))) createAvailableSizeInfoTable();
+        if(!(tableExist("SizeInfo"))) createSizeInfoTable();
     }    
     
     private void createMemberTable() throws SQLException,ClassNotFoundException{
