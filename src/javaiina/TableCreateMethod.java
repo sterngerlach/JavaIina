@@ -31,8 +31,7 @@ public class TableCreateMethod{
             + "postCode varchar(128)"
             + "phoneNumber varchar(128)," 
             + "emailAddress varchar(128),"
-            + ")";
-        
+            + ")";        
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(memberTable);
@@ -42,7 +41,7 @@ public class TableCreateMethod{
     private void createRentalTable() throws SQLException, ClassNotFoundException{
         String rentalObjectTable = 
             "create table RentalObject ("
-            + "rentalId bigint,"
+            + "rentalId bigint primary key,"
             + "memberId bigint,"
             + "rentalObjectId bigint,"
             + "sizeId int,"
@@ -50,8 +49,7 @@ public class TableCreateMethod{
             + "desiredReturnDate date,"
             + "actualReturnDate date," 
             + "overduePayment int"
-            + ")";
-        
+            + ")";        
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(rentalObjectTable);
@@ -61,14 +59,13 @@ public class TableCreateMethod{
     private void createReservationTable() throws SQLException, ClassNotFoundException{
         String reservationTable =
             "create table Reservation ("
-            + "reservationId bigint"
+            + "reservationId bigint primary key"
             + "memberId bigint,"
             + "rentalId bigint,"
             + "reservationDate date,"
             + "sizeId int,"
             + "done bit,"
-            + ")";
-        
+            + ")";       
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(reservationTable);
@@ -78,7 +75,7 @@ public class TableCreateMethod{
     private void createRentalObjectTable() throws SQLException, ClassNotFoundException{
         String rentalTable =
             "create table RentalObject ("
-            + "rentalObjectId int,"
+            + "rentalObjectId int primary key,"
             + "rentalObjectName varchar(256),"
             + "categoryName varchar(256),"
             + "cost int"
@@ -102,8 +99,7 @@ public class TableCreateMethod{
             + "shoulderWidth int,"
             + "lenSleeve int,"
             + "inseam int"
-            + ")";
-        
+            + ")";        
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(sizeInfoTable);
@@ -113,10 +109,9 @@ public class TableCreateMethod{
     private void createAvailableSizeInfoTable() throws SQLException, ClassNotFoundException{
         String availableSizeInfoTable =
             "create table AvailableSizeInfo("
-            + "rentalObjectId bigint,"
+            + "rentalObjectId bigint primary key,"
             + "sizeId int"
-            + ")";
-        
+            + ")";        
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(availableSizeInfoTable);
