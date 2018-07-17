@@ -17,7 +17,7 @@ public class RentalObjectTableMethod {
                 + "(0, 'スーツレンタル', 'スーツ', 2000)"
                 + ",(1, '制服レンタル', 'スカート', 4000)"
                 + ",(2, 'コスプレレンタル', 'コスプレ衣装', 10000)"
-              );
+            );
         stmt.close();
     }
     
@@ -29,8 +29,8 @@ public class RentalObjectTableMethod {
             + "'" + ro.name() + "',"
             + "'" + ro.categoryName() + "',"
             + ro.cost() + ","
-              + ")"
-         );
+            + ")"
+        );
         stmt.close();
     }
 
@@ -47,7 +47,7 @@ public class RentalObjectTableMethod {
             "update RentalObject "
             + "set " + column + " = " + "'" + updateData + "' "
             + condition
-         );
+        );
         stmt.close();
     }
     
@@ -58,7 +58,7 @@ public class RentalObjectTableMethod {
             "update RentalObject "
             + "set " + column + " = " + updateData + " "
             + condition
-         );
+        );
         stmt.close();
     }
     
@@ -69,7 +69,7 @@ public class RentalObjectTableMethod {
             "update RentalObject "
             +"set " + column + " = " + updateData + " " 
             + condition
-         );
+        );
         stmt.close();
     }
     
@@ -80,7 +80,7 @@ public class RentalObjectTableMethod {
             "update RentalObject "
             + "set rentalObjectName = '" + ro.name() + "' " 
             + "where rentalObjectId = " + ro.id()
-         ); 
+        ); 
         stmt.close();
     }
     
