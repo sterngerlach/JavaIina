@@ -7,13 +7,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MemberTableMethod{
     
-    public MemberTableMethod() throws SQLException, ClassNotFoundException{
+    private MemberTableMethod() throws SQLException, ClassNotFoundException{
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         if(tableExist("Member"))

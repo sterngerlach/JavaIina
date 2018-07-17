@@ -1,7 +1,15 @@
+
+/* RentalObjectTableMethod.java */
+
 package javaiina;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class RentalObjectTableMethod {
-    public RentalObjectTableMethod() throws SQLException, ClassNotFoundException{
+    private RentalObjectTableMethod() throws SQLException, ClassNotFoundException{
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         if(tableExist("RentalObject"))

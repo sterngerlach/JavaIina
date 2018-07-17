@@ -3,12 +3,16 @@
 
 package javaiina;
 
-import com.sun.corba.se.pept.transport.Connection;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ReservationTableMethod{
-    public ReservationTableMethod() throws SQLException, ClassNotFoundException{
+    private ReservationTableMethod() throws SQLException, ClassNotFoundException{
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        // test data
         if(tableExist("Reservation"))
             stmt.executeUpdate("insert into Reservation values" 
                 + "(0, 0, 0, '2017-07-017', 0, 1)"

@@ -1,7 +1,15 @@
+
+/* RentalTableMethod.java */
+
 package javaiina;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class RentalTableMethod {
-    public RentalTableMethod() throws SQLException, ClassNotFoundException{
+    private RentalTableMethod() throws SQLException, ClassNotFoundException{
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
          // test data
