@@ -3,8 +3,13 @@
 
 package javaiina;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemberTableMethod{
     
@@ -150,30 +155,27 @@ public class MemberTableMethod{
         stmt.close();
     }
 
-    public ArrayList<ArrayList<String>> memberSelectAll(Member m) throws SQLException{
-        ArrayList<ArrayList<String>> resultListList = new ArrayList<ArrayList<String>>();
-        ArrayList<String> resultList = new ArrayList<String>();
+    public List<Member> memberSelectAll(Member m) throws SQLException{
+        List<Member> resultList = new ArrayList<Member>();
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from MemberDataTest where mId = " + m.id());
         while(rs.next()) {
-            resultList.add(String.valueOf(rs.getInt("memberId")));
-            resultList.add(rs.getString("firstName"));
-            resultList.add(rs.getString("secontName"));
-            resultList.add(rs.getString("firstNameKana"));
-            resultList.add(rs.getString("secontNameKana"));
-            resultList.add(rs.getString("nickName"));
-            resultList.add(rs.getDate("birthDate").toLocalDate());
-            resultList.add(rs.getDate("registerDate").toLocalDate());
-            resultList.add(rs.getString("gender"));
-            resultList.add(rs.getString("phoneNumber"));
-            resultList.add(rs.getString("emailAddress"));
-            resultListList.add(resultList);
-            removeAll(resultList);
+            resultList.add(Member.member(String.valueOf(rs.getInt("memberId")),
+            rs.getString("firstName"),
+            rs.getString("secontName"),
+            rs.getString("firstNameKana"),
+            rs.getString("secontNameKana"),
+            rs.getString("nickName"),
+            rs.getDate("birthDate").toLocalDate(),
+            rs.getDate("registerDate").toLocalDate(),
+            rs.getString("gender"),
+            rs.getString("phoneNumber"),
+            rs.getString("emailAddress")));
         }
         rs.close();
         stmt.close();
-        return resultListList;
+        return resultList;
     }
     
 }
