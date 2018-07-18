@@ -56,7 +56,7 @@ public class AvailableSizeInfoTableMethod {
     }
     
     public void availableSizeInfoUpdate(String column, long updateData, String condition) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update AvailableSizeInfo "
@@ -67,7 +67,7 @@ public class AvailableSizeInfoTableMethod {
     }
     
     public void availableSizeInfoUpdateSizeId(AvailableSize aSize) throws SQLException{
-        Connection conn = Database.getInstance().getConnetion();
+        Connection conn = DatabaseAccess.getInstance().getConnetion();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update AvailableSizeInfo "
@@ -78,7 +78,7 @@ public class AvailableSizeInfoTableMethod {
     }
     
     public void availableSizeInfoUpdateRentalObjectId(AvailableSize aSize) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update AvailableSizeInfo "
@@ -90,15 +90,40 @@ public class AvailableSizeInfoTableMethod {
     
     public List<AvailableSize> availableSizeSelectAll(AvailableSize aSize) throws SQLException{
         List<AvailableSize> resultList = new ArrayList<AvailableSize>();
+        RentalObject[] ro;
+        RentalObjectSizeInfo[] rosi;
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        ResultSet roRs = stmt.executeQuery("select ro.* from RentalObject ro, AvailableSizeInfo a where a.rentalObjectId = " + aSize.getRentalObject().id());
+        ResultSet rosiRs = stmt.executeQuery("select si.* from SizeInfo si, AvailableSizeInfo a where a.sizeId = " + aSize.getSizeInfo().id());
         ResultSet rs = stmt.executeQuery("select * from AvailableSize where rentalObjectId = " + aSize.getRentalObject().id());
-        while(rs.next()) {
-            resultList.add(new AvailableSize(
-                rs.getLong("rentalObjectId")),
-                rs.getLong("sizeId")
-            );
+        for (int i = 0; rosiRs.next(); i++)
+            rosi[i] = new RentalObjectSizeInfo(
+                    rosiRs.getLong("sizeId"),
+                    rosiRs.getString("sizeName"),
+                    rosiRs.getInt("height"),
+                    rosiRs.getInt("weight"),
+                    rosiRs.getInt("waistMin"),
+                    rosiRs.getInt("waistMax"),
+                    rosiRs.getInt("chestWidth"),
+                    rosiRs.getInt("shoulderLength"),
+                    rosiRs.getInt("sleeveLength"),
+                    rosiRs.getInt("inseam")
+                    );    
+        
+        for (int i = 0; roRs.next(); i++)
+            ro[i] = new RentalObject(
+                    roRs.getLong("rentalObjectId"),
+                    roRs.getString("rentalObjectName"),
+                    roRs.getString("categoryName"),
+                    rosi,
+                    roRs.getInt("cost")
+                    );
+        
+        for (int i = 0; rs.next(); i++) {
+            resultList.add(new AvailableSize(ro[i], rosi[i]));
         }
+        
         rs.close();
         stmt.close();
         return resultList;

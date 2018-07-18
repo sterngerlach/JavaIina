@@ -112,13 +112,30 @@ public class RentalObjectTableMethod {
         List<RentalObject> resultList = new ArrayList<RentalObject>();
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select * from RentalObject where rentalObjectId = " + ro.id());
+        ResultSet rosiRs = stmt.executeQuery("select s.* from SizeInfo s, AvailableSizeinfo a where a.rentalObjectId = " + ro.id());
+        ResultSet rs = stmt.executeQuery("select * from RentalObject where rentalObjectId = " + ro.id());        
+        RentalObjectSizeInfo[] rosi;
+        
+        for (int i = 0; rosiRs.next(); i++)
+            rosi[i] = new RentalObjectSizeInfo(
+                rs.getLong("sizeId"),
+                rs.getString("sizeName"),
+                rs.getInt("height"),
+                rs.getInt("weight"),
+                rs.getInt("waistMin"),
+                rs.getInt("waistMax"),
+                rs.getInt("chestWidth"),
+                rs.getInt("shoulderLength"),
+                rs.getInt("sleeveLength"),
+                rs.getInt("inseam")
+            );
+        
         while(rs.next()) {
             resultList.add(new RentalObject(
                 rs.getLong("rentalObjectId"),
                 rs.getString("rentalObjectName"),
                 rs.getString("categoryName"),
-                // need rentalObjectSizeInfo[] but this table doesn't have this column...
+                rosi,
                 rs.getInt("cost"))
             );
         }

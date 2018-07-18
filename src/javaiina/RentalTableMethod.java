@@ -150,14 +150,68 @@ public class RentalTableMethod {
     
     public List<Rental> rentalSelectAll(Rental ren) throws SQLException{
         List<Rental> resultList = new ArrayList<Rental>();
+        RentalObject[] ro;
+        RentalObjectSizeInfo[] rosi;
+        Member m;
+        Gender g;
+        String str = "";
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        ResultSet roRs = stmt.executeQuery("select ro.* from RentalObject ro, AvailableSizeInfo a where a.rentalObjectId = " + ren.getRentalObject().id());
+        ResultSet rosiRs = stmt.executeQuery("select si.* from SizeInfo si, AvailableSizeInfo a where a.sizeId = " + ren.getSizeInfo().id());
+        ResultSet memRs = stmt.executeQuery("select * from Member where memberId = " + ren.getMember().id());
         ResultSet rs = stmt.executeQuery("select * from Rental where rentalId = " + ren.getId());
-        while(rs.next()) {
+        
+        for (int i = 0; rosiRs.next(); i++)
+            rosi[i] = new RentalObjectSizeInfo(
+                    rosiRs.getLong("sizeId"),
+                    rosiRs.getString("sizeName"),
+                    rosiRs.getInt("height"),
+                    rosiRs.getInt("weight"),
+                    rosiRs.getInt("waistMin"),
+                    rosiRs.getInt("waistMax"),
+                    rosiRs.getInt("chestWidth"),
+                    rosiRs.getInt("shoulderLength"),
+                    rosiRs.getInt("sleeveLength"),
+                    rosiRs.getInt("inseam")
+                    );    
+        
+        for (int i = 0; roRs.next(); i++)
+            ro[i] = new RentalObject(
+                    roRs.getLong("rentalObjectId"),
+                    roRs.getString("rentalObjectName"),
+                    roRs.getString("categoryName"),
+                    rosi,
+                    roRs.getInt("cost")
+                    );
+        while(memRs.next()) { 
+            str = rs.getString("gender");
+            if (str.equals("Male")) { g = Gender.MALE;}
+            else if (str.equals("Female")) { g = Gender.FEMALE;}
+            else {g = Gender.UNSPECIFIED;}
+            m = new Member(
+                memRs.getLong("memberId"),
+                memRs.getString("firstName"),
+                memRs.getString("secontName"),
+                memRs.getString("firstNameKana"),
+                memRs.getString("secontNameKana"),
+                memRs.getString("nickName"),
+                memRs.getDate("birthDate").toLocalDate(),
+                memRs.getDate("registerDate").toLocalDate(),
+                g,
+                memRs.getString("address"),
+                memRs.getString("postCode"),
+                memRs.getString("phoneNumber"),
+                memRs.getString("emailAddress")
+            );
+        }
+        
+        for(int i = 0; rs.next(); i++) {
             resultList.add(new Rental(
                 rs.getLong("rentalId"),
-                rs.getLong("memberId"),
-                rs.getLong("rentalObjectId"),
+                m,
+                ro[i],
+                rosi[i],
                 rs.getDate("beginDate").toLocalDate(),
                 rs.getDate("desiredReturnDate").toLocalDate(),
                 rs.getDate("actualReturnDate").toLocalDate(),

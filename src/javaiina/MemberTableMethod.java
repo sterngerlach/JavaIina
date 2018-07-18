@@ -165,12 +165,18 @@ public class MemberTableMethod{
 
     public List<Member> memberSelectAll(Member m) throws SQLException{
         List<Member> resultList = new ArrayList<Member>();
+        Gender g;
+        String str = "";
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from Member where memberId = " + m.id());
-        while(rs.next()) {
+        while(rs.next()) { 
+            str = rs.getString("gender");
+            if (str.equals("Male")) { g = Gender.MALE;}
+            else if (str.equals("Female")) { g = Gender.FEMALE;}
+            else {g = Gender.UNSPECIFIED;}
             resultList.add(new Member(
-                rs.getLong("memberId")),
+                rs.getLong("memberId"),
                 rs.getString("firstName"),
                 rs.getString("secontName"),
                 rs.getString("firstNameKana"),
@@ -178,9 +184,11 @@ public class MemberTableMethod{
                 rs.getString("nickName"),
                 rs.getDate("birthDate").toLocalDate(),
                 rs.getDate("registerDate").toLocalDate(),
-                rs.getString("gender"),
+                g,
+                rs.getString("address"),
+                rs.getString("postCode"),
                 rs.getString("phoneNumber"),
-                rs.getString("emailAddress")
+                rs.getString("emailAddress"))
             );
         }
         rs.close();
