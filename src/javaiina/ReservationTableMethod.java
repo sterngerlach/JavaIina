@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ReservationTableMethod{
     private ReservationTableMethod() throws SQLException, ClassNotFoundException{
@@ -57,7 +60,7 @@ public class ReservationTableMethod{
     
     public void reservationUpdate(String column, Date updateData, String condition) throws SQLException {
         Connection conn = Database.getInstance().getConnection();
-        stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation "
             + "set " + column + " = " + updateData + " "
@@ -68,7 +71,7 @@ public class ReservationTableMethod{
     
     public void reservationUpdate(String column, long updateData, String condition) throws SQLException{
         Connection conn = Database.getInstance().getConnection();
-        stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation "
             +"set " + column + " = " + updateData + " " 
@@ -79,7 +82,7 @@ public class ReservationTableMethod{
     
     public void reservationUpdateMember(Reservation res) throws SQLException{
         Connection conn = Database.getInstance().getConnetion();
-        stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation"
             +" set memberId = " + res.member().id() + " " 
@@ -90,7 +93,7 @@ public class ReservationTableMethod{
     
     public void reservationUpdateRentalObject(Reservation res) throws SQLException{
         Connection conn = Database.getInstance().getConnection();
-        stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation"
             +" set rentalObjectId = " + res.rentalObject().id() + " "  
@@ -101,7 +104,7 @@ public class ReservationTableMethod{
     
     public void reservationUpdateSizeInfo(Reservation res) throws SQLException{
         Connection conn = Database.getInstance().getConnetion();
-        stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation"
             +" set sizeInfo = " + res.sizeInfo().id() + " "
@@ -110,7 +113,7 @@ public class ReservationTableMethod{
         stmt.close();
     }
     
-    public void reservationUpdateRentalObject(Reservation res) throws SQLException{
+    public void reservationUpdateReservationDate(Reservation res) throws SQLException{
         Connection conn = Database.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
@@ -119,5 +122,35 @@ public class ReservationTableMethod{
             + "where reservationId = " + res.id()
          ); 
         stmt.close();
+    }
+    
+    public void reservationUpdateDone(Reservation res) throws SQLException{
+        Connection conn = Database.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(
+            "update Reservation"
+            + "where reservationId = " + res.id()
+         ); 
+        stmt.close();
+    }
+    
+    public List<Reservation> reservationSelectAll(Reservation res) throws SQLException{
+        List<Reservation> resultList = new ArrayList<Reservation>();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from Reservation where reservationId = " + res.id());
+        while(rs.next()) {
+            resultList.add(new Reservation(
+                rs.getLong("reservationId")),
+                rs.getLong("memberId"),
+                rs.getLong("rentalObjectId"),
+                rs.getDate("reservationDate"),
+                rs.getDate("sizeId"),
+                rs.getBoolean("done")
+            );
+        }
+        rs.close();
+        stmt.close();
+        return resultList;
     }
 }

@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.ArrayList;
 
 public class AvailableSizeInfoTableMethod {    
     private AvailableSizeInfoTableMethod() throws SQLException, ClassNotFoundException{
@@ -84,5 +86,21 @@ public class AvailableSizeInfoTableMethod {
             + "where sizeId = " + aSize.getSizeInfo().id()
          ); 
         stmt.close();
+    }
+    
+    public List<AvailableSize> availableSizeSelectAll(AvailableSize aSize) throws SQLException{
+        List<AvailableSize> resultList = new ArrayList<AvailableSize>();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from AvailableSize where rentalObjectId = " + aSize.getRentalObject().id());
+        while(rs.next()) {
+            resultList.add(new AvailableSize(
+                rs.getLong("rentalObjectId")),
+                rs.getLong("sizeId")
+            );
+        }
+        rs.close();
+        stmt.close();
+        return resultList;
     }
 }

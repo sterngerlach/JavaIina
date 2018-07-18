@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.ArrayList;
 
 public class RentalTableMethod {
     private RentalTableMethod() throws SQLException, ClassNotFoundException{
@@ -23,8 +26,9 @@ public class RentalTableMethod {
     }
     
     public void rentalInsert(Rental ren) throws SQLException{
-        mStmt = mConnToDatabase.createStatement();
-        mStmt.executeUpdate("insert into Rental values("
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = mConnToDatabase.createStatement();
+        stmt.executeUpdate("insert into Rental values("
             + ren.getId() + ","
             + ren.getMember().id() + ","
             + ren.getRentalObject().id() + ","
@@ -57,7 +61,7 @@ public class RentalTableMethod {
     
     public void rentalUpdate(String column, Date updateData, String condition) throws SQLException {
         Connection conn = Database.getInstance().getConnection();
-        stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
             + "set " + column + " = '" + updateData + "' "
@@ -68,7 +72,7 @@ public class RentalTableMethod {
     
     public void rentalUpdate(String column, long updateData, String condition) throws SQLException{
         Connection conn = Database.getInstance().getConnection();
-        stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
             + "set " + column + " = " + updateData + " " 
@@ -79,7 +83,7 @@ public class RentalTableMethod {
     
     public void reservationUpdateMemberId(Rental ren) throws SQLException{
         Connection conn = Database.getInstance().getConnetion();
-        stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
             + "set memberId = " + ren.getMember().id() + " " 
@@ -90,22 +94,11 @@ public class RentalTableMethod {
     
     public void rentalUpdateRentalObjectId(Rental ren) throws SQLException{
         Connection conn = Database.getInstance().getConnection();
-        stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
             + "set rentalObjectId = " + ren.getRentalObject().id() + " "  
             + "where rentalId = " + ren.getId()
-         ); 
-        stmt.close();
-    }
-    
-    public void rentalUpdateSizeId(Rental ren) throws SQLException{
-        Connection conn = Database.getInstance().getConnetion();
-        stmt = conn.createStatement();
-        stmt.executeUpdate(
-            "update Rental "
-            + "set sizeId = " + ren.getSizeInfo().id() + " "
-            + "where reservationId = " + ren.getId()
          ); 
         stmt.close();
     }
@@ -152,5 +145,26 @@ public class RentalTableMethod {
             + "where rentalId = " + ren.getId()
          ); 
         stmt.close();
+    }
+    
+    public List<Rental> rentalSelectAll(Rental ren) throws SQLException{
+        List<Rental> resultList = new ArrayList<Rental>();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from Rental where rentalId = " + ren.getId());
+        while(rs.next()) {
+            resultList.add(new Rental(
+                rs.getLong("rentalId")),
+                rs.getLong("memberId"),
+                rs.getLong("rentalObjectId"),
+                rs.getDate("beginDate"),
+                rs.getDate("desiredReturnDate"),
+                rs.getDate("actualReturnDate"),
+                rs.getInt("overduePayment")
+            );
+        }
+        rs.close();
+        stmt.close();
+        return resultList;
     }
 }

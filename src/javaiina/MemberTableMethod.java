@@ -15,6 +15,7 @@ public class MemberTableMethod{
     private MemberTableMethod() throws SQLException, ClassNotFoundException{
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        // test data
         if(tableExist("Member"))
             stmt.executeUpdate("insert into Member values" 
                 + "(0, '大樹', '鈴木', 'ひろき', 'すずき', 'すーさん', '1997-09-12', '2016-11-07', 'MALE', '東京都世田谷区池尻1111-11', '154-0001', '000-0000-0000', 'aaa@aaa')"
@@ -166,19 +167,21 @@ public class MemberTableMethod{
         List<Member> resultList = new ArrayList<Member>();
         Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("select * from MemberDataTest where mId = " + m.id());
+        ResultSet rs = stmt.executeQuery("select * from Member where memberId = " + m.id());
         while(rs.next()) {
-            resultList.add(Member.member(String.valueOf(rs.getInt("memberId")),
-            rs.getString("firstName"),
-            rs.getString("secontName"),
-            rs.getString("firstNameKana"),
-            rs.getString("secontNameKana"),
-            rs.getString("nickName"),
-            rs.getDate("birthDate").toLocalDate(),
-            rs.getDate("registerDate").toLocalDate(),
-            rs.getString("gender"),
-            rs.getString("phoneNumber"),
-            rs.getString("emailAddress")));
+            resultList.add(new Member(
+                rs.getLong("memberId")),
+                rs.getString("firstName"),
+                rs.getString("secontName"),
+                rs.getString("firstNameKana"),
+                rs.getString("secontNameKana"),
+                rs.getString("nickName"),
+                rs.getDate("birthDate").toLocalDate(),
+                rs.getDate("registerDate").toLocalDate(),
+                rs.getString("gender"),
+                rs.getString("phoneNumber"),
+                rs.getString("emailAddress")
+            );
         }
         rs.close();
         stmt.close();

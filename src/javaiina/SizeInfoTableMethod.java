@@ -1,4 +1,14 @@
+
+/* SizeInforTableMethod.java */
+
 package javaiina;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SizeInfoTableMethod {
     private SizeInfoTableMethod() throws SQLException, ClassNotFoundException{
@@ -148,5 +158,28 @@ public class SizeInfoTableMethod {
             + "where sizeId = " + si.id()
         ); 
         stmt.close();
+    }
+    
+    public List<RentalObjectSizeInfo> sizeInfoSelectAll(RentalObjectSizeInfo si) throws SQLException{
+        List<RentalObjectSizeInfo> resultList = new ArrayList<RentalObjectSizeInfo>();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from SizeInfo where sizeId = " + si.id());
+        while(rs.next()) {
+            resultList.add(new RentalObjectSizeInfo(
+                rs.getLong("sizeId")),
+                rs.getInt("height"),
+                rs.getInt("weight"),
+                rs.getInt("waistMin"),
+                rs.getInt("waistMax"),
+                rs.getInt("chestWidth"),
+                rs.getInt("shoulderLength"),
+                rs.getInt("sleeveLength"),
+                rs.getBoolean("inseam")
+            );
+        }
+        rs.close();
+        stmt.close();
+        return resultList;
     }
 }

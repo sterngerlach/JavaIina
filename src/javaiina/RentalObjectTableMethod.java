@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.ArrayList;
 
 public class RentalObjectTableMethod {
     private RentalObjectTableMethod() throws SQLException, ClassNotFoundException{
@@ -104,5 +106,23 @@ public class RentalObjectTableMethod {
             + "where rentalObjectId = " + ro.id()
          ); 
         stmt.close();
+    }
+    
+    public List<RentalObject> rentalObjectSelectAll(RentalObject ro) throws SQLException{
+        List<RentalObject> resultList = new ArrayList<RentalObject>();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from RentalObject where rentalObjectId = " + ro.id());
+        while(rs.next()) {
+            resultList.add(new RentalObject(
+                rs.getLong("rentalObjectId")),
+                rs.getString("rentalObjectName"),
+                rs.getString("categoryName"),
+                rs.getInt("cost")
+            );
+        }
+        rs.close();
+        stmt.close();
+        return resultList;
     }
 }
