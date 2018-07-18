@@ -25,7 +25,7 @@ public class RentalObjectTableMethod {
     
     public void rentalObjectInsert(RentalObject ro) throws SQLException{
         Connection conn = DatabaseAccess.getInstance().getConnection();
-        Statement stmt = mConnToDatabase.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate("insert into RentalObject values("
             + ro.id() + ","
             + "'" + ro.name() + "',"
@@ -42,8 +42,8 @@ public class RentalObjectTableMethod {
         stmt.executeUpdate("delete from RentalObject where rentalObjectId = " + ro.id());
         stmt.close();
     }
-    public void rentalObjectUpdate(String column, String updateTada, String condition) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+    public void rentalObjectUpdate(String column, String updateData, String condition) throws SQLException{
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update RentalObject "
@@ -54,8 +54,8 @@ public class RentalObjectTableMethod {
     }
     
     public void rentalObjectUpdate(String column, int updateData, String condition) throws SQLException {
-        Connection conn = Database.getInstance().getConnection();
-        stmt = conn.createStatement();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update RentalObject "
             + "set " + column + " = " + updateData + " "
@@ -65,8 +65,8 @@ public class RentalObjectTableMethod {
     }
     
     public void rentalObjectUpdate(String column, long updateData, String condition) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
-        stmt = conn.createStatement();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update RentalObject "
             +"set " + column + " = " + updateData + " " 
@@ -76,8 +76,8 @@ public class RentalObjectTableMethod {
     }
     
     public void rentalObjectUpdateRentalObjectName(RentalObject ro) throws SQLException{
-        Connection conn = Database.getInstance().getConnetion();
-        stmt = conn.createStatement();
+        Connection conn = DatabaseAccess.getInstance().getConnetion();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update RentalObject "
             + "set rentalObjectName = '" + ro.name() + "' " 
@@ -87,8 +87,8 @@ public class RentalObjectTableMethod {
     }
     
     public void rentalObjectUpdateCategoryName(RentalObject ro) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
-        stmt = conn.createStatement();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update RentalObject "
             + "set categoryName = " + ro.categoryName() + " "  
@@ -98,8 +98,8 @@ public class RentalObjectTableMethod {
     }
     
     public void rentalObjectUpdateCost(RentalObject ro) throws SQLException{
-        Connection conn = Database.getInstance().getConnetion();
-        stmt = conn.createStatement();
+        Connection conn = DatabaseAccess.getInstance().getConnetion();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update RentalObject"
             +" set cost = " + ro.cost() + " "
@@ -115,10 +115,11 @@ public class RentalObjectTableMethod {
         ResultSet rs = stmt.executeQuery("select * from RentalObject where rentalObjectId = " + ro.id());
         while(rs.next()) {
             resultList.add(new RentalObject(
-                rs.getLong("rentalObjectId")),
+                rs.getLong("rentalObjectId"),
                 rs.getString("rentalObjectName"),
                 rs.getString("categoryName"),
-                rs.getInt("cost")
+                // need rentalObjectSizeInfo[] but this table doesn't have this column...
+                rs.getInt("cost"))
             );
         }
         rs.close();

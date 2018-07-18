@@ -4,6 +4,7 @@
 package javaiina;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -49,7 +50,7 @@ public class RentalTableMethod {
     }
     
     public void rentalUpdate(String column, String updateData, String condition){
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
@@ -60,7 +61,7 @@ public class RentalTableMethod {
     }
     
     public void rentalUpdate(String column, Date updateData, String condition) throws SQLException {
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
@@ -71,7 +72,7 @@ public class RentalTableMethod {
     }
     
     public void rentalUpdate(String column, long updateData, String condition) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
@@ -82,7 +83,7 @@ public class RentalTableMethod {
     }
     
     public void reservationUpdateMemberId(Rental ren) throws SQLException{
-        Connection conn = Database.getInstance().getConnetion();
+        Connection conn = DatabaseAccess.getInstance().getConnetion();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
@@ -93,7 +94,7 @@ public class RentalTableMethod {
     }
     
     public void rentalUpdateRentalObjectId(Rental ren) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
@@ -104,7 +105,7 @@ public class RentalTableMethod {
     }
     
     public void rentalUpdateBeginDate(Rental ren) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
@@ -115,7 +116,7 @@ public class RentalTableMethod {
     }
     
     public void rentalUpdateDesiredReturnDate(Rental ren) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
@@ -126,7 +127,7 @@ public class RentalTableMethod {
     }
     
     public void rentalUpdateActualReturnDate(Rental ren) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
@@ -137,7 +138,7 @@ public class RentalTableMethod {
     }
     
     public void rentalUpdateOverduePayment(Rental ren) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Rental "
@@ -154,13 +155,13 @@ public class RentalTableMethod {
         ResultSet rs = stmt.executeQuery("select * from Rental where rentalId = " + ren.getId());
         while(rs.next()) {
             resultList.add(new Rental(
-                rs.getLong("rentalId")),
+                rs.getLong("rentalId"),
                 rs.getLong("memberId"),
                 rs.getLong("rentalObjectId"),
-                rs.getDate("beginDate"),
-                rs.getDate("desiredReturnDate"),
-                rs.getDate("actualReturnDate"),
-                rs.getInt("overduePayment")
+                rs.getDate("beginDate").toLocalDate(),
+                rs.getDate("desiredReturnDate").toLocalDate(),
+                rs.getDate("actualReturnDate").toLocalDate(),
+                rs.getInt("overduePayment"))
             );
         }
         rs.close();

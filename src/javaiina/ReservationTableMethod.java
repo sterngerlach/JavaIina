@@ -4,6 +4,7 @@
 package javaiina;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -47,8 +48,8 @@ public class ReservationTableMethod{
         stmt.close();
     }
     
-    public void reservationUpdate(String column, String updateDta, String condition) throws SQLException {
-        Connection conn = Database.getInstance().getConnection();
+    public void reservationUpdate(String column, String updateData, String condition) throws SQLException {
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation "
@@ -59,7 +60,7 @@ public class ReservationTableMethod{
     }
     
     public void reservationUpdate(String column, Date updateData, String condition) throws SQLException {
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation "
@@ -70,7 +71,7 @@ public class ReservationTableMethod{
     }
     
     public void reservationUpdate(String column, long updateData, String condition) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation "
@@ -81,7 +82,7 @@ public class ReservationTableMethod{
     }
     
     public void reservationUpdateMember(Reservation res) throws SQLException{
-        Connection conn = Database.getInstance().getConnetion();
+        Connection conn = DatabaseAccess.getInstance().getConnetion();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation"
@@ -92,7 +93,7 @@ public class ReservationTableMethod{
     }
     
     public void reservationUpdateRentalObject(Reservation res) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation"
@@ -103,7 +104,7 @@ public class ReservationTableMethod{
     }
     
     public void reservationUpdateSizeInfo(Reservation res) throws SQLException{
-        Connection conn = Database.getInstance().getConnetion();
+        Connection conn = DatabaseAccess.getInstance().getConnetion();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation"
@@ -114,7 +115,7 @@ public class ReservationTableMethod{
     }
     
     public void reservationUpdateReservationDate(Reservation res) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation"
@@ -125,7 +126,7 @@ public class ReservationTableMethod{
     }
     
     public void reservationUpdateDone(Reservation res) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update Reservation"
@@ -141,12 +142,12 @@ public class ReservationTableMethod{
         ResultSet rs = stmt.executeQuery("select * from Reservation where reservationId = " + res.id());
         while(rs.next()) {
             resultList.add(new Reservation(
-                rs.getLong("reservationId")),
+                rs.getLong("reservationId"),
                 rs.getLong("memberId"),
                 rs.getLong("rentalObjectId"),
-                rs.getDate("reservationDate"),
-                rs.getDate("sizeId"),
-                rs.getBoolean("done")
+                rs.getDate("reservationDate").toLocalDate(),
+                rs.getDate("sizeId").toLocalDate(),
+                rs.getBoolean("done"))
             );
         }
         rs.close();

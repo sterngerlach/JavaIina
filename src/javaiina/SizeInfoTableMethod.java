@@ -51,7 +51,7 @@ public class SizeInfoTableMethod {
     }
     
     public void sizeInfoUpdate(String column, long updateData, String condition) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update SizeInfo "
@@ -73,7 +73,7 @@ public class SizeInfoTableMethod {
     }
     
     public void sizeInfoUpdateHeight(RentalObjectSizeInfo si) throws SQLException{
-        Connection conn = Database.getInstance().getConnetion();
+        Connection conn = DatabaseAccess.getInstance().getConnetion();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update SizeInfo "
@@ -84,7 +84,7 @@ public class SizeInfoTableMethod {
     }
     
     public void sizeInfoUpdateWeight(RentalObjectSizeInfo si) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update SizeInfo "
@@ -95,7 +95,7 @@ public class SizeInfoTableMethod {
     }
     
     public void sizeInfoUpdateWaistMin(RentalObjectSizeInfo si) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update SizeInfo "
@@ -105,8 +105,8 @@ public class SizeInfoTableMethod {
         stmt.close();
     }
     
-    public void sizeInfoUpdateWaistMin(RentalObjectSizeInfo si) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+    public void sizeInfoUpdateWaistMax(RentalObjectSizeInfo si) throws SQLException{
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update SizeInfo "
@@ -117,7 +117,7 @@ public class SizeInfoTableMethod {
     }
     
     public void sizeInfoUpdateChestWidth(RentalObjectSizeInfo si) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update SizeInfo "
@@ -128,7 +128,7 @@ public class SizeInfoTableMethod {
     }
     
     public void sizeInfoUpdateShoulderWidth(RentalObjectSizeInfo si) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update SizeInfo "
@@ -139,7 +139,7 @@ public class SizeInfoTableMethod {
     }
     
     public void sizeInfoUpdateSleeveLength(RentalObjectSizeInfo si) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update SizeInfo "
@@ -150,7 +150,7 @@ public class SizeInfoTableMethod {
     }
     
     public void sizeInfoUpdateInseamLength(RentalObjectSizeInfo si) throws SQLException{
-        Connection conn = Database.getInstance().getConnection();
+        Connection conn = DatabaseAccess.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(
             "update SizeInfo "
@@ -167,7 +167,8 @@ public class SizeInfoTableMethod {
         ResultSet rs = stmt.executeQuery("select * from SizeInfo where sizeId = " + si.id());
         while(rs.next()) {
             resultList.add(new RentalObjectSizeInfo(
-                rs.getLong("sizeId")),
+                rs.getLong("sizeId"),
+                rs.getString("sizeName"),
                 rs.getInt("height"),
                 rs.getInt("weight"),
                 rs.getInt("waistMin"),
@@ -175,7 +176,7 @@ public class SizeInfoTableMethod {
                 rs.getInt("chestWidth"),
                 rs.getInt("shoulderLength"),
                 rs.getInt("sleeveLength"),
-                rs.getBoolean("inseam")
+                rs.getInt("inseam"))
             );
         }
         rs.close();
