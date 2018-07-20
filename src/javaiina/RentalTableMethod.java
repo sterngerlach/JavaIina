@@ -28,7 +28,7 @@ public class RentalTableMethod {
     
     public void rentalInsert(Rental ren) throws SQLException{
         Connection conn = DatabaseAccess.getInstance().getConnection();
-        Statement stmt = mConnToDatabase.createStatement();
+        Statement stmt = conn.createStatement();
         stmt.executeUpdate("insert into Rental values("
             + ren.getId() + ","
             + ren.getMember().id() + ","
