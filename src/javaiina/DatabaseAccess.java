@@ -5,12 +5,13 @@ import java.util.Properties;
 
 public class DatabaseAccess {
     private static DatabaseAccess mInstance = null;
-    private String mConnUri = "jdbc:derby:../database;create = true";
-    private Connection mConnToDatabase = DriverManager.getConnection(mConnUri);
+    private String mConnUri;
+    private Connection mConnToDatabase;
 
     private DatabaseAccess() throws SQLException,ClassNotFoundException{
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-        
+        this.mConnUri = "jdbc:derby:../database;create = true";
+        this.mConnToDatabase = DriverManager.getConnection(mConnUri);
     }
     
     public static DatabaseAccess getInstance() throws SQLException, ClassNotFoundException{ 
