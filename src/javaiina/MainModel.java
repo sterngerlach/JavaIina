@@ -211,4 +211,16 @@ public class MainModel
             .filter(rentalInfo -> rentalInfo.getMember().id() == this.mLoggedInMember.id())
             .collect(Collectors.toList());
     }
+    
+    public List<Rental> getRecentlyBorrowedItems(int maxSize)
+    {
+        // TODO: Database access may be needed
+        
+        // Return sample list for debugging
+        return this.mDummyRentalList.stream()
+            .filter(rentalInfo -> rentalInfo.getMember().id() == this.mLoggedInMember.id())
+            .filter(rentalInfo -> rentalInfo.getActualReturnDate() != null)
+            .limit(maxSize)
+            .collect(Collectors.toList());
+    }
 }

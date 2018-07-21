@@ -155,6 +155,7 @@ public class MainController
     private void onShowMemberInfo()
     {
         // Switch to member information panel
+        this.mView.switchToMemberInformationPanel();
     }
     
     private void onLogout()
@@ -237,5 +238,8 @@ public class MainController
         // Update Rental database (actualReturnDate, overduePayment)
         // Check Reservation database
         // If someone is waiting for the rental object, then he/she automatically borrows it
+        
+        // Reload borrowing items panel
+        this.mView.getBorrowingItemsPanel().reloadView();
     }
 }
