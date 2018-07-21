@@ -187,8 +187,6 @@ public class RegisterMemberView extends DialogBase
             layoutConstraints, 1, 3, 1.0, 0.0, defaultInsets, GridBagConstraints.HORIZONTAL);
         this.mPanelCenter.add(this.mTextBoxPasswordConfirm, layoutConstraints);
         
-        // TODO: Only full-width characters are accepted.
-        
         /* Name Label */
         this.mLabelName = new JLabel();
         this.mLabelName.setText("Name");
@@ -239,8 +237,6 @@ public class RegisterMemberView extends DialogBase
         this.setLayoutConstraints(
             layoutConstraints, 3, 0, 1.0, 0.0, emptyInsets, GridBagConstraints.HORIZONTAL);
         this.mPanelName.add(this.mTextBoxSecondName, layoutConstraints);
-        
-        // TODO: Only half-width Katakana characters are accepted.
         
         /* Name(Kana) Label */
         this.mLabelNameKana = new JLabel();
