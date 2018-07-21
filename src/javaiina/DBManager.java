@@ -54,11 +54,11 @@ public class DBManager {
             return null;
         }
         
-        public void insert(Member member) {
+        public void insertMember(Member member) {
             this.mMemberList.add(member);
         }
         
-        public List<RentalObject> selectRentalObjectWhereMemberId(Member member) {
+        public List<RentalObject> selectRentalObjectWhereMember(Member member) {
             List<RentalObject> roList = new ArrayList<>();
             
             for (int i = 0; i < this.mRentalList.size(); ++i) {
@@ -66,11 +66,10 @@ public class DBManager {
                     roList.add(this.mRentalList.get(i).getRentalObject());
                 }
             }
-
             return roList;
         }
         
-        public List<RentalObject> selectRentalObjectList() { 
+        public List<RentalObject> selectRentalObject() { 
             return this.mRentalObjectList; 
         }
         
@@ -171,15 +170,15 @@ public class DBManager {
     }
     
     public void addMember(Member member) {
-        this.db.insert(member);
+        this.db.insertMember(member);
     }
     
     public List<RentalObject> nowRetalingObjects(Member member) {
-        return this.db.selectRentalObjectWhereMemberId(member);
+        return this.db.selectRentalObjectWhereMember(member);
     }
     
     public List<RentalObject> allRentalObjects() {
-        return this.db.selectRentalObjectList();
+        return this.db.selectRentalObject();
     }
     
     public List<RentalObject> searchByCategoryName(String categoryName) {
