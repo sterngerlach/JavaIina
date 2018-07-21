@@ -17,6 +17,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import javaiina.RentalListViewRenderer.RenderMode;
+
 public class BorrowingItemsPanel extends PanelBase
 {
     private static final long serialVersionUID = 1340009896202568436L;
@@ -63,7 +65,8 @@ public class BorrowingItemsPanel extends PanelBase
         this.mListViewBorrowingItems = new JList<>();
         this.mListViewBorrowingItemsModel = new DefaultListModel<>();
         this.mListViewBorrowingItems.setModel(this.mListViewBorrowingItemsModel);
-        this.mListViewBorrowingItems.setCellRenderer(new RentalListViewRenderer());
+        this.mListViewBorrowingItems.setCellRenderer(
+            new RentalListViewRenderer(RenderMode.BorrowingItems));
         this.setLayoutConstraints(
             layoutConstraints, 0, 0, 1.0, 1.0, emptyInsets, GridBagConstraints.BOTH);
         this.mPanelCenter.add(this.mListViewBorrowingItems, layoutConstraints);
@@ -90,6 +93,12 @@ public class BorrowingItemsPanel extends PanelBase
     
     @Override
     protected void onPanelSelected()
+    {
+        this.initializeItems();
+    }
+    
+    @Override
+    protected void reloadView()
     {
         this.initializeItems();
     }
