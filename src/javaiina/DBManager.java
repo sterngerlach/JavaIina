@@ -44,7 +44,7 @@ public class DBManager {
             
         }
         
-        public Member searchMember(String emailAdress, String password) {
+        public Member selectMemberWhereEmailAdressAndPassword(String emailAdress, String password) {
             for (int i = 0; i < this.mMemberList.size(); ++i) {
                 if (this.mMemberList.get(i).emailAddress().equals(emailAdress) &&
                     this.mMemberList.get(i).password().equals(password)) { 
@@ -70,7 +70,7 @@ public class DBManager {
             return roList;
         }
         
-        public List<RentalObject> getRentalObjectList() { 
+        public List<RentalObject> selectRentalObjectList() { 
             return this.mRentalObjectList; 
         }
         
@@ -98,7 +98,7 @@ public class DBManager {
              this.mRentalList.add(rental);
         }
         
-        public List<Rental> allRental() {
+        public List<Rental> selectRental() {
             return this.mRentalList;
         }
         
@@ -126,7 +126,7 @@ public class DBManager {
             this.mReservationList.add(reservation);
         }
         
-        public List<Reservation> allReservation() {
+        public List<Reservation> selectReservation() {
             return this.mReservationList;
         }
         
@@ -167,7 +167,7 @@ public class DBManager {
     }
     
     public Member login(String emailAdress, String password) {
-        return this.db.searchMember(emailAdress, password);
+        return this.db.selectMemberWhereEmailAdressAndPassword(emailAdress, password);
     }
     
     public void addMember(Member member) {
@@ -179,7 +179,7 @@ public class DBManager {
     }
     
     public List<RentalObject> allRentalObjects() {
-        return this.db.getRentalObjectList();
+        return this.db.selectRentalObjectList();
     }
     
     public List<RentalObject> searchByCategoryName(String categoryName) {
@@ -218,14 +218,14 @@ public class DBManager {
     
     public boolean Rental(Member member, RentalObject rentalObject, RentalObjectSizeInfo sizeInfo, LocalDate beginDate, LocalDate disiredDate) {
         if (this.isAvailableRentalObject(rentalObject, sizeInfo)) {
-            List<Rental> rentalList = this.db.allRental();
+            List<Rental> rentalList = this.db.selectRental();
             int id_rental = rentalList.size();
             Rental rental;
             rental = new Rental(id_rental, member, rentalObject, sizeInfo, beginDate, disiredDate, null, 0);
             this.db.insertRental(rental);
             return true;
         } else {
-            List<Reservation> reservationList = this.db.allReservation();
+            List<Reservation> reservationList = this.db.selectReservation();
             int id_reservation = reservationList.size();
             Reservation reservation = new Reservation(id_reservation, member, rentalObject, sizeInfo, LocalDate.now(), false);
             this.db.insertReservation(reservation);
