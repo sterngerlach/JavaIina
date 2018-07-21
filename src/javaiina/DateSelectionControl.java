@@ -229,7 +229,7 @@ public class DateSelectionControl extends JPanel implements ItemListener, PopupM
         
         Integer selectedYear = (Integer)this.mComboBoxYear.getModel().getSelectedItem();
         Integer selectedMonth = (Integer)this.mComboBoxMonth.getModel().getSelectedItem();
-        Integer selectedDay = (Integer)this.mComboBoxYear.getModel().getSelectedItem();
+        Integer selectedDay = (Integer)this.mComboBoxDay.getModel().getSelectedItem();
         
         if (selectedYear == null || selectedMonth == null || selectedDay == null)
             return null;
