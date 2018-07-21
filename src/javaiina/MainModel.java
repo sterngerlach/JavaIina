@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.swing.event.EventListenerList;
@@ -150,6 +151,53 @@ public class MainModel
             modelListener.modelChanged(modelEvent);
     }
     
+    public boolean isValidEmailAddress(String emailAddress)
+    {
+        return Pattern.matches("^(.+)@(.+)$", emailAddress);
+    }
+    
+    public boolean isValidUserPassword(String userPassword)
+    {
+        return userPassword.chars().allMatch(ch -> 
+            (('0' <= ch && ch <= '9') || ('a' <= ch && ch <= 'z') ||
+                ('A' <= ch && ch <= 'Z') || ch == '_'));
+    }
+    
+    public boolean isValidUserName(String userName)
+    {
+        return userName.chars().allMatch(ch -> Character.isLetter(ch));
+    }
+    
+    public boolean isValidUserNameKana(String name)
+    {
+        return Pattern.matches("^[ぁ-ゞ]+$", name);
+    }
+    
+    public boolean isValidNickName(String nickName)
+    {
+        return nickName.chars().allMatch(ch -> Character.isLetterOrDigit(ch));
+    }
+    
+    public boolean isValidPostcode1(String postcode1)
+    {
+        return Pattern.matches("^[0-9]{3}$", postcode1);
+    }
+    
+    public boolean isValidPostcode2(String postcode2)
+    {
+        return Pattern.matches("^[0-9]{4}$", postcode2);
+    }
+    
+    public boolean isValidAddress(String address)
+    {
+        return address.chars().allMatch(ch -> Character.isLetterOrDigit(ch));
+    }
+    
+    public boolean isValidPhoneNumber(String phoneNumber)
+    {
+        return phoneNumber.chars().allMatch(ch -> Character.isDigit(ch));
+    }
+    
     public Member getMemberInfo(long userId)
     {
         // TODO: Database access may be needed
@@ -159,6 +207,12 @@ public class MainModel
             .filter(userInfo -> userInfo.id() == userId)
             .findFirst()
             .get();
+    }
+    
+    public boolean memberExists(String emailAddress, String userPassword)
+    {
+        // TODO: Database access may be needed
+        return true;
     }
     
     public List<String> getRentalCategoryList()
@@ -209,6 +263,18 @@ public class MainModel
         // Return sample list for debugging
         return this.mDummyRentalList.stream()
             .filter(rentalInfo -> rentalInfo.getMember().id() == this.mLoggedInMember.id())
+            .collect(Collectors.toList());
+    }
+    
+    public List<Rental> getRecentlyBorrowedItems(int maxSize)
+    {
+        // TODO: Database access may be needed
+        
+        // Return sample list for debugging
+        return this.mDummyRentalList.stream()
+            .filter(rentalInfo -> rentalInfo.getMember().id() == this.mLoggedInMember.id())
+            .filter(rentalInfo -> rentalInfo.getActualReturnDate() != null)
+            .limit(maxSize)
             .collect(Collectors.toList());
     }
 }

@@ -61,7 +61,6 @@ public class LoginView extends DialogBase
         layoutConstraints.anchor = GridBagConstraints.WEST;
         
         /* User Id Label */
-        // TODO: An Email address may be used as a user id
         this.mLabelUserId = new JLabel("Email Address: ");
         this.mLabelUserId.setFont(this.mFontLabel);
         this.setLayoutConstraints(

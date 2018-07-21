@@ -42,7 +42,6 @@ public class Member
         Gender gender, String address, String postcode,
         String phoneNumber, String emailAddress)
     {
-        // TODO: Validity check may be needed
         this.mId = id;
         this.mFirstName = firstName;
         this.mSecondName = secondName;

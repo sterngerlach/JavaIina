@@ -18,16 +18,27 @@ import javax.swing.border.EmptyBorder;
 
 public class RentalListViewRenderer implements ListCellRenderer<Rental>
 {
+    public enum RenderMode
+    {
+        BorrowingItems,
+        BorrowingHistory
+    }
+    
+    private RenderMode mRenderMode;
     private JPanel mPanelItem;
     private JLabel mLabelItemName;
     private JLabel mLabelItemSize;
     private JLabel mLabelItemCost;
     private JLabel mLabelBeginDate;
     private JLabel mLabelDesiredReturnDate;
+    private JLabel mLabelActualReturnDate;
     private DateTimeFormatter mDateFormatter;
+    private JLabel mLabelOverduePayment;
     
-    public RentalListViewRenderer()
+    public RentalListViewRenderer(RenderMode renderMode)
     {
+        this.mRenderMode = renderMode;
+        
         this.mPanelItem = new JPanel();
         this.mPanelItem.setBorder(new EmptyBorder(3, 3, 3, 3));
         this.mPanelItem.setLayout(new BoxLayout(this.mPanelItem, BoxLayout.Y_AXIS));
@@ -52,6 +63,14 @@ public class RentalListViewRenderer implements ListCellRenderer<Rental>
         this.mPanelItem.add(this.mLabelDesiredReturnDate);
         this.mPanelItem.add(Box.createVerticalStrut(3));
         
+        this.mLabelActualReturnDate = new JLabel();
+        this.mPanelItem.add(this.mLabelActualReturnDate);
+        this.mPanelItem.add(Box.createVerticalStrut(3));
+        
+        this.mLabelOverduePayment = new JLabel();
+        this.mPanelItem.add(this.mLabelOverduePayment);
+        this.mPanelItem.add(Box.createVerticalStrut(3));
+        
         this.mDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     }
     
@@ -69,10 +88,31 @@ public class RentalListViewRenderer implements ListCellRenderer<Rental>
         this.mLabelDesiredReturnDate.setText("Return By: " +
             value.getDesiredReturnDate().format(this.mDateFormatter));
 
-        if (value.getDesiredReturnDate().isBefore(LocalDate.now()))
-            this.mLabelDesiredReturnDate.setForeground(Color.RED);
-        else
-            this.mLabelDesiredReturnDate.setForeground(Color.BLUE);
+        if (this.mRenderMode == RenderMode.BorrowingItems) {
+            this.mLabelActualReturnDate.setVisible(false);
+            
+            if (value.getDesiredReturnDate().isBefore(LocalDate.now())) {
+                this.mLabelDesiredReturnDate.setForeground(Color.RED);
+            } else {
+                this.mLabelDesiredReturnDate.setForeground(Color.BLUE);
+            }
+        } else if (this.mRenderMode == RenderMode.BorrowingHistory) {
+            this.mLabelActualReturnDate.setText("Actual Return Date: " +
+                value.getActualReturnDate().format(this.mDateFormatter));
+            this.mLabelActualReturnDate.setVisible(true);
+            
+            this.mLabelOverduePayment.setText("Overdue Payment: " +
+                value.getOverduePayment());
+            this.mLabelOverduePayment.setVisible(true);
+            
+            if (value.getDesiredReturnDate().isBefore(value.getActualReturnDate())) {
+                this.mLabelDesiredReturnDate.setForeground(Color.RED);
+                this.mLabelActualReturnDate.setForeground(Color.RED);
+            } else {
+                this.mLabelDesiredReturnDate.setForeground(Color.BLUE);
+                this.mLabelActualReturnDate.setForeground(Color.BLUE);
+            }
+        }
         
         if (isSelected)
             this.mPanelItem.setBackground(Color.LIGHT_GRAY);

@@ -85,6 +85,10 @@ public class PanelBase extends JPanel
     {
     }
     
+    protected void reloadView()
+    {
+    }
+    
     protected void setHeaderTitle(String headerTitle)
     {
         this.mLabelHeaderTitle.setText(headerTitle);
