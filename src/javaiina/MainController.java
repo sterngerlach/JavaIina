@@ -50,7 +50,150 @@ public class MainController
                 @Override
                 public boolean validateInput(RegisterMemberView userInput)
                 {
-                    // TODO: Validate user input
+                    /* Email Address Validation */
+                    if (userInput.getMailAddress().isEmpty() || userInput.getMailAddressConfirm().isEmpty()) {
+                        this.setMessage("Mail address is empty.");
+                        return false;
+                    }
+                    
+                    if (!userInput.getMailAddress().equals(userInput.getMailAddressConfirm())) {
+                        this.setMessage("Mail addresses are not equal.");
+                        return false;
+                    }
+                    
+                    if (!MainController.this.mModel.isValidEmailAddress(userInput.getMailAddress())) {
+                        this.setMessage("Mail address is not valid.");
+                        return false;
+                    }
+                    
+                    /* Password Validation */
+                    if (userInput.getPassword().isEmpty() || userInput.getPasswordConfirm().isEmpty()) {
+                        this.setMessage("User password is empty.");
+                        return false;
+                    }
+                    
+                    if (!userInput.getPassword().equals(userInput.getPasswordConfirm())) {
+                        this.setMessage("User passwords are not equal.");
+                        return false;
+                    }
+                    
+                    if (!MainController.this.mModel.isValidUserPassword(userInput.getPassword())) {
+                        this.setMessage("User password is not valid.");
+                        return false;
+                    }
+                    
+                    /* Name Validation */
+                    if (userInput.getFirstName().isEmpty()) {
+                        this.setMessage("First name is empty.");
+                        return false;
+                    }
+                    
+                    if (!MainController.this.mModel.isValidUserName(userInput.getFirstName())) {
+                        this.setMessage("First name is not valid.");
+                        return false;
+                    }
+                    
+                    if (userInput.getSecondName().isEmpty()) {
+                        this.setMessage("Second name is empty.");
+                        return false;
+                    }
+                    
+                    if (!MainController.this.mModel.isValidUserName(userInput.getSecondName())) {
+                        this.setMessage("Second name is not valid.");
+                        return false;
+                    }
+                    
+                    /* Name (Kana) Validation */
+                    if (userInput.getFirstNameKana().isEmpty()) {
+                        this.setMessage("First name (Kana) is empty.");
+                        return false;
+                    }
+                    
+                    if (!MainController.this.mModel.isValidUserNameKana(userInput.getFirstNameKana())) {
+                        this.setMessage("First name (Kana) is not valid.");
+                        return false;
+                    }
+                    
+                    if (userInput.getSecondNameKana().isEmpty()) {
+                        this.setMessage("Second name (Kana) is empty.");
+                        return false;
+                    }
+                    
+                    if (!MainController.this.mModel.isValidUserNameKana(userInput.getSecondNameKana())) {
+                        this.setMessage("Second name (Kana) is not valid.");
+                        return false;
+                    }
+                    
+                    /* NickName Validation */
+                    if (userInput.getNickName().isEmpty()) {
+                        this.setMessage("NickName is empty.");
+                        return false;
+                    }
+                    
+                    if (!MainController.this.mModel.isValidNickName(userInput.getNickName())) {
+                        this.setMessage("NickName is not valid.");
+                        return false;
+                    }
+                    
+                    /* Gender Validation */
+                    if (userInput.getSelectedGender() == null) {
+                        this.setMessage("Gender is not selected.");
+                        return false;
+                    }
+                    
+                    /* BirthDate Validation */
+                    if (userInput.getSelectedBirthDate() == null) {
+                        this.setMessage("Birth date is not selected.");
+                        return false;
+                    }
+                    
+                    /* Postcode Validation */
+                    if (userInput.getPostcode1().isEmpty() ||
+                        userInput.getPostcode2().isEmpty()) {
+                        this.setMessage("Postcode is empty.");
+                        return false;
+                    }
+                    
+                    if (!MainController.this.mModel.isValidPostcode1(userInput.getPostcode1()) ||
+                        !MainController.this.mModel.isValidPostcode2(userInput.getPostcode2())) {
+                        this.setMessage("Postcode is not valid.");
+                        return false;
+                    }
+                    
+                    /* Prefecture Validation */
+                    if (userInput.getSelectedPrefecture() == null) {
+                        this.setMessage("Prefecture is not selected.");
+                        return false;
+                    }
+                    
+                    /* Address Validation */
+                    if (userInput.getAddress1().isEmpty() ||
+                        userInput.getAddress2().isEmpty()) {
+                        this.setMessage("Address is empty.");
+                        return false;
+                    }
+                    
+                    if (!MainController.this.mModel.isValidAddress(userInput.getAddress1()) ||
+                        !MainController.this.mModel.isValidAddress(userInput.getAddress2())) {
+                        this.setMessage("Address is not valid.");
+                        return false;
+                    }
+                    
+                    /* Phone Number Validation */
+                    if (userInput.getPhoneNumberAreaCode().isEmpty() ||
+                        userInput.getPhoneNumberSubscriber1().isEmpty() ||
+                        userInput.getPhoneNumberSubscriber2().isEmpty()) {
+                        this.setMessage("Phone number is empty.");
+                        return false;
+                    }
+                    
+                    if (!MainController.this.mModel.isValidPhoneNumber(userInput.getPhoneNumberAreaCode()) ||
+                        !MainController.this.mModel.isValidPhoneNumber(userInput.getPhoneNumberSubscriber1()) ||
+                        !MainController.this.mModel.isValidPhoneNumber(userInput.getPhoneNumberSubscriber2())) {
+                        this.setMessage("Phone number is not valid.");
+                        return false;
+                    }
+                    
                     return true;
                 }
             });
@@ -72,9 +215,6 @@ public class MainController
             
             // Switch to main menu if all input fields are valid
             MainController.this.mView.switchToMainMenuPanel();
-            
-            // Call MainController.setLoggedInMember() with null because no one has logged in
-            // MainController.this.mModel.setLoggedInMember(null);
         }
     }
     
@@ -93,10 +233,14 @@ public class MainController
                 @Override
                 public boolean validateInput(LoginView userInput)
                 {
-                    // TODO: Validate user input
-                    // String inputUserId = userInput.getUserId();
-                    // String inputUserPassword = userInput.getPassword();
-                    return true;
+                    String inputUserId = userInput.getUserId();
+                    String inputUserPassword = userInput.getPassword();
+                    
+                    if (MainController.this.mModel.memberExists(inputUserId, inputUserPassword))
+                        return true;
+                    
+                    this.setMessage("User id or password is incorrect.");
+                    return false;
                 }
             });
             
@@ -114,9 +258,6 @@ public class MainController
             
             // Switch to main menu if both user name and password are valid
             MainController.this.mView.switchToMainMenuPanel();
-            
-            // Call MainController.setLoggedInMember() with null because no one has logged in
-            // MainController.this.mModel.setLoggedInMember(null);
         }
     }
     
@@ -125,12 +266,12 @@ public class MainController
         @Override
         public void modelChanged(ModelEvent e)
         {
-            // TODO: Implement appropriate program for modelChanged event
-            System.out.println("ModelChangeListener::modelChanged() called.");
-            
-            // For instance, you can change the title of the window
-            // MainController.this.mView.setTitle(
-            //     MainController.this.mModel.loggedInMember().nickName());
+            // Change the title of the window
+            if (MainController.this.mModel.loggedInMember() != null)
+                MainController.this.mView.setTitle("JavaIina - " +
+                    MainController.this.mModel.loggedInMember().nickName());
+            else
+                MainController.this.mView.setTitle("JavaIina");
         }
     }
     
@@ -160,9 +301,6 @@ public class MainController
     
     private void onLogout()
     {
-        // TODO: Implement program for logout
-        System.out.println("MainController::performLogout() called.");
-        
         // Switch to start menu
         this.mView.switchToStartMenuPanel();
         
@@ -193,6 +331,28 @@ public class MainController
             {
                 // TODO: Validate user input
                 // Both RentalView.getBeginDate() and RentalView.getDesiredReturnDate() might return null
+                
+                if (userInput.getSizeInfo() == null) {
+                    this.setMessage("Size info is not selected.");
+                    return false;
+                }
+                
+                if (userInput.getBeginDate() == null) {
+                    this.setMessage("Begin date is not selected.");
+                    return false;
+                }
+                
+                if (userInput.getDesiredReturnDate() == null) {
+                    this.setMessage("Desired return date is not selected.");
+                    return false;
+                }
+                
+                if (userInput.getBeginDate().isEqual(userInput.getDesiredReturnDate()) ||
+                    userInput.getBeginDate().isAfter(userInput.getDesiredReturnDate())) {
+                    this.setMessage("Desired return date should be after the begin date.");
+                    return false;
+                }
+                
                 return true;
             }
         });
