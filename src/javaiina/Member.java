@@ -20,6 +20,7 @@ public class Member
     private String mPostcode;
     private String mPhoneNumber;
     private String mEmailAddress;
+    private String mPassword;
     
     public long id() { return this.mId; }
     public String firstName() { return this.mFirstName; }
@@ -34,13 +35,15 @@ public class Member
     public String postcode() { return this.mPostcode; }
     public String phoneNumber() { return this.mPhoneNumber; }
     public String emailAddress() { return this.mEmailAddress; }
+    public String password() { return this.mPassword; }
     
     public Member(
         long id, String firstName, String secondName,
         String firstNameKana, String secondNameKana, String nickName,
         LocalDate birthDate, LocalDate registerDate,
         Gender gender, String address, String postcode,
-        String phoneNumber, String emailAddress)
+        String phoneNumber, String emailAddress,
+        String password)
     {
         this.mId = id;
         this.mFirstName = firstName;
@@ -55,6 +58,7 @@ public class Member
         this.mPostcode = postcode;
         this.mPhoneNumber = phoneNumber;
         this.mEmailAddress = emailAddress;
+        this.mPassword = password;
     }
 
     @Override

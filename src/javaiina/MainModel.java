@@ -24,16 +24,16 @@ public class MainModel
     private List<Member> mDummyUserList = Arrays.asList(
         new Member(0, "達郎", "山下", "たつろう", "やました", "音の職人",
             LocalDate.of(1953, 2, 4), LocalDate.of(1973, 4, 1),
-            Gender.MALE, "東京都世田谷区", "100-0000", "000-0000-0000", "aaa@bbb.com"),
+            Gender.MALE, "東京都世田谷区", "100-0000", "000-0000-0000", "aaa@bbb.com","aa"),
         new Member(1, "龍一", "坂本", "りゅういち", "さかもと", "教授 ",
             LocalDate.of(1952, 1, 17), LocalDate.of(1978, 4, 1),
-            Gender.MALE, "東京都中野区", "200-0000", "001-0000-0000", "ccc@ddd.com"),
+            Gender.MALE, "東京都中野区", "200-0000", "001-0000-0000", "ccc@ddd.com","bb"),
         new Member(2, "晴臣", "細野", "はるおみ", "ほその", "Harry",
             LocalDate.of(1947, 7, 9), LocalDate.of(1969, 4, 1),
-            Gender.MALE, "東京都港区", "300-0000", "002-0000-0000", "eee@fff.com"),
+            Gender.MALE, "東京都港区", "300-0000", "002-0000-0000", "eee@fff.com","cc"),
         new Member(0, "顕子", "矢野", "あきこ", "やの", "アッコちゃん",
             LocalDate.of(1955, 2, 13), LocalDate.of(1976, 4, 1),
-            Gender.FEMALE, "青森県青森市", "400-0000", "003-0000-0000", "ggg@hhh.com"));
+            Gender.FEMALE, "青森県青森市", "400-0000", "003-0000-0000", "ggg@hhh.com","dd"));
         
     // This data makes absolutely no sense
     private List<String> mDummyCategoryList = Arrays.asList(
