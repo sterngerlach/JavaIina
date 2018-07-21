@@ -394,6 +394,6 @@ public class DBManager {
     }
     
     public void readData() {
-        ;
+        ;;
     }
 }
