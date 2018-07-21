@@ -5,8 +5,11 @@ package javaiina;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -16,6 +19,7 @@ public class MainModel
 {
     public static final LocalDate MinBirthDate = LocalDate.of(1900, Month.JANUARY, 1);
     
+    private DBManager mDBManager;
     private EventListenerList mEventListenerList;
     private Member mLoggedInMember;
     
@@ -67,7 +71,7 @@ public class MainModel
             new RentalObjectSizeInfo[] { mDummySizeInfoList.get(1), mDummySizeInfoList.get(2) }, 500));
     
     // This data makes absolutely no sense
-    private List<Rental> mDummyRentalList = Arrays.asList(
+    /*private List<Rental> mDummyRentalList = Arrays.asList(
         new Rental(0, this.mDummyUserList.get(0), this.mDummyRentalObjectList.get(1),
             this.mDummyRentalObjectList.get(1).availableSizeInfo()[0],
             LocalDate.of(2018, Month.JULY, 1), LocalDate.of(2018, Month.JULY, 8),
@@ -99,7 +103,7 @@ public class MainModel
         new Rental(7, this.mDummyUserList.get(3), this.mDummyRentalObjectList.get(8),
             this.mDummyRentalObjectList.get(8).availableSizeInfo()[1],
             LocalDate.of(2018, Month.JULY, 8), LocalDate.of(2018, Month.JULY, 22),
-            null, 0));
+            null, 0));*/
     
     public Member loggedInMember()
     {
@@ -114,6 +118,7 @@ public class MainModel
     
     public MainModel()
     {
+        this.mDBManager = new DBManager();
         this.reset();
     }
     
@@ -121,6 +126,10 @@ public class MainModel
     {
         this.mEventListenerList = null;
         this.mLoggedInMember = null;
+    }
+    
+    public DBManager getDBManager() {
+        return this.mDBManager;
     }
     
     public void addModelListener(ModelListener modelListener)
@@ -200,81 +209,51 @@ public class MainModel
     
     public Member getMemberInfo(long userId)
     {
-        // TODO: Database access may be needed
-        
+        return this.mDBManager.getMemberInfo(userId);
+        /*
         // Return sample member data for debugging
         return this.mDummyUserList.stream()
             .filter(userInfo -> userInfo.id() == userId)
             .findFirst()
-            .get();
+            .get();*/
     }
     
     public boolean memberExists(String emailAddress, String userPassword)
     {
-        // TODO: Database access may be needed
-        return true;
+        return this.mDBManager.memberExists(emailAddress, userPassword);
     }
     
     public List<String> getRentalCategoryList()
     {
-        // TODO: Database access may be needed
-        
-        // Return sample list for debugging
-        return this.mDummyCategoryList;
+        List<RentalObject> rentalObjectList = this.mDBManager.allRentalObjects();
+        Set<String> categorySet = new HashSet<>();
+        rentalObjectList.forEach(ro -> categorySet.add(ro.categoryName()));
+        return new ArrayList<String>(categorySet);
     }
     
     public List<RentalObject> filterRentalObjectByCategory(String categoryName)
     {
-        // TODO: Database access may be needed
-        
-        // Return sample list for debugging
-        return this.mDummyRentalObjectList.stream()
-            .filter(rentalObject -> rentalObject.categoryName().equals(categoryName))
-            .collect(Collectors.toList());
+        return this.mDBManager.searchByCategoryName(categoryName);
     }
     
     public List<RentalObject> filterRentalObjectByName(String itemName)
     {
-        // TODO: Database access may be needed
-        
-        // Return sample list for debugging
-        return this.mDummyRentalObjectList.stream()
-            .filter(rentalObject -> rentalObject.name()
-                .toLowerCase().contains(itemName.toLowerCase()))
-            .collect(Collectors.toList());
+        return this.mDBManager.searchByName(itemName);
     }
     
     public List<RentalObject> filterRentalObjectByNameAndCategory(String itemName, String categoryName)
     {
-        // TODO: Database access may be needed
-        
-        // Return sample list for debugging
-        return this.mDummyRentalObjectList.stream()
-            .filter(rentalObject -> rentalObject.name()
-                .toLowerCase().contains(itemName.toLowerCase()) &&
-                rentalObject.categoryName().equals(categoryName))
-            .collect(Collectors.toList());
+        return this.mDBManager.searchByNameAndCategory(itemName, categoryName);
     }
     
     public List<Rental> getBorrowingItems()
     {
-        // TODO: Database access may be needed
-        
-        // Return sample list for debugging
-        return this.mDummyRentalList.stream()
-            .filter(rentalInfo -> rentalInfo.getMember().id() == this.mLoggedInMember.id())
-            .collect(Collectors.toList());
+        return this.mDBManager.getBorrowingItems(this.mLoggedInMember);
     }
     
     public List<Rental> getRecentlyBorrowedItems(int maxSize)
     {
-        // TODO: Database access may be needed
-        
-        // Return sample list for debugging
-        return this.mDummyRentalList.stream()
-            .filter(rentalInfo -> rentalInfo.getMember().id() == this.mLoggedInMember.id())
-            .filter(rentalInfo -> rentalInfo.getActualReturnDate() != null)
-            .limit(maxSize)
-            .collect(Collectors.toList());
+        return this.mDBManager.getBorrowedItems(this.mLoggedInMember).stream()
+                             .limit(maxSize).collect(Collectors.toList());
     }
 }

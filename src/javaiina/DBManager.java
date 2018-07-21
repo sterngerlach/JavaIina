@@ -3,8 +3,15 @@
 
 package javaiina;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DBManager {
     
@@ -12,46 +19,76 @@ public class DBManager {
     private class DB {
         private List<AvailableSize> mAvailableSizeList;
         private List<Member> mMemberList;
-        private List<String> mPasswordList;
         private List<Rental> mRentalList;
         private List<RentalObject> mRentalObjectList;
         private List<RentalObjectSizeInfo> mRentalObjectSizeInfoList;
         private List<Reservation> mReservationList;
         
         public DB() {
-            /*
+            
             this.mAvailableSizeList = new ArrayList<>();
             this.mMemberList = new ArrayList<>();
             this.mRentalList = new ArrayList<>();
             this.mRentalObjectList = new ArrayList<>();
             this.mRentalObjectSizeInfoList = new ArrayList<>();
+            this.mAvailableSizeList = new ArrayList<>();
+            this.mReservationList = new ArrayList<>();
             
-            this.mAvailableSizeList.add(new AvailableSize())
-            */
-        	this.mMemberList = Arrays.asList(
-        	        new Member(0, "達郎", "山下", "たつろう", "やました", "音の職人",
-        	            LocalDate.of(1953, 2, 4), LocalDate.of(1973, 4, 1),
-        	            Gender.MALE, "東京都世田谷区", "100-0000", "000-0000-0000", "aaa@bbb.com", "aa"),
-        	        new Member(1, "龍一", "坂本", "りゅういち", "さかもと", "教授 ",
-        	            LocalDate.of(1952, 1, 17), LocalDate.of(1978, 4, 1),
-        	            Gender.MALE, "東京都中野区", "200-0000", "001-0000-0000", "ccc@ddd.com","bb"),
-        	        new Member(2, "晴臣", "細野", "はるおみ", "ほその", "Harry",
-        	            LocalDate.of(1947, 7, 9), LocalDate.of(1969, 4, 1),
-        	            Gender.MALE, "東京都港区", "300-0000", "002-0000-0000", "eee@fff.com","cc"),
-        	        new Member(0, "顕子", "矢野", "あきこ", "やの", "アッコちゃん",
-        	            LocalDate.of(1955, 2, 13), LocalDate.of(1976, 4, 1),
-        	            Gender.FEMALE, "青森県青森市", "400-0000", "003-0000-0000", "ggg@hhh.com", "dd"));
+         // This data makes absolutely no sense
             
+            this.mMemberList.add(new Member(0, "a","a", "あ","あ", "a", 
+                    LocalDate.of(1998, 2, 14), LocalDate.of(2000, 5, 9), Gender.MALE, 
+                    "東京都千代田区千代田", "000-0000", "000-0000-0000","a@a", "aa"));
+            
+            this.mMemberList.add(new Member(1, "b","b", "ぶ","ぶ", "b", 
+                    LocalDate.of(1997, 4, 27), LocalDate.of(2012, 3, 30), Gender.UNSPECIFIED, 
+                    "東京都世田谷区", "111-1111", "111-1111-1111","b@b", "bb"));
+       
+            this.mRentalObjectSizeInfoList.add(new RentalObjectSizeInfo(0, "Y1", 150, 45, 50, 55, 60, 70, 80, 80));
+            this.mRentalObjectSizeInfoList.add(new RentalObjectSizeInfo(1, "A2", 155, 50, 55, 60, 70, 80, 90, 90));
+            this.mRentalObjectSizeInfoList.add(new RentalObjectSizeInfo(2, "B3", 160, 55, 60, 65, 80, 90, 90, 90));
+            
+            this.mRentalObjectList.add(new RentalObject(0, "ClothA1", "CategoryA",
+                    new RentalObjectSizeInfo[] { this.mRentalObjectSizeInfoList.get(0)}, 100));
+            this.mRentalObjectList.add(new RentalObject(1, "ClothB2", "CategoryB",
+                    new RentalObjectSizeInfo[] { this.mRentalObjectSizeInfoList.get(1), this.mRentalObjectSizeInfoList.get(2) }, 150));
+            this.mRentalObjectList.add(new RentalObject(2, "ClothC3", "CategoryC",
+                    new RentalObjectSizeInfo[] { this.mRentalObjectSizeInfoList.get(2) }, 200));
+                /*new RentalObject(3, "ClothB1", "CategoryB",
+                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(0), mDummySizeInfoList.get(1) }, 250),
+                new RentalObject(4, "ClothB2", "CategoryB",
+                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(1) }, 300),
+                new RentalObject(5, "ClothB3", "CategoryB",
+                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(1), mDummySizeInfoList.get(2) }, 350),
+                new RentalObject(6, "ClothC1", "CategoryC",
+                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(0), mDummySizeInfoList.get(1) }, 400),
+                new RentalObject(7, "ClothC2", "CategoryC",
+                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(0) }, 450),
+                new RentalObject(8, "ClothC3", "CategoryC",
+                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(1), mDummySizeInfoList.get(2) }, 500));*/
+            /*this.mRentalList.add(new Rental(0, this.mMemberList.get(0), this.mRentalObjectList.get(1),
+                    this.mRentalObjectList.get(1).availableSizeInfo()[0],
+                    LocalDate.of(2018, Month.JULY, 1), LocalDate.of(2018, Month.JULY, 4),
+                    null, 0));*/
         }
         
-        public Member selectMemberWhereEmailAdressAndPassword(String emailAdress, String password) {
+        public List<Member> selectMember() {
+            return this.mMemberList;
+        }
+        
+        public List<Member> selectMemberWhereId(long id) {
+            return this.mMemberList.stream().filter(member -> member.id() == id).collect(Collectors.toList());
+        }
+        
+        public List<Member> selectMemberWhereEmailAdressAndPassword(String emailAdress, String password) {
+            List<Member> memberList = new ArrayList<>();
             for (int i = 0; i < this.mMemberList.size(); ++i) {
                 if (this.mMemberList.get(i).emailAddress().equals(emailAdress) &&
                     this.mMemberList.get(i).password().equals(password)) { 
-                    return this.mMemberList.get(i);
+                    memberList.add(this.mMemberList.get(i));
                 }
             }
-            return null;
+            return memberList;
         }
         
         public void insertMember(Member member) {
@@ -86,7 +123,7 @@ public class DBManager {
         public List<RentalObject> selectRentalObjectWhereName(String name) {
             List<RentalObject> roList = new ArrayList<>();
             for (int i = 0; i < this.mRentalObjectList.size(); ++i) {
-                if (this.mRentalObjectList.get(i).name().toLowerCase().equals(name.toLowerCase())) {
+                if (this.mRentalObjectList.get(i).name().toLowerCase().contains(name.toLowerCase())) {
                     roList.add(this.mRentalObjectList.get(i));
                 }
             }
@@ -105,11 +142,26 @@ public class DBManager {
             List<Rental> rList = new ArrayList<>();
             for (int i = 0; i < this.mRentalList.size(); ++i) {
                 if (this.mRentalList.get(i).getRentalObject().id() == rentalObject.id()
-                    && this.mRentalObjectSizeInfoList.get(i).id() == sizeInfo.id()) {
+                    && this.mRentalList.get(i).getSizeInfo().id() == sizeInfo.id()) {
                     rList.add(this.mRentalList.get(i));
                 }
             }
             return rList;
+        }
+        
+        public List<Rental> selectRentalWhereMember(Member member) {
+            return this.mRentalList.stream().filter(rental -> rental.getMember().id() == member.id())
+                   .collect(Collectors.toList());
+        }
+        
+        public List<Rental> selectBorrowingItemWhereMember(Member member) {
+            return this.mRentalList.stream().filter(rental -> rental.getMember().id() == member.id() )
+                    .filter(rental -> rental.getActualReturnDate() == null).collect(Collectors.toList());
+        }
+        
+        public List<Rental> selectBorrowedItemWhereMember(Member member) {
+            return this.mRentalList.stream().filter(rental -> rental.getMember().id() == member.id() )
+            .filter(rental -> rental.getActualReturnDate() != null).collect(Collectors.toList());
         }
         
         public void updateRental(Rental rental, LocalDate actualReturnDate, int overduePayment) {
@@ -165,8 +217,21 @@ public class DBManager {
         this.db = new DB();
     }
     
-    public Member login(String emailAdress, String password) {
-        return this.db.selectMemberWhereEmailAdressAndPassword(emailAdress, password);
+    public int generateMemberId() {
+        return this.db.selectMember().size();
+    }
+    
+    public Member getMemberInfo(long id) {
+        List<Member> memberList = this.db.selectMemberWhereId(id);
+        return memberList.get(0);
+    }
+    
+    public Member getMember(String emailAddress, String password) {
+        return this.db.selectMemberWhereEmailAdressAndPassword(emailAddress, password).get(0);
+    }
+    
+    public boolean memberExists(String emailAddress, String password) {
+        return this.db.selectMemberWhereEmailAdressAndPassword(emailAddress, password).size() > 0;
     }
     
     public void addMember(Member member) {
@@ -190,15 +255,18 @@ public class DBManager {
     }
     
     public List<RentalObject> searchByNameAndCategory(String name, String categoryName) {
-        List<RentalObject> roList = new ArrayList<>();
-        List<RentalObject> roList_match_name = this.db.selectRentalObjectWhereName(name);
-        
-        for (int i = 0; i < roList_match_name.size(); ++i) {
-            if (roList_match_name.get(i).categoryName().toLowerCase().equals(categoryName.toLowerCase())) {
-                roList.add(roList_match_name.get(i));
-            }
-        }
-        return roList;
+        return this.db.mRentalObjectList.stream()
+                .filter(rentalObject -> rentalObject.name().toLowerCase().contains(name.toLowerCase()))
+                .filter(rentalObject -> rentalObject.categoryName().toLowerCase().equals(categoryName.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+    
+    public List<Rental> getBorrowingItems(Member member) {
+        return this.db.selectBorrowingItemWhereMember(member);
+    }
+    
+    public List<Rental> getBorrowedItems(Member member) {
+        return this.db.selectBorrowedItemWhereMember(member);
     }
     
     public boolean isAvailableRentalObject(RentalObject rentalObject, RentalObjectSizeInfo sizeInfo) {
@@ -209,6 +277,10 @@ public class DBManager {
             }
         }
         return true;
+    }
+    
+    public int generateReserveId() {
+        return this.db.selectReservation().size();
     }
     
     public void Reserve(Reservation reservation) {
@@ -232,13 +304,16 @@ public class DBManager {
         }
     }
     
+    
     public List<Reservation> ReservedRentalObjectList(Member member) {
         return this.db.selectReservationWhereMember(member);
     }
     
-    public void Return(Rental rental, LocalDate actualReturnDate, int overduePayment) {
+    public void ReturnObject(Rental rental, LocalDate actualReturnDate, int overduePayment) {
         this.db.updateRental(rental, actualReturnDate, overduePayment);
-        List<Reservation> resList = this.db.selectReservationWhereRentalObjectAndSizeInfo(rental.getRentalObject(), rental.getSizeInfo());
+        List<Reservation> resList = this.db.selectReservationWhereRentalObjectAndSizeInfo(rental.getRentalObject(), rental.getSizeInfo())
+                .stream().filter(res -> res.isDone() == false).collect(Collectors.toList());
+        
         if (resList.size() > 0) {
             this.Rental(resList.get(0).member(), rental.getRentalObject(), rental.getSizeInfo(), actualReturnDate, actualReturnDate.plusWeeks(2));
             this.db.updateReservationDone(resList.get(0));
@@ -248,4 +323,77 @@ public class DBManager {
         
     }
     
+    
+    public int generateRentalId() {
+        return this.db.selectRental().size();
+    }
+    
+    public void saveData() {
+        BufferedWriter bw = null;
+        try {
+            
+            bw = Files.newBufferedWriter(Paths.get("Rental.csv"), Charset.defaultCharset());
+            
+            for (Rental rental : this.db.mRentalList) {
+                bw.write(rental.getId() + "," + 
+                        rental.getMember().id() + "," + 
+                        rental.getRentalObject().id() + "," + 
+                        rental.getSizeInfo().id() + "," + 
+                        rental.getBeginDate().toString() + "," + 
+                        ((rental.getActualReturnDate() == null) ? "" : rental.getActualReturnDate().toString()) + "," +
+                        rental.getOverduePayment() + System.lineSeparator()
+                        );
+            }
+            
+            bw.close();
+            
+            bw = Files.newBufferedWriter(Paths.get("Reservation.csv"), Charset.defaultCharset());
+           
+            for ( Reservation res : this.db.mReservationList) {
+                bw.write(res.id() + "," + 
+                        res.member().id() +"," + 
+                        res.rentalObject().id() +"," + 
+                        res.sizeInfo().id() + "," + 
+                        res.reservationDate().toString() + "," + 
+                        res.isDone() + System.lineSeparator()
+                        );
+            }
+            bw.close();
+            
+            bw = Files.newBufferedWriter(Paths.get("Member.csv"), Charset.defaultCharset());
+            for (Member member : this.db.mMemberList) {
+                bw.write(member.id() + "," + 
+                        member.firstName() + "," + 
+                        member.secondName() + "," + 
+                        member.firstNameKana() + "," + 
+                        member.secondNameKana() + "," + 
+                        member.nickName() + "," + 
+                        member.birthDate().toString() + "," +
+                        member.registerDate().toString() + "," +
+                        member.gender().toString() + "," + 
+                        member.address() + "," + 
+                        member.postcode() + "," + 
+                        member.phoneNumber() + "," + 
+                        member.emailAddress() + "," + 
+                        member.password() + System.lineSeparator()
+                        );
+            }
+        
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bw != null) {
+                    
+                    bw.close();
+                }
+            } catch (Exception e){
+                ;
+            }
+        }
+    }
+    
+    public void readData() {
+        ;
+    }
 }

@@ -26,6 +26,8 @@ public class App
         MainController mainController = new MainController(mainView, mainModel);
         
         mainView.setVisible(true);
+        
+        mainModel.getDBManager().saveData();
     }
     
     private static void initializeLookAndFeel()
