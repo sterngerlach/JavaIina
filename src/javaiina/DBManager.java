@@ -3,6 +3,7 @@
 
 package javaiina;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -33,43 +34,6 @@ public class DBManager {
             this.mRentalObjectSizeInfoList = new ArrayList<>();
             this.mAvailableSizeList = new ArrayList<>();
             this.mReservationList = new ArrayList<>();
-            
-         // This data makes absolutely no sense
-            
-            this.mMemberList.add(new Member(0, "a","a", "あ","あ", "a", 
-                    LocalDate.of(1998, 2, 14), LocalDate.of(2000, 5, 9), Gender.MALE, 
-                    "東京都千代田区千代田", "000-0000", "000-0000-0000","a@a", "aa"));
-            
-            this.mMemberList.add(new Member(1, "b","b", "ぶ","ぶ", "b", 
-                    LocalDate.of(1997, 4, 27), LocalDate.of(2012, 3, 30), Gender.UNSPECIFIED, 
-                    "東京都世田谷区", "111-1111", "111-1111-1111","b@b", "bb"));
-       
-            this.mRentalObjectSizeInfoList.add(new RentalObjectSizeInfo(0, "Y1", 150, 45, 50, 55, 60, 70, 80, 80));
-            this.mRentalObjectSizeInfoList.add(new RentalObjectSizeInfo(1, "A2", 155, 50, 55, 60, 70, 80, 90, 90));
-            this.mRentalObjectSizeInfoList.add(new RentalObjectSizeInfo(2, "B3", 160, 55, 60, 65, 80, 90, 90, 90));
-            
-            this.mRentalObjectList.add(new RentalObject(0, "ClothA1", "CategoryA",
-                    new RentalObjectSizeInfo[] { this.mRentalObjectSizeInfoList.get(0)}, 100));
-            this.mRentalObjectList.add(new RentalObject(1, "ClothB2", "CategoryB",
-                    new RentalObjectSizeInfo[] { this.mRentalObjectSizeInfoList.get(1), this.mRentalObjectSizeInfoList.get(2) }, 150));
-            this.mRentalObjectList.add(new RentalObject(2, "ClothC3", "CategoryC",
-                    new RentalObjectSizeInfo[] { this.mRentalObjectSizeInfoList.get(2) }, 200));
-                /*new RentalObject(3, "ClothB1", "CategoryB",
-                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(0), mDummySizeInfoList.get(1) }, 250),
-                new RentalObject(4, "ClothB2", "CategoryB",
-                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(1) }, 300),
-                new RentalObject(5, "ClothB3", "CategoryB",
-                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(1), mDummySizeInfoList.get(2) }, 350),
-                new RentalObject(6, "ClothC1", "CategoryC",
-                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(0), mDummySizeInfoList.get(1) }, 400),
-                new RentalObject(7, "ClothC2", "CategoryC",
-                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(0) }, 450),
-                new RentalObject(8, "ClothC3", "CategoryC",
-                    new RentalObjectSizeInfo[] { mDummySizeInfoList.get(1), mDummySizeInfoList.get(2) }, 500));*/
-            /*this.mRentalList.add(new Rental(0, this.mMemberList.get(0), this.mRentalObjectList.get(1),
-                    this.mRentalObjectList.get(1).availableSizeInfo()[0],
-                    LocalDate.of(2018, Month.JULY, 1), LocalDate.of(2018, Month.JULY, 4),
-                    null, 0));*/
         }
         
         public List<Member> selectMember() {
@@ -93,6 +57,10 @@ public class DBManager {
         
         public void insertMember(Member member) {
             this.mMemberList.add(member);
+        }
+        
+        public void insertRentalObject(RentalObject rentalObject) {
+            this.mRentalObjectList.add(rentalObject);
         }
         
         public List<RentalObject> selectRentalObjectWhereMember(Member member) {
@@ -128,6 +96,15 @@ public class DBManager {
                 }
             }
             return roList;
+        }
+        
+        public void insertRentalObjectSizeInfo(RentalObjectSizeInfo sizeInfo) {
+            this.mRentalObjectSizeInfoList.add(sizeInfo);
+        }
+        
+        public List<RentalObjectSizeInfo> selectRentalObjectSizeInfoWhereId(int id) {
+            return this.mRentalObjectSizeInfoList.stream()
+                    .filter(rentalObject -> rentalObject.id() == id).collect(Collectors.toList());
         }
         
         public void insertRental(Rental rental) {
@@ -215,6 +192,7 @@ public class DBManager {
     
     public DBManager() {
         this.db = new DB();
+        this.readData();
     }
     
     public int generateMemberId() {
@@ -393,7 +371,84 @@ public class DBManager {
         }
     }
     
+    private void readMember() throws IOException {
+        /* read Member.csv */
+        List<String> memberLineList = Files.readAllLines(Paths.get("Member.csv"), Charset.defaultCharset());
+        
+        for (String line : memberLineList) {
+            String[] valueArray = line.split(",");
+            
+            Gender gender = null;
+            if (valueArray[8].equals(Gender.MALE.toString())) gender = Gender.MALE;
+            else if (valueArray[8].equals(Gender.FEMALE.toString())) gender = Gender.FEMALE;
+            else gender = Gender.UNSPECIFIED;
+            
+            Member member = new Member(
+                    (long)Integer.valueOf(valueArray[0]), valueArray[1], valueArray[2],
+                    valueArray[3], valueArray[4], valueArray[5],
+                    LocalDate.parse(valueArray[6]),LocalDate.parse(valueArray[7]), 
+                    gender, valueArray[9], valueArray[10],
+                    valueArray[11], valueArray[12],
+                    valueArray[13]
+                    );
+            this.db.insertMember(member);
+        }
+    }
+
+    private void readRentalObjectSizeInfo() throws IOException {
+        List<String> sizeInfoLineList = Files.readAllLines(Paths.get("RentalObjectSizeInfo.csv"));
+        //System.out.println(sizeInfoLineList.size());
+        for(String sizeInfoLine : sizeInfoLineList) {
+            //System.out.println(sizeInfoLine);
+            String[] valueArray = sizeInfoLine.split(",");
+            RentalObjectSizeInfo sizeInfo = new RentalObjectSizeInfo(
+                    Integer.valueOf(valueArray[0]), valueArray[1],
+                    Integer.valueOf(valueArray[2]), Integer.valueOf(valueArray[3]),
+                    Integer.valueOf(valueArray[4]), Integer.valueOf(valueArray[5]),
+                    Integer.valueOf(valueArray[6]), Integer.valueOf(valueArray[7]),
+                    Integer.valueOf(valueArray[8]), Integer.valueOf(valueArray[9])
+                    );
+            this.db.insertRentalObjectSizeInfo(sizeInfo);
+        }
+    }
+    
+    private void readRentalObject() throws IOException {
+        List<String> rentalObjectLineList = Files.readAllLines(Paths.get("RentalObject.csv"));
+        
+        for (String rentalObjectLine : rentalObjectLineList) {
+            String[] valueArray = rentalObjectLine.split(",");
+            
+            int id = Integer.valueOf(valueArray[0]);
+            String name = valueArray[1];
+            String categoryName = valueArray[2];
+            int cost = Integer.valueOf(valueArray[3]);
+            List<RentalObjectSizeInfo> availableSizeInfoList = new ArrayList<>();
+            
+            for (int i = 4; i < valueArray.length; ++i) {
+                availableSizeInfoList.add(this.db.selectRentalObjectSizeInfoWhereId(Integer.valueOf(valueArray[i])).get(0));
+            }
+            RentalObjectSizeInfo[] availableSizeInfoArray = availableSizeInfoList.toArray(new RentalObjectSizeInfo[availableSizeInfoList.size()]);
+            
+            //availableSizeInfoList.forEach(sizeInfo -> System.out.println(sizeInfo.toString()));
+            //System.out.println(availableSizeInfoList.size());
+            RentalObject rentalObject = new RentalObject(
+                    id, name, categoryName,
+                    availableSizeInfoArray, cost
+                    );
+            
+            this.db.insertRentalObject(rentalObject);
+        }
+        
+    }
+    
     public void readData() {
-        ;;;;;
+        try {
+            this.readMember();
+            this.readRentalObjectSizeInfo();
+            this.readRentalObject();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
