@@ -7,6 +7,9 @@ import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.Period;
+
+import javax.swing.JOptionPane;
 
 public class MainController
 {
@@ -40,7 +43,6 @@ public class MainController
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            // TODO: Implement appropriate program for member registration
             System.out.println("MemberRegisterListener::actionPerformed() called.");
 
             // Show the member registration dialog
@@ -207,13 +209,32 @@ public class MainController
             // If the dialog is closed, all input fields are valid
             // Therefore, sanity check is not needed
             
-            // TODO: Database access may be needed
+            DBManager dbm = MainController.this.mModel.getDBManager();
             
-            // Set dummy user
-            Member dummyMember = MainController.this.mModel.getMemberInfo(1);
-            MainController.this.mModel.setLoggedInMember(dummyMember);
+            Member member = new Member(
+                dbm.generateMemberId(),
+                memberView.getFirstName(), 
+                memberView.getSecondName(), 
+                memberView.getFirstNameKana(), 
+                memberView.getSecondNameKana(), 
+                memberView.getNickName(), 
+                memberView.getSelectedBirthDate(), 
+                LocalDate.now(), 
+                memberView.getSelectedGender(), 
+                memberView.getAddress1() + memberView.getAddress2(), 
+                memberView.getPostcode1() + "-" + memberView.getPostcode2(),
+                memberView.getPhoneNumberAreaCode() + "-" +
+                memberView.getPhoneNumberSubscriber1() + "-" +
+                memberView.getPhoneNumberSubscriber2(),
+                memberView.getMailAddress(),
+                memberView.getPassword());
             
-            // Switch to main menu if all input fields are valid
+            dbm.addMember(member);
+            
+            // Set current user
+            MainController.this.mModel.setLoggedInMember(member);
+            
+            // Switch to main menu
             MainController.this.mView.switchToMainMenuPanel();
         }
     }
@@ -223,7 +244,6 @@ public class MainController
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            // TODO: Implement appropriate program for login
             System.out.println("LogInListener::actionPerformed() called.");
 
             // Show the login dialog
@@ -250,13 +270,13 @@ public class MainController
             if (loginView.getResult() != DialogResult.OK)
                 return;
             
-            // TODO: Database access may be needed
+            DBManager dbm = MainController.this.mModel.getDBManager();
+            Member member = dbm.getMember(loginView.getUserId(), loginView.getPassword());
             
-            // Set dummy user
-            Member dummyMember = MainController.this.mModel.getMemberInfo(1);
-            MainController.this.mModel.setLoggedInMember(dummyMember);
+            // Set current user
+            MainController.this.mModel.setLoggedInMember(member);
             
-            // Switch to main menu if both user name and password are valid
+            // Switch to main menu
             MainController.this.mView.switchToMainMenuPanel();
         }
     }
@@ -310,7 +330,6 @@ public class MainController
     
     private void onBorrowItem()
     {
-        // TODO: Implement program for borrowing
         ItemsPanel itemsPanel = this.mView.getItemsPanel();
         RentalObject borrowedObject = itemsPanel.getSelectedRentalObject();
         
@@ -329,7 +348,6 @@ public class MainController
             @Override
             public boolean validateInput(RentalView userInput)
             {
-                // TODO: Validate user input
                 // Both RentalView.getBeginDate() and RentalView.getDesiredReturnDate() might return null
                 
                 if (userInput.getSizeInfo() == null) {
@@ -363,27 +381,53 @@ public class MainController
         if (rentalView.getResult() != DialogResult.OK)
             return;
         
-        // TODO: Database access may be needed
-        // First you need to check if the user can borrow it or the user needs to reserve it
-        // by checking Reservation Database and Rental Database
+        DBManager dbm = MainController.this.mModel.getDBManager();
         
-        // Maybe you will need to create a new class derived from InputValidator<RentalView>, 
-        // whose constructor takes a MainModel object as an argument,
-        // so that you can do the database access in the validateInput() method
+        if (!dbm.isAvailableRentalObject(rentalView.getRentalObject(), rentalView.getSizeInfo())) {
+            int dialogResult = JOptionPane.showConfirmDialog(
+                this.mView,
+                "Currently you cannot borrow the selected item." + System.lineSeparator() +
+                "Would you like to reserve the selected item?",
+                "JavaIina",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.INFORMATION_MESSAGE);
+            
+            if (dialogResult == JOptionPane.OK_OPTION) {
+                Reservation res = new Reservation(
+                    dbm.generateReservationId(), 
+                    this.mModel.loggedInMember(),
+                    rentalView.getRentalObject(),
+                    rentalView.getSizeInfo(),
+                    LocalDate.now(),
+                    false);
+                dbm.addReservation(res);
+                return;
+            } else {
+                return;
+            }
+        }
         
-        // TODO: Initialize a new Rental object or a new Reservation object
+        dbm.processRental(
+            this.mModel.loggedInMember(),
+            rentalView.getRentalObject(),
+            rentalView.getSizeInfo(),
+            rentalView.getBeginDate(),
+            rentalView.getDesiredReturnDate());
     }
     
     private void onReturnItem()
     {
-        // TODO: Implement program for returning
         Rental returnedObjectInfo = this.mView.getBorrowingItemsPanel().getSelectedRental();
         
         if (returnedObjectInfo == null)
             return;
         
-        // TODO: Implement program for calculating overdue payment
-        int overduePayment = 100;
+        int overduePayment = 0;
+        
+        if (returnedObjectInfo.getDesiredReturnDate().isBefore(LocalDate.now())) {
+            Period period = Period.between(returnedObjectInfo.getDesiredReturnDate(), LocalDate.now());
+            overduePayment = period.getDays() * 100;
+        }
         
         // Show the return dialog
         ReturnView returnView = new ReturnView(this.mView);
@@ -394,7 +438,9 @@ public class MainController
         if (returnView.getResult() != DialogResult.OK)
             return;
         
-        // TODO: Database access may be needed
+        DBManager dbm = MainController.this.mModel.getDBManager();
+        dbm.returnRentalObject(returnedObjectInfo, LocalDate.now(), overduePayment);
+        
         // Update Rental database (actualReturnDate, overduePayment)
         // Check Reservation database
         // If someone is waiting for the rental object, then he/she automatically borrows it

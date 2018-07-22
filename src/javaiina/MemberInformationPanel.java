@@ -204,6 +204,7 @@ public class MemberInformationPanel extends PanelBase
         this.mLabelPhoneNumberValue.setText(loggedInMember.phoneNumber());
         this.mLabelEmailAddressValue.setText(loggedInMember.emailAddress());
         
+        this.mRecentlyBorrowedItemsModel.removeAllElements();
         this.mMainModel.getRecentlyBorrowedItems(5)
             .forEach(rentalInfo -> this.mRecentlyBorrowedItemsModel.addElement(rentalInfo));
     }

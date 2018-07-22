@@ -33,6 +33,7 @@ public class Reservation
     public RentalObjectSizeInfo sizeInfo() { return this.mSizeInfo; }
     public LocalDate reservationDate() { return this.mReservationDate; }
     public boolean isDone() { return this.mDone; }
+    public void changeDone(boolean done) { this.mDone = done; }
 
     @Override
     public String toString()

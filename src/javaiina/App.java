@@ -26,6 +26,9 @@ public class App
         MainController mainController = new MainController(mainView, mainModel);
         
         mainView.setVisible(true);
+        
+        Runtime.getRuntime().addShutdownHook(new Thread(
+            () -> mainModel.getDBManager().saveData()));
     }
     
     private static void initializeLookAndFeel()
