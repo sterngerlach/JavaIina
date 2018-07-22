@@ -225,125 +225,136 @@ public class DBManager
         }
     }
     
-    private DB db;
+    private DB mDb;
     
-    public DBManager() {
-        this.db = new DB();
+    public DBManager()
+    {
+        this.mDb = new DB();
         this.readData();
     }
     
     @Override
-    public void finalize () {
+    public void finalize()
+    {
         this.saveData();
     }
     
-    public int generateMemberId() {
-        return this.db.selectMember().size();
+    public int generateMemberId()
+    {
+        return this.mDb.selectMember().size();
     }
     
-    public Member getMemberInfo(long id) {
-        List<Member> memberList = this.db.selectMemberWhereId(id);
-        return memberList.get(0);
+    public Member getMemberInfo(long id)
+    {
+        return this.mDb.selectMemberWhereId(id).get(0);
     }
     
-    public Member getMember(String emailAddress, String password) {
-        return this.db.selectMemberWhereEmailAddressAndPassword(emailAddress, password).get(0);
+    public Member getMember(String emailAddress, String password)
+    {
+        return this.mDb.selectMemberWhereEmailAddressAndPassword(emailAddress, password).get(0);
     }
     
-    public boolean memberExists(String emailAddress, String password) {
-        return this.db.selectMemberWhereEmailAddressAndPassword(emailAddress, password).size() > 0;
+    public boolean memberExists(String emailAddress, String password)
+    {
+        return this.mDb.selectMemberWhereEmailAddressAndPassword(emailAddress, password).size() > 0;
     }
     
-    public void addMember(Member member) {
-        this.db.insertMember(member);
+    public void addMember(Member member)
+    {
+        this.mDb.insertMember(member);
     }
     
-    public List<RentalObject> nowRetalingObjects(Member member) {
-        return this.db.selectRentalObjectWhereMember(member);
+    public List<RentalObject> nowRetalingObjects(Member member)
+    {
+        return this.mDb.selectRentalObjectWhereMember(member);
     }
     
-    public List<RentalObject> allRentalObjects() {
-        return this.db.selectRentalObject();
+    public List<RentalObject> allRentalObjects()
+    {
+        return this.mDb.selectRentalObject();
     }
     
-    public List<RentalObject> searchByCategoryName(String categoryName) {
-        return this.db.selectRentalObjectWhereCategory(categoryName);
+    public List<RentalObject> searchByCategoryName(String categoryName)
+    {
+        return this.mDb.selectRentalObjectWhereCategory(categoryName);
     }
     
-    public List<RentalObject> searchByName(String name) {
-        return this.db.selectRentalObjectWhereName(name);
+    public List<RentalObject> searchByName(String name)
+    {
+        return this.mDb.selectRentalObjectWhereName(name);
     }
     
-    public List<RentalObject> searchByNameAndCategory(String name, String categoryName) {
-        return this.db.mRentalObjectList.stream()
-                .filter(rentalObject -> rentalObject.name().toLowerCase().contains(name.toLowerCase()))
-                .filter(rentalObject -> rentalObject.categoryName().toLowerCase().equals(categoryName.toLowerCase()))
-                .collect(Collectors.toList());
+    public List<RentalObject> searchByNameAndCategory(String name, String categoryName)
+    {
+        return this.mDb.selectRentalObjectWhereCategoryAndName(categoryName, name);
     }
     
-    public List<Rental> getBorrowingItems(Member member) {
-        return this.db.selectBorrowingItemWhereMember(member);
+    public List<Rental> getBorrowingItems(Member member)
+    {
+        return this.mDb.selectBorrowingItemWhereMember(member);
     }
     
-    public List<Rental> getBorrowedItems(Member member) {
-        return this.db.selectBorrowedItemWhereMember(member);
+    public List<Rental> getBorrowedItems(Member member)
+    {
+        return this.mDb.selectBorrowedItemWhereMember(member);
     }
     
-    public boolean isAvailableRentalObject(RentalObject rentalObject, RentalObjectSizeInfo sizeInfo) {
-        List<Rental> rentalLogList = this.db.selectRentalWhereRentalObjectAndSizeInfo(rentalObject, sizeInfo);
-        for (int i = 0; i < rentalLogList.size(); ++i) {
-            if (rentalLogList.get(i).getActualReturnDate() == null) { 
-                return false;
-            }
-        }
-        return true;
+    public boolean isAvailableRentalObject(RentalObject rentalObject, RentalObjectSizeInfo sizeInfo)
+    {
+        return !this.mDb.selectRentalWhereRentalObjectAndSizeInfo(rentalObject, sizeInfo)
+            .stream()
+            .anyMatch(rental -> rental.getActualReturnDate() == null);
     }
     
-    public int generateReserveId() {
-        return this.db.selectReservation().size();
+    public int generateReservationId()
+    {
+        return this.mDb.selectReservation().size();
     }
     
-    public void Reserve(Reservation reservation) {
-        this.db.insertReservation(reservation);
+    public void addReservation(Reservation reservation)
+    {
+        this.mDb.insertReservation(reservation);
     }
     
-    public boolean Rental(Member member, RentalObject rentalObject, RentalObjectSizeInfo sizeInfo, LocalDate beginDate, LocalDate disiredDate) {
+    public boolean processRental(
+        Member member, RentalObject rentalObject, RentalObjectSizeInfo sizeInfo,
+        LocalDate beginDate, LocalDate desiredDate)
+    {
         if (this.isAvailableRentalObject(rentalObject, sizeInfo)) {
-            List<Rental> rentalList = this.db.selectRental();
-            int id_rental = rentalList.size();
-            Rental rental;
-            rental = new Rental(id_rental, member, rentalObject, sizeInfo, beginDate, disiredDate, null, 0);
-            this.db.insertRental(rental);
+            int rentalId = this.generateRentalId();
+            Rental rental = new Rental(rentalId, member, rentalObject, sizeInfo, beginDate, desiredDate, null, 0);
+            this.mDb.insertRental(rental);
             return true;
         } else {
-            List<Reservation> reservationList = this.db.selectReservation();
-            int id_reservation = reservationList.size();
-            Reservation reservation = new Reservation(id_reservation, member, rentalObject, sizeInfo, LocalDate.now(), false);
-            this.db.insertReservation(reservation);
+            int reservationId = this.generateReservationId();
+            Reservation reservation = new Reservation(reservationId, member, rentalObject, sizeInfo, LocalDate.now(), false);
+            this.mDb.insertReservation(reservation);
             return false;
         }
     }
     
-    public List<Reservation> ReservedRentalObjectList(Member member) {
-        return this.db.selectReservationWhereMember(member);
+    public List<Reservation> ReservedRentalObjectList(Member member)
+    {
+        return this.mDb.selectReservationWhereMember(member);
     }
     
-    public void ReturnObject(Rental rental, LocalDate actualReturnDate, int overduePayment) {
-        this.db.updateRental(rental, actualReturnDate, overduePayment);
-        List<Reservation> resList = this.db.selectReservationWhereRentalObjectAndSizeInfo(rental.getRentalObject(), rental.getSizeInfo())
-                .stream().filter(res -> res.isDone() == false).collect(Collectors.toList());
+    public void returnRentalObject(Rental rental, LocalDate actualReturnDate, int overduePayment)
+    {
+        this.mDb.updateRental(rental, actualReturnDate, overduePayment);
+        List<Reservation> resList = this.mDb.selectReservationWhereRentalObjectAndSizeInfo(
+            rental.getRentalObject(), rental.getSizeInfo());
         
         if (resList.size() > 0) {
-            this.Rental(resList.get(0).member(), rental.getRentalObject(), rental.getSizeInfo(), actualReturnDate, actualReturnDate.plusWeeks(2));
-            this.db.updateReservationDone(resList.get(0));
-        } else {
-            ;
+            this.processRental(
+                resList.get(0).member(), rental.getRentalObject(), rental.getSizeInfo(),
+                actualReturnDate, actualReturnDate.plusWeeks(2));
+            this.mDb.updateReservationDone(resList.get(0));
         }
-        
     }
     
-    public int generateRentalId() {
-        return this.db.selectRental().size();
+    public int generateRentalId()
+    {
+        return this.mDb.selectRental().size();
     }
     
     public void saveData() {
@@ -351,7 +362,7 @@ public class DBManager
         try {
             
             bw = Files.newBufferedWriter(Paths.get("Rental.csv"), Charset.defaultCharset());
-            for (Rental rental : this.db.selectRental()) {
+            for (Rental rental : this.mDb.selectRental()) {
                 System.out.println(rental.toString());
                 bw.write(rental.getId() + "," + 
                         rental.getMember().id() + "," + 
@@ -368,7 +379,7 @@ public class DBManager
             
             bw = Files.newBufferedWriter(Paths.get("Reservation.csv"), Charset.defaultCharset());
            
-            for ( Reservation res : this.db.selectReservation()) {
+            for ( Reservation res : this.mDb.selectReservation()) {
                 bw.write(res.id() + "," + 
                         res.member().id() +"," + 
                         res.rentalObject().id() +"," + 
@@ -380,7 +391,7 @@ public class DBManager
             bw.close();
             
             bw = Files.newBufferedWriter(Paths.get("Member.csv"), Charset.defaultCharset());
-            for (Member member : this.db.mMemberList) {
+            for (Member member : this.mDb.mMemberList) {
                 bw.write(member.id() + "," + 
                         member.firstName() + "," + 
                         member.secondName() + "," + 
@@ -432,7 +443,7 @@ public class DBManager
                     valueArray[11], valueArray[12],
                     valueArray[13]
                     );
-            this.db.insertMember(member);
+            this.mDb.insertMember(member);
         }
     }
 
@@ -447,7 +458,7 @@ public class DBManager
                     Integer.valueOf(valueArray[6]), Integer.valueOf(valueArray[7]),
                     Integer.valueOf(valueArray[8]), Integer.valueOf(valueArray[9])
                     );
-            this.db.insertRentalObjectSizeInfo(sizeInfo);
+            this.mDb.insertRentalObjectSizeInfo(sizeInfo);
         }
     }
     
@@ -464,7 +475,7 @@ public class DBManager
             List<RentalObjectSizeInfo> availableSizeInfoList = new ArrayList<>();
             
             for (int i = 4; i < valueArray.length; ++i) {
-                availableSizeInfoList.add(this.db.selectRentalObjectSizeInfoWhereId(Integer.valueOf(valueArray[i])).get(0));
+                availableSizeInfoList.add(this.mDb.selectRentalObjectSizeInfoWhereId(Integer.valueOf(valueArray[i])).get(0));
             }
             RentalObjectSizeInfo[] availableSizeInfoArray = availableSizeInfoList.toArray(new RentalObjectSizeInfo[availableSizeInfoList.size()]);
             
@@ -473,7 +484,7 @@ public class DBManager
                     availableSizeInfoArray, cost
                     );
             
-            this.db.insertRentalObject(rentalObject);
+            this.mDb.insertRentalObject(rentalObject);
         }
     }
     
@@ -482,10 +493,10 @@ public class DBManager
         for (String reservationLine : reservationLineList) {
             String[] valueArray = reservationLine.split(",");
             int id = Integer.valueOf(valueArray[0]);
-            Member member = this.db.selectMemberWhereId(Integer.valueOf(valueArray[1])).get(0);
+            Member member = this.mDb.selectMemberWhereId(Integer.valueOf(valueArray[1])).get(0);
             
-            RentalObject rentalObject = this.db.selectRentalObjectWhereId(Integer.valueOf(valueArray[2])).get(0);
-            RentalObjectSizeInfo sizeInfo = this.db.selectRentalObjectSizeInfoWhereId(Integer.valueOf(valueArray[3])).get(0);
+            RentalObject rentalObject = this.mDb.selectRentalObjectWhereId(Integer.valueOf(valueArray[2])).get(0);
+            RentalObjectSizeInfo sizeInfo = this.mDb.selectRentalObjectSizeInfoWhereId(Integer.valueOf(valueArray[3])).get(0);
             LocalDate reservationDate = LocalDate.parse(valueArray[4], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             boolean done = Boolean.valueOf(valueArray[5]);
             
@@ -494,7 +505,7 @@ public class DBManager
                     rentalObject, sizeInfo,
                     reservationDate, done
                     );
-            this.db.insertReservation(reservation);
+            this.mDb.insertReservation(reservation);
         }
     }
     
@@ -504,9 +515,9 @@ public class DBManager
         for (String rentalLine : rentalLineList) {
             String[] valueArray = rentalLine.split(",");
             int id = Integer.valueOf(valueArray[0]);
-            Member member = this.db.selectMemberWhereId((long)Integer.valueOf(valueArray[1])).get(0);
-            RentalObject rentalObject = this.db.selectRentalObjectWhereId(Integer.valueOf(valueArray[2])).get(0);
-            RentalObjectSizeInfo sizeInfo = this.db.selectRentalObjectSizeInfoWhereId(Integer.valueOf(valueArray[3])).get(0);
+            Member member = this.mDb.selectMemberWhereId((long)Integer.valueOf(valueArray[1])).get(0);
+            RentalObject rentalObject = this.mDb.selectRentalObjectWhereId(Integer.valueOf(valueArray[2])).get(0);
+            RentalObjectSizeInfo sizeInfo = this.mDb.selectRentalObjectSizeInfoWhereId(Integer.valueOf(valueArray[3])).get(0);
             LocalDate beginDate = LocalDate.parse(valueArray[4], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             LocalDate desiredReturnDate = LocalDate.parse(valueArray[5], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             LocalDate actualReturnDate = valueArray[6].equals("") ? null : LocalDate.parse(valueArray[6], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -515,7 +526,7 @@ public class DBManager
                     id, member, rentalObject,
                     sizeInfo, beginDate, desiredReturnDate,
                     actualReturnDate, overduePayment);
-            this.db.insertRental(rental);
+            this.mDb.insertRental(rental);
         }
     }
     

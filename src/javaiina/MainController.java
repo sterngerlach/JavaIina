@@ -390,13 +390,13 @@ public class MainController
             
             if (dialogResult == JOptionPane.OK_OPTION) {
                 Reservation res = new Reservation(
-                       dbm.generateReserveId(), 
+                       dbm.generateReservationId(), 
                        this.mModel.loggedInMember(),
                        rentalView.getRentalObject(),
                        rentalView.getSizeInfo(),
                        LocalDate.now(),
                        false);
-                dbm.Reserve(res);
+                dbm.addReservation(res);
                 return;
             } else {
                 return;
@@ -413,7 +413,7 @@ public class MainController
                 null,
                 0
                 );
-        dbm.Rental(rental.getMember(), 
+        dbm.processRental(rental.getMember(), 
                 rental.getRentalObject(), 
                 rental.getSizeInfo(), 
                 rental.getBeginDate(), 
@@ -446,7 +446,7 @@ public class MainController
             return;
         
         DBManager dbm = MainController.this.mModel.getDBManager();
-        dbm.ReturnObject(returnedObjectInfo, LocalDate.now(), overduePayment);
+        dbm.returnRentalObject(returnedObjectInfo, LocalDate.now(), overduePayment);
         
         // Update Rental database (actualReturnDate, overduePayment)
         // Check Reservation database
