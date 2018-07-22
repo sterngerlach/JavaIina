@@ -209,30 +209,32 @@ public class MainController
             // If the dialog is closed, all input fields are valid
             // Therefore, sanity check is not needed
             
-            System.out.println("All input fields are valid.");
-            
             DBManager dbm = MainController.this.mModel.getDBManager();
+            
             Member member = new Member(
-                    dbm.generateMemberId(),
-                    memberView.getFirstName(), 
-                    memberView.getSecondName(), 
-                    memberView.getFirstNameKana(), 
-                    memberView.getSecondNameKana(), 
-                    memberView.getNickName(), 
-                    memberView.getSelectedBirthDate(), 
-                    LocalDate.now(), 
-                    memberView.getSelectedGender(), 
-                    memberView.getAddress1() + memberView.getAddress2(), 
-                    memberView.getPostcode1() +"-"+ memberView.getPostcode2(),
-                    memberView.getPhoneNumberAreaCode() + "-"+ memberView.getPhoneNumberSubscriber1() + "-" + memberView.getPhoneNumberSubscriber2(),
-                    memberView.getMailAddress(),
-                    memberView.getPassword()
-                    );
+                dbm.generateMemberId(),
+                memberView.getFirstName(), 
+                memberView.getSecondName(), 
+                memberView.getFirstNameKana(), 
+                memberView.getSecondNameKana(), 
+                memberView.getNickName(), 
+                memberView.getSelectedBirthDate(), 
+                LocalDate.now(), 
+                memberView.getSelectedGender(), 
+                memberView.getAddress1() + memberView.getAddress2(), 
+                memberView.getPostcode1() + "-" + memberView.getPostcode2(),
+                memberView.getPhoneNumberAreaCode() + "-" +
+                memberView.getPhoneNumberSubscriber1() + "-" +
+                memberView.getPhoneNumberSubscriber2(),
+                memberView.getMailAddress(),
+                memberView.getPassword());
+            
             dbm.addMember(member);
-            // Set dummy user
+            
+            // Set current user
             MainController.this.mModel.setLoggedInMember(member);
             
-            // Switch to main menu if all input fields are valid
+            // Switch to main menu
             MainController.this.mView.switchToMainMenuPanel();
         }
     }
@@ -271,9 +273,10 @@ public class MainController
             DBManager dbm = MainController.this.mModel.getDBManager();
             Member member = dbm.getMember(loginView.getUserId(), loginView.getPassword());
             
+            // Set current user
             MainController.this.mModel.setLoggedInMember(member);
             
-            // Switch to main menu if both user name and password are valid
+            // Switch to main menu
             MainController.this.mView.switchToMainMenuPanel();
         }
     }
@@ -379,23 +382,24 @@ public class MainController
             return;
         
         DBManager dbm = MainController.this.mModel.getDBManager();
+        
         if (!dbm.isAvailableRentalObject(rentalView.getRentalObject(), rentalView.getSizeInfo())) {
             int dialogResult = JOptionPane.showConfirmDialog(
-                    this.mView,
-                    "Currently you cannot borrow the selected item." + System.lineSeparator() +
-                    "Would you like to reserve the selected item?",
-                    "JavaIina",
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE);
+                this.mView,
+                "Currently you cannot borrow the selected item." + System.lineSeparator() +
+                "Would you like to reserve the selected item?",
+                "JavaIina",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.INFORMATION_MESSAGE);
             
             if (dialogResult == JOptionPane.OK_OPTION) {
                 Reservation res = new Reservation(
-                       dbm.generateReservationId(), 
-                       this.mModel.loggedInMember(),
-                       rentalView.getRentalObject(),
-                       rentalView.getSizeInfo(),
-                       LocalDate.now(),
-                       false);
+                    dbm.generateReservationId(), 
+                    this.mModel.loggedInMember(),
+                    rentalView.getRentalObject(),
+                    rentalView.getSizeInfo(),
+                    LocalDate.now(),
+                    false);
                 dbm.addReservation(res);
                 return;
             } else {
@@ -403,23 +407,12 @@ public class MainController
             }
         }
         
-        Rental rental = new Rental(
-                dbm.generateRentalId(),
-                this.mModel.loggedInMember(),
-                rentalView.getRentalObject(),
-                rentalView.getSizeInfo(),
-                LocalDate.now(),
-                rentalView.getDesiredReturnDate(),
-                null,
-                0
-                );
-        dbm.processRental(rental.getMember(), 
-                rental.getRentalObject(), 
-                rental.getSizeInfo(), 
-                rental.getBeginDate(), 
-                rental.getDesiredReturnDate());
-        
-        
+        dbm.processRental(
+            this.mModel.loggedInMember(),
+            rentalView.getRentalObject(),
+            rentalView.getSizeInfo(),
+            rentalView.getBeginDate(),
+            rentalView.getDesiredReturnDate());
     }
     
     private void onReturnItem()
