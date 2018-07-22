@@ -89,10 +89,21 @@ public class AvailableSizeInfoTable
         ResultSet resultSet = stmt.executeQuery("select * from AvailableSizeInfo");
         List<AvailableSize> resultList = new ArrayList<AvailableSize>();
         
-        for (int i = 0; resultSet.next(); ++i)
-            resultList.add(new AvailableSize(
-                rentalObjects.get((int)resultSet.getLong("rentalObjectId")),
-                sizeInfos.get((int)resultSet.getLong("sizeId"))));
+        for (int i = 0; resultSet.next(); ++i) {
+            long rentalObjectId = resultSet.getLong("rentalObjectId");
+            long sizeId = resultSet.getLong("sizeId");
+            
+            RentalObject foundRentalObject = rentalObjects.stream()
+                .filter(rentalObject -> rentalObject.id() == rentalObjectId)
+                .findFirst()
+                .orElse(null);
+            RentalObjectSizeInfo foundSizeInfo = sizeInfos.stream()
+                .filter(sizeInfo -> sizeInfo.id() == sizeId)
+                .findFirst()
+                .orElse(null);
+            
+            resultList.add(new AvailableSize(foundRentalObject, foundSizeInfo));
+        }
         
         resultSet.close();
         stmt.close();
