@@ -373,7 +373,7 @@ public class DBManager
                     rental.getSizeInfo().id() + "," + 
                     rental.getBeginDate().toString() + "," + 
                     rental.getDesiredReturnDate().toString() + "," + 
-                    rental.getActualReturnDate() == null ? "" : rental.getActualReturnDate().toString() + "," +
+                    (rental.getActualReturnDate() == null ? "" : rental.getActualReturnDate().toString()) + "," +
                     rental.getOverduePayment() + System.lineSeparator());
             }
             
