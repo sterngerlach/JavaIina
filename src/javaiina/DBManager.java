@@ -15,10 +15,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DBManager {
-    
+public class DBManager
+{    
     /* replace to Derby later */
-    private class DB {
+    private class DB
+    {
         private List<AvailableSize> mAvailableSizeList;
         private List<Member> mMemberList;
         private List<Rental> mRentalList;
@@ -26,8 +27,8 @@ public class DBManager {
         private List<RentalObjectSizeInfo> mRentalObjectSizeInfoList;
         private List<Reservation> mReservationList;
         
-        public DB() {
-            
+        public DB()
+        {    
             this.mAvailableSizeList = new ArrayList<>();
             this.mMemberList = new ArrayList<>();
             this.mRentalList = new ArrayList<>();
@@ -37,26 +38,31 @@ public class DBManager {
             this.mReservationList = new ArrayList<>();
         }
         
-        public List<Member> selectMember() {
+        /*
+         * Member methods
+         */
+        public List<Member> selectMember()
+        {
             return this.mMemberList;
         }
         
-        public List<Member> selectMemberWhereId(long id) {
-            return this.mMemberList.stream().filter(member -> member.id() == id).collect(Collectors.toList());
+        public List<Member> selectMemberWhereId(long id)
+        {
+            return this.mMemberList.stream()
+                .filter(member -> member.id() == id)
+                .collect(Collectors.toList());
         }
         
-        public List<Member> selectMemberWhereEmailAdressAndPassword(String emailAdress, String password) {
-            List<Member> memberList = new ArrayList<>();
-            for (int i = 0; i < this.mMemberList.size(); ++i) {
-                if (this.mMemberList.get(i).emailAddress().equals(emailAdress) &&
-                    this.mMemberList.get(i).password().equals(password)) { 
-                    memberList.add(this.mMemberList.get(i));
-                }
-            }
-            return memberList;
+        public List<Member> selectMemberWhereEmailAddressAndPassword(String emailAddress, String password)
+        {
+            return this.mMemberList.stream()
+                .filter(member -> member.emailAddress().equals(emailAddress))
+                .filter(member -> member.password().equals(password))
+                .collect(Collectors.toList());
         }
         
-        public void insertMember(Member member) {
+        public void insertMember(Member member)
+        {
             this.mMemberList.add(member);
         }
         
@@ -216,11 +222,11 @@ public class DBManager {
     }
     
     public Member getMember(String emailAddress, String password) {
-        return this.db.selectMemberWhereEmailAdressAndPassword(emailAddress, password).get(0);
+        return this.db.selectMemberWhereEmailAddressAndPassword(emailAddress, password).get(0);
     }
     
     public boolean memberExists(String emailAddress, String password) {
-        return this.db.selectMemberWhereEmailAdressAndPassword(emailAddress, password).size() > 0;
+        return this.db.selectMemberWhereEmailAddressAndPassword(emailAddress, password).size() > 0;
     }
     
     public void addMember(Member member) {
