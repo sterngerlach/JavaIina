@@ -89,7 +89,7 @@ public class AvailableSizeInfoTable
         ResultSet resultSet = stmt.executeQuery("select * from AvailableSizeInfo");
         List<AvailableSize> resultList = new ArrayList<AvailableSize>();
         
-        for (int i = 0; resultSet.next(); ++i) {
+        while (resultSet.next()) {
             long rentalObjectId = resultSet.getLong("rentalObjectId");
             long sizeId = resultSet.getLong("sizeId");
             
