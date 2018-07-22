@@ -81,7 +81,7 @@ public class RentalListViewRenderer implements ListCellRenderer<Rental>
         boolean isSelected, boolean cellHasFocus)
     {
         this.mLabelItemName.setText("Name: " + value.getRentalObject().name());
-        this.mLabelItemSize.setText("Size: " + value.getSizeInfo().sizeName());
+        this.mLabelItemSize.setText("Size: " + value.getSizeInfo().toString());
         this.mLabelItemCost.setText("Cost: " + value.getRentalObject().cost() + " Yen/day");
         this.mLabelBeginDate.setText("Borrowed On: " +
             value.getBeginDate().format(this.mDateFormatter));
