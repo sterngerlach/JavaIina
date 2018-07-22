@@ -236,7 +236,7 @@ public class DBManager
     @Override
     public void finalize()
     {
-        this.saveData();
+        // this.saveData();
     }
     
     public int generateMemberId()
