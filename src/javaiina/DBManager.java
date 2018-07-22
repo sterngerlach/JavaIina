@@ -131,87 +131,100 @@ public class DBManager
             this.mRentalObjectSizeInfoList.add(sizeInfo);
         }
         
-        public void insertRental(Rental rental) {
-             this.mRentalList.add(rental);
-        }
-        
-        public List<Rental> selectRental() {
+        /*
+         * Rental methods
+         */
+        public List<Rental> selectRental()
+        {
             return this.mRentalList;
         }
         
-        public List<Rental> selectRentalWhereRentalObjectAndSizeInfo(RentalObject rentalObject, RentalObjectSizeInfo sizeInfo) {
-            List<Rental> rList = new ArrayList<>();
-            for (int i = 0; i < this.mRentalList.size(); ++i) {
-                if (this.mRentalList.get(i).getRentalObject().id() == rentalObject.id()
-                    && this.mRentalList.get(i).getSizeInfo().id() == sizeInfo.id()) {
-                    rList.add(this.mRentalList.get(i));
-                }
-            }
-            return rList;
+        public void insertRental(Rental rental)
+        {
+             this.mRentalList.add(rental);
         }
         
-        public List<Rental> selectRentalWhereMember(Member member) {
-            return this.mRentalList.stream().filter(rental -> rental.getMember().id() == member.id())
-                   .collect(Collectors.toList());
+        public List<Rental> selectRentalWhereRentalObjectAndSizeInfo(
+            RentalObject rentalObject, RentalObjectSizeInfo sizeInfo)
+        {
+            return this.mRentalList.stream()
+                .filter(rental -> rental.getRentalObject().id() == rentalObject.id())
+                .filter(rental -> rental.getSizeInfo().id() == sizeInfo.id())
+                .collect(Collectors.toList());
         }
         
-        public List<Rental> selectBorrowingItemWhereMember(Member member) {
-            return this.mRentalList.stream().filter(rental -> rental.getMember().id() == member.id() )
-                    .filter(rental -> rental.getActualReturnDate() == null).collect(Collectors.toList());
+        public List<Rental> selectRentalWhereMember(Member member)
+        {
+            return this.mRentalList.stream()
+                .filter(rental -> rental.getMember().id() == member.id())
+                .collect(Collectors.toList());
         }
         
-        public List<Rental> selectBorrowedItemWhereMember(Member member) {
-            return this.mRentalList.stream().filter(rental -> rental.getMember().id() == member.id() )
-            .filter(rental -> rental.getActualReturnDate() != null).collect(Collectors.toList());
+        public List<Rental> selectBorrowingItemWhereMember(Member member)
+        {
+            return this.mRentalList.stream()
+                .filter(rental -> rental.getMember().id() == member.id())
+                .filter(rental -> rental.getActualReturnDate() == null)
+                .collect(Collectors.toList());
         }
         
-        public void updateRental(Rental rental, LocalDate actualReturnDate, int overduePayment) {
-            for (int i = 0; i < this.mRentalList.size(); ++i) {
-                if (this.mRentalList.get(i).getId() == rental.getId()) {
-                    this.mRentalList.get(i).setActualReturnDate(actualReturnDate);
-                    this.mRentalList.get(i).setOverduePayment(overduePayment);
-                }
-            }
+        public List<Rental> selectBorrowedItemWhereMember(Member member)
+        {
+            return this.mRentalList.stream()
+                .filter(rental -> rental.getMember().id() == member.id())
+                .filter(rental -> rental.getActualReturnDate() != null)
+                .collect(Collectors.toList());
         }
         
-        public void insertReservation(Reservation reservation) {
-            this.mReservationList.add(reservation);
+        public void updateRental(Rental updatedRental, LocalDate actualReturnDate, int overduePayment)
+        {
+            this.mRentalList.stream()
+                .filter(rental -> rental.getId() == updatedRental.getId())
+                .forEach(rental -> {
+                    rental.setActualReturnDate(actualReturnDate);
+                    rental.setOverduePayment(overduePayment);
+                });
         }
         
-        public List<Reservation> selectReservation() {
+        /*
+         * Reservation methods
+         */
+        public List<Reservation> selectReservation()
+        {
             return this.mReservationList;
         }
         
-        public List<Reservation> selectReservationWhereMember(Member member) {
-            List<Reservation> resList = new ArrayList<>();
-            for (int i = 0; i < this.mReservationList.size(); ++i) {
-                if (this.mReservationList.get(i).isDone() == false && this.mReservationList.get(i).member().id() == member.id()) {
-                    resList.add(this.mReservationList.get(i));
-                }
-            }
-            return resList;
+        public void insertReservation(Reservation reservation)
+        {
+            this.mReservationList.add(reservation);
         }
         
-        public List<Reservation> selectReservationWhereRentalObjectAndSizeInfo(RentalObject rentalObject, RentalObjectSizeInfo sizeInfo) {
-            List<Reservation> resList = new ArrayList<>();
-            for (int i = 0; i < this.mReservationList.size(); ++i) {
-                if (this.mReservationList.get(i).rentalObject().id() == rentalObject.id()) {
-                    resList.add(this.mReservationList.get(i));
-                }
-            }
-            return resList;
+        public List<Reservation> selectReservationWhereMember(Member member)
+        {
+            return this.mReservationList.stream()
+                .filter(reservation -> reservation.isDone() == false)
+                .filter(reservation -> reservation.member().id() == member.id())
+                .collect(Collectors.toList());
         }
         
-        public void updateReservationDone(Reservation reservation) {
-            for (int i = 0; i < this.mReservationList.size(); ++i) {
-                if (this.mReservationList.get(i).id() == reservation.id()) {
-                    this.mReservationList.get(i).changeDone(true);
-                }
-            }
+        public List<Reservation> selectReservationWhereRentalObjectAndSizeInfo(
+            RentalObject rentalObject, RentalObjectSizeInfo sizeInfo)
+        {
+            return this.mReservationList.stream()
+                .filter(reservation -> reservation.isDone() == false)
+                .filter(reservation -> reservation.rentalObject().id() == rentalObject.id())
+                .filter(reservation -> reservation.sizeInfo().id() == sizeInfo.id())
+                .collect(Collectors.toList());
         }
         
+        public void updateReservationDone(Reservation updatedReservation)
+        {
+            this.mReservationList.stream()
+                .filter(reservation -> reservation.id() == updatedReservation.id())
+                .forEach(reservation -> reservation.changeDone(true));
+        }
     }
-/*---------------------------------------------------------------------------*/
+    
     private DB db;
     
     public DBManager() {
