@@ -18,6 +18,7 @@ public class MainMenuPanel extends PanelBase
     
     private JButton mButtonShowItems;
     private JButton mButtonShowBorrowingItems;
+    private JButton mButtonShowReservingItems;
     private JButton mButtonShowMemberInfo;
     private JButton mButtonLogout;
     
@@ -69,6 +70,16 @@ public class MainMenuPanel extends PanelBase
         this.mPanelCenter.add(Box.createHorizontalGlue());
         this.mPanelCenter.add(Box.createVerticalStrut(10));
         
+        /* Show Reserving Items Button */
+        this.mButtonShowReservingItems = new JButton("Show Reserving Items");
+        this.mButtonShowReservingItems.setFont(fontButton);
+        this.mButtonShowReservingItems.setPreferredSize(buttonSize);
+        this.mButtonShowReservingItems.setMaximumSize(buttonSize);
+        this.mPanelCenter.add(this.mButtonShowReservingItems);
+        
+        this.mPanelCenter.add(Box.createHorizontalGlue());
+        this.mPanelCenter.add(Box.createVerticalStrut(10));
+        
         /* Show Member Info Button */
         this.mButtonShowMemberInfo = new JButton("Show Member Information");
         this.mButtonShowMemberInfo.setFont(fontButton);
@@ -109,6 +120,11 @@ public class MainMenuPanel extends PanelBase
     public void addShowBorrowingItemsListener(ActionListener actionListener)
     {
         this.mButtonShowBorrowingItems.addActionListener(actionListener);
+    }
+    
+    public void addShowReservingItemsListener(ActionListener actionListener)
+    {
+        this.mButtonShowReservingItems.addActionListener(actionListener);
     }
     
     public void addShowMemberInfoListener(ActionListener actionListener)
