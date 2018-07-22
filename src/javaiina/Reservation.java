@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public class Reservation
 {
-    private int mId;
+    private long mId;
     private Member mMember;
     private RentalObject mRentalObject;
     private RentalObjectSizeInfo mSizeInfo;
@@ -15,7 +15,7 @@ public class Reservation
     private boolean mDone;
 	
     public Reservation(
-        int id, Member member,
+        long id, Member member,
         RentalObject rentalObject, RentalObjectSizeInfo sizeInfo,
         LocalDate reservationDate, boolean done)
     {
@@ -27,7 +27,7 @@ public class Reservation
         this.mDone = done;
     }
     
-    public int id() { return this.mId; }
+    public long id() { return this.mId; }
     public Member member() { return this.mMember; }
     public RentalObject rentalObject() { return this.mRentalObject; }
     public RentalObjectSizeInfo sizeInfo() { return this.mSizeInfo; }

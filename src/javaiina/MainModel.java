@@ -25,7 +25,7 @@ public class MainModel
     
     // Generate sample data for debugging
     // This data makes absolutely no sense
-    private List<Member> mDummyUserList = Arrays.asList(
+    /* private List<Member> mDummyUserList = Arrays.asList(
         new Member(0, "達郎", "山下", "たつろう", "やました", "音の職人",
             LocalDate.of(1953, 2, 4), LocalDate.of(1973, 4, 1),
             Gender.MALE, "東京都世田谷区", "100-0000", "000-0000-0000", "aaa@bbb.com","aa"),
@@ -37,20 +37,20 @@ public class MainModel
             Gender.MALE, "東京都港区", "300-0000", "002-0000-0000", "eee@fff.com","cc"),
         new Member(0, "顕子", "矢野", "あきこ", "やの", "アッコちゃん",
             LocalDate.of(1955, 2, 13), LocalDate.of(1976, 4, 1),
-            Gender.FEMALE, "青森県青森市", "400-0000", "003-0000-0000", "ggg@hhh.com","dd"));
+            Gender.FEMALE, "青森県青森市", "400-0000", "003-0000-0000", "ggg@hhh.com","dd")); */
         
     // This data makes absolutely no sense
-    private List<String> mDummyCategoryList = Arrays.asList(
-        "CategoryA", "CategoryB", "CategoryC");
+    /* private List<String> mDummyCategoryList = Arrays.asList(
+        "CategoryA", "CategoryB", "CategoryC"); */
     
     // This data makes absolutely no sense
-    private List<RentalObjectSizeInfo> mDummySizeInfoList = Arrays.asList(
+    /* private List<RentalObjectSizeInfo> mDummySizeInfoList = Arrays.asList(
         new RentalObjectSizeInfo(0, "Y1", 150, 45, 50, 55, 60, 70, 80, 80),
         new RentalObjectSizeInfo(1, "A2", 155, 50, 55, 60, 70, 80, 90, 90),
-        new RentalObjectSizeInfo(2, "B3", 160, 55, 60, 65, 80, 90, 90, 90));
+        new RentalObjectSizeInfo(2, "B3", 160, 55, 60, 65, 80, 90, 90, 90)); */
     
     // This data makes absolutely no sense
-    private List<RentalObject> mDummyRentalObjectList = Arrays.asList(
+    /* private List<RentalObject> mDummyRentalObjectList = Arrays.asList(
         new RentalObject(0, "ClothA1", "CategoryA",
             new RentalObjectSizeInfo[] { mDummySizeInfoList.get(0), mDummySizeInfoList.get(1) }, 100),
         new RentalObject(1, "ClothA2", "CategoryA",
@@ -68,10 +68,10 @@ public class MainModel
         new RentalObject(7, "ClothC2", "CategoryC",
             new RentalObjectSizeInfo[] { mDummySizeInfoList.get(0) }, 450),
         new RentalObject(8, "ClothC3", "CategoryC",
-            new RentalObjectSizeInfo[] { mDummySizeInfoList.get(1), mDummySizeInfoList.get(2) }, 500));
+            new RentalObjectSizeInfo[] { mDummySizeInfoList.get(1), mDummySizeInfoList.get(2) }, 500)); */
     
     // This data makes absolutely no sense
-    /*private List<Rental> mDummyRentalList = Arrays.asList(
+    /* private List<Rental> mDummyRentalList = Arrays.asList(
         new Rental(0, this.mDummyUserList.get(0), this.mDummyRentalObjectList.get(1),
             this.mDummyRentalObjectList.get(1).availableSizeInfo()[0],
             LocalDate.of(2018, Month.JULY, 1), LocalDate.of(2018, Month.JULY, 8),
@@ -103,7 +103,7 @@ public class MainModel
         new Rental(7, this.mDummyUserList.get(3), this.mDummyRentalObjectList.get(8),
             this.mDummyRentalObjectList.get(8).availableSizeInfo()[1],
             LocalDate.of(2018, Month.JULY, 8), LocalDate.of(2018, Month.JULY, 22),
-            null, 0));*/
+            null, 0)); */
     
     public Member loggedInMember()
     {
@@ -174,7 +174,7 @@ public class MainModel
     
     public boolean isValidUserName(String userName)
     {
-        return userName.chars().allMatch(ch -> Character.isLetter(ch));
+        return userName.chars().allMatch(ch -> Character.isLetterOrDigit(ch));
     }
     
     public boolean isValidUserNameKana(String name)
@@ -199,7 +199,7 @@ public class MainModel
     
     public boolean isValidAddress(String address)
     {
-        return address.chars().allMatch(ch -> Character.isLetterOrDigit(ch));
+        return true;
     }
     
     public boolean isValidPhoneNumber(String phoneNumber)
@@ -210,12 +210,6 @@ public class MainModel
     public Member getMemberInfo(long userId)
     {
         return this.mDBManager.getMemberInfo(userId);
-        /*
-        // Return sample member data for debugging
-        return this.mDummyUserList.stream()
-            .filter(userInfo -> userInfo.id() == userId)
-            .findFirst()
-            .get();*/
     }
     
     public boolean memberExists(String emailAddress, String userPassword)
@@ -227,7 +221,7 @@ public class MainModel
     {
         List<RentalObject> rentalObjectList = this.mDBManager.allRentalObjects();
         Set<String> categorySet = new HashSet<>();
-        rentalObjectList.forEach(ro -> categorySet.add(ro.categoryName()));
+        rentalObjectList.forEach(rentalObject -> categorySet.add(rentalObject.categoryName()));
         return new ArrayList<String>(categorySet);
     }
     
@@ -254,6 +248,6 @@ public class MainModel
     public List<Rental> getRecentlyBorrowedItems(int maxSize)
     {
         return this.mDBManager.getBorrowedItems(this.mLoggedInMember).stream()
-                             .limit(maxSize).collect(Collectors.toList());
+            .limit(maxSize).collect(Collectors.toList());
     }
 }

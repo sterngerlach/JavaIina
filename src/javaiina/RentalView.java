@@ -68,7 +68,7 @@ public class RentalView extends DialogBase
     {
         this.mRentalObject = rentalObject;
         
-        this.mLabelItemIdValue.setText(Integer.toString(rentalObject.id()));
+        this.mLabelItemIdValue.setText(Long.toString(rentalObject.id()));
         this.mLabelItemNameValue.setText(rentalObject.name());
         this.mLabelItemCostValue.setText(Integer.toString(rentalObject.cost()) + " Yen/day");
         
