@@ -1,23 +1,35 @@
+
+/* DatabaseAccess.java */
+
 package javaiina;
 
-import java.sql.*;
-import java.util.Properties;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-public class DatabaseAccess {
-    private static DatabaseAccess mInstance = null;
+public class DatabaseAccessManager
+{
+    private static DatabaseAccessManager mInstance;
     private String mConnUri;
     private Connection mConnToDatabase;
 
-    private DatabaseAccess() throws SQLException,ClassNotFoundException{
+    public DatabaseAccessManager() throws SQLException, ClassNotFoundException
+    {
         Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
         this.mConnUri = "jdbc:derby:../database;create = true";
         this.mConnToDatabase = DriverManager.getConnection(mConnUri);
     }
     
-    public static DatabaseAccess getInstance() throws SQLException, ClassNotFoundException{ 
-        if (mInstance == null) mInstance = new DatabaseAccess();
-        return DatabaseAccess.mInstance;
+    public static DatabaseAccessManager getInstance() throws SQLException, ClassNotFoundException
+    { 
+        if (mInstance == null)
+            mInstance = new DatabaseAccessManager();
+        
+        return DatabaseAccessManager.mInstance;
     }
     
-    public Connection getConnection() { return this.mConnToDatabase;}
+    public Connection getConnection()
+    {
+        return this.mConnToDatabase;
+    }
 }
