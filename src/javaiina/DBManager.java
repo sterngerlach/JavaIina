@@ -66,57 +66,69 @@ public class DBManager
             this.mMemberList.add(member);
         }
         
-        public void insertRentalObject(RentalObject rentalObject) {
-            this.mRentalObjectList.add(rentalObject);
-        }
-        
-        public List<RentalObject> selectRentalObjectWhereMember(Member member) {
-            List<RentalObject> roList = new ArrayList<>();
-            
-            for (int i = 0; i < this.mRentalList.size(); ++i) {
-                if (this.mRentalList.get(i).getMember().id() == member.id()) {
-                    roList.add(this.mRentalList.get(i).getRentalObject());
-                }
-            }
-            return roList;
-        }
-        
-        public List<RentalObject> selectRentalObject() { 
+        /*
+         * RentalObject methods
+         */
+        public List<RentalObject> selectRentalObject()
+        { 
             return this.mRentalObjectList; 
         }
         
-        public List<RentalObject> selectRentalObjectWhereId(int id) {
+        public List<RentalObject> selectRentalObjectWhereId(int id)
+        {
             return this.mRentalObjectList.stream()
-                    .filter(rentalObject -> rentalObject.id() == id).collect(Collectors.toList());
+                .filter(rentalObject -> rentalObject.id() == id)
+                .collect(Collectors.toList());
         }
         
-        public List<RentalObject> selectRentalObjectWhereCategory(String categoryName) {
-            List<RentalObject> roList = new ArrayList<>();
-            for (int i = 0; i < this.mRentalObjectList.size(); ++i) {
-                if (this.mRentalObjectList.get(i).categoryName().toLowerCase().equals(categoryName.toLowerCase())) {
-                    roList.add(this.mRentalObjectList.get(i));
-                }
-            }
-            return roList;
+        public List<RentalObject> selectRentalObjectWhereMember(Member member)
+        {
+            return this.mRentalList.stream()
+                .filter(rental -> rental.getMember().id() == member.id())
+                .map(rental -> rental.getRentalObject())
+                .collect(Collectors.toList());
         }
         
-        public List<RentalObject> selectRentalObjectWhereName(String name) {
-            List<RentalObject> roList = new ArrayList<>();
-            for (int i = 0; i < this.mRentalObjectList.size(); ++i) {
-                if (this.mRentalObjectList.get(i).name().toLowerCase().contains(name.toLowerCase())) {
-                    roList.add(this.mRentalObjectList.get(i));
-                }
-            }
-            return roList;
+        public List<RentalObject> selectRentalObjectWhereCategory(String categoryName)
+        {
+            return this.mRentalObjectList.stream()
+                .filter(rentalObject -> rentalObject.categoryName().toLowerCase().equals(categoryName.toLowerCase()))
+                .collect(Collectors.toList());
         }
         
-        public void insertRentalObjectSizeInfo(RentalObjectSizeInfo sizeInfo) {
-            this.mRentalObjectSizeInfoList.add(sizeInfo);
+        public List<RentalObject> selectRentalObjectWhereName(String name)
+        {
+            return this.mRentalObjectList.stream()
+                .filter(rentalObject -> rentalObject.name().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
         }
         
-        public List<RentalObjectSizeInfo> selectRentalObjectSizeInfoWhereId(int id) {
+        public List<RentalObject> selectRentalObjectWhereCategoryAndName(String categoryName, String name)
+        {
+            return this.mRentalObjectList.stream()
+                .filter(rentalObject -> rentalObject.categoryName().toLowerCase().equals(categoryName.toLowerCase()))
+                .filter(rentalObject -> rentalObject.name().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        
+        public void insertRentalObject(RentalObject rentalObject)
+        {
+            this.mRentalObjectList.add(rentalObject);
+        }
+        
+        /*
+         * RentalObjectSizeInfo methods
+         */
+        public List<RentalObjectSizeInfo> selectRentalObjectSizeInfoWhereId(int id)
+        {
             return this.mRentalObjectSizeInfoList.stream()
-                    .filter(rentalObject -> rentalObject.id() == id).collect(Collectors.toList());
+                .filter(rentalObject -> rentalObject.id() == id)
+                .collect(Collectors.toList());
+        }
+        
+        public void insertRentalObjectSizeInfo(RentalObjectSizeInfo sizeInfo)
+        {
+            this.mRentalObjectSizeInfoList.add(sizeInfo);
         }
         
         public void insertRental(Rental rental) {
