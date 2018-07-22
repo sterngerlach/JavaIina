@@ -174,7 +174,7 @@ public class MainModel
     
     public boolean isValidUserName(String userName)
     {
-        return userName.chars().allMatch(ch -> Character.isLetter(ch));
+        return userName.chars().allMatch(ch -> Character.isLetterOrDigit(ch));
     }
     
     public boolean isValidUserNameKana(String name)
@@ -199,7 +199,7 @@ public class MainModel
     
     public boolean isValidAddress(String address)
     {
-        return address.chars().allMatch(ch -> Character.isLetterOrDigit(ch));
+        return true;
     }
     
     public boolean isValidPhoneNumber(String phoneNumber)
@@ -210,12 +210,6 @@ public class MainModel
     public Member getMemberInfo(long userId)
     {
         return this.mDBManager.getMemberInfo(userId);
-        /*
-        // Return sample member data for debugging
-        return this.mDummyUserList.stream()
-            .filter(userInfo -> userInfo.id() == userId)
-            .findFirst()
-            .get();*/
     }
     
     public boolean memberExists(String emailAddress, String userPassword)
@@ -227,7 +221,7 @@ public class MainModel
     {
         List<RentalObject> rentalObjectList = this.mDBManager.allRentalObjects();
         Set<String> categorySet = new HashSet<>();
-        rentalObjectList.forEach(ro -> categorySet.add(ro.categoryName()));
+        rentalObjectList.forEach(rentalObject -> categorySet.add(rentalObject.categoryName()));
         return new ArrayList<String>(categorySet);
     }
     
@@ -254,6 +248,6 @@ public class MainModel
     public List<Rental> getRecentlyBorrowedItems(int maxSize)
     {
         return this.mDBManager.getBorrowedItems(this.mLoggedInMember).stream()
-                             .limit(maxSize).collect(Collectors.toList());
+            .limit(maxSize).collect(Collectors.toList());
     }
 }
