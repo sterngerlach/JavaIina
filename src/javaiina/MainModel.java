@@ -6,7 +6,6 @@ package javaiina;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -128,7 +127,8 @@ public class MainModel
         this.mLoggedInMember = null;
     }
     
-    public DBManager getDBManager() {
+    public DBManager getDBManager()
+    {
         return this.mDBManager;
     }
     
@@ -179,7 +179,7 @@ public class MainModel
     
     public boolean isValidUserNameKana(String name)
     {
-        return Pattern.matches("^[ぁ-ゞ]+$", name);
+        return Pattern.matches("^[ぁ-ゞー]+$", name);
     }
     
     public boolean isValidNickName(String nickName)
@@ -243,6 +243,11 @@ public class MainModel
     public List<Rental> getBorrowingItems()
     {
         return this.mDBManager.getBorrowingItems(this.mLoggedInMember);
+    }
+    
+    public List<Reservation> getReservations()
+    {
+        return this.mDBManager.getReservations(this.mLoggedInMember);
     }
     
     public List<Rental> getRecentlyBorrowedItems(int maxSize)

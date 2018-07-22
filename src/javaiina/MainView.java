@@ -49,6 +49,7 @@ public class MainView extends JFrame
     private MainMenuPanel mMainMenuPanel;
     private ItemsPanel mItemsPanel;
     private BorrowingItemsPanel mBorrowingItemsPanel;
+    private ReservingItemsPanel mReservingItemsPanel;
     private MemberInformationPanel mMemberInformationPanel;
     
     private JPanel mPanelStatusBar;
@@ -79,6 +80,11 @@ public class MainView extends JFrame
         return this.mBorrowingItemsPanel;
     }
     
+    public ReservingItemsPanel getReservingItemsPanel()
+    {
+        return this.mReservingItemsPanel;
+    }
+    
     public MemberInformationPanel getMemberInformationPanel()
     {
         return this.mMemberInformationPanel;
@@ -101,6 +107,7 @@ public class MainView extends JFrame
         this.mMainMenuPanel.setModel(this.mModel);
         this.mItemsPanel.setModel(this.mModel);
         this.mBorrowingItemsPanel.setModel(this.mModel);
+        this.mReservingItemsPanel.setModel(this.mModel);
         this.mMemberInformationPanel.setModel(this.mModel);
     }
     
@@ -161,6 +168,9 @@ public class MainView extends JFrame
         /* Borrowing Items Panel */
         this.mBorrowingItemsPanel = new BorrowingItemsPanel();
         
+        /* Reserving Items Panel */
+        this.mReservingItemsPanel = new ReservingItemsPanel();
+        
         // Member Information Panel */
         this.mMemberInformationPanel = new MemberInformationPanel();
         
@@ -206,6 +216,7 @@ public class MainView extends JFrame
         this.mTabbedPaneMain.addTab(this.mMainMenuPanel.getPanelName(), this.mMainMenuPanel);
         this.mTabbedPaneMain.addTab(this.mItemsPanel.getPanelName(), this.mItemsPanel);
         this.mTabbedPaneMain.addTab(this.mBorrowingItemsPanel.getPanelName(), this.mBorrowingItemsPanel);
+        this.mTabbedPaneMain.addTab(this.mReservingItemsPanel.getPanelName(), this.mReservingItemsPanel);
         this.mTabbedPaneMain.addTab(this.mMemberInformationPanel.getPanelName(), this.mMemberInformationPanel);
         this.mTabbedPaneMain.setSelectedComponent(this.mMainMenuPanel);
         this.mPanelToolBar.remove(this.mToolBarMain);
@@ -219,6 +230,11 @@ public class MainView extends JFrame
     public void switchToBorrowingItemsPanel()
     {
         this.mTabbedPaneMain.setSelectedComponent(this.mBorrowingItemsPanel);
+    }
+    
+    public void switchToReservingItemsPanel()
+    {
+        this.mTabbedPaneMain.setSelectedComponent(this.mReservingItemsPanel);
     }
     
     public void switchToMemberInformationPanel()

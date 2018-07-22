@@ -27,6 +27,7 @@ public class MainController
         
         this.mView.getMainMenuPanel().addShowItemsListener(e -> this.onShowItems());
         this.mView.getMainMenuPanel().addShowBorrowingItemsListener(e -> this.onShowBorrowingItems());
+        this.mView.getMainMenuPanel().addShowReservingItemsListener(e -> this.onShowReservingItems());
         this.mView.getMainMenuPanel().addShowMemberInfoListener(e -> this.onShowMemberInfo());
         this.mView.getMainMenuPanel().addLogoutListener(e -> this.onLogout());
         
@@ -313,6 +314,12 @@ public class MainController
         this.mView.switchToBorrowingItemsPanel();
     }
     
+    private void onShowReservingItems()
+    {
+        // Switch to reserving items panel
+        this.mView.switchToReservingItemsPanel();
+    }
+    
     private void onShowMemberInfo()
     {
         // Switch to member information panel
@@ -365,8 +372,7 @@ public class MainController
                     return false;
                 }
                 
-                if (userInput.getBeginDate().isEqual(userInput.getDesiredReturnDate()) ||
-                    userInput.getBeginDate().isAfter(userInput.getDesiredReturnDate())) {
+                if (userInput.getBeginDate().isAfter(userInput.getDesiredReturnDate())) {
                     this.setMessage("Desired return date should be after the begin date.");
                     return false;
                 }
