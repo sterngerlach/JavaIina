@@ -357,73 +357,75 @@ public class DBManager
         return this.mDb.selectRental().size();
     }
     
-    public void saveData() {
+    public void saveData()
+    {
         BufferedWriter bw = null;
+        
         try {
-            
             bw = Files.newBufferedWriter(Paths.get("Rental.csv"), Charset.defaultCharset());
+            
             for (Rental rental : this.mDb.selectRental()) {
                 System.out.println(rental.toString());
-                bw.write(rental.getId() + "," + 
-                        rental.getMember().id() + "," + 
-                        rental.getRentalObject().id() + "," + 
-                        rental.getSizeInfo().id() + "," + 
-                        rental.getBeginDate().toString() + "," + 
-                        rental.getDesiredReturnDate().toString() + "," + 
-                        ((rental.getActualReturnDate() == null) ? "" : rental.getActualReturnDate().toString()) + "," +
-                        rental.getOverduePayment() + System.lineSeparator()
-                        );
+                bw.write(
+                    rental.getId() + "," + 
+                    rental.getMember().id() + "," + 
+                    rental.getRentalObject().id() + "," + 
+                    rental.getSizeInfo().id() + "," + 
+                    rental.getBeginDate().toString() + "," + 
+                    rental.getDesiredReturnDate().toString() + "," + 
+                    rental.getActualReturnDate() == null ? "" : rental.getActualReturnDate().toString() + "," +
+                    rental.getOverduePayment() + System.lineSeparator());
             }
             
             bw.close();
             
             bw = Files.newBufferedWriter(Paths.get("Reservation.csv"), Charset.defaultCharset());
            
-            for ( Reservation res : this.mDb.selectReservation()) {
-                bw.write(res.id() + "," + 
-                        res.member().id() +"," + 
-                        res.rentalObject().id() +"," + 
-                        res.sizeInfo().id() + "," + 
-                        res.reservationDate().toString() + "," + 
-                        res.isDone() + System.lineSeparator()
-                        );
+            for (Reservation res : this.mDb.selectReservation()) {
+                bw.write(
+                    res.id() + "," + 
+                    res.member().id() +"," + 
+                    res.rentalObject().id() +"," + 
+                    res.sizeInfo().id() + "," + 
+                    res.reservationDate().toString() + "," + 
+                    res.isDone() + System.lineSeparator());
             }
+            
             bw.close();
             
             bw = Files.newBufferedWriter(Paths.get("Member.csv"), Charset.defaultCharset());
+            
             for (Member member : this.mDb.mMemberList) {
-                bw.write(member.id() + "," + 
-                        member.firstName() + "," + 
-                        member.secondName() + "," + 
-                        member.firstNameKana() + "," + 
-                        member.secondNameKana() + "," + 
-                        member.nickName() + "," + 
-                        member.birthDate().toString() + "," +
-                        member.registerDate().toString() + "," +
-                        member.gender().toString() + "," + 
-                        member.address() + "," + 
-                        member.postcode() + "," + 
-                        member.phoneNumber() + "," + 
-                        member.emailAddress() + "," + 
-                        member.password() + System.lineSeparator()
-                        );
+                bw.write(
+                    member.id() + "," + 
+                    member.firstName() + "," + 
+                    member.secondName() + "," + 
+                    member.firstNameKana() + "," + 
+                    member.secondNameKana() + "," + 
+                    member.nickName() + "," + 
+                    member.birthDate().toString() + "," +
+                    member.registerDate().toString() + "," +
+                    member.gender().toString() + "," + 
+                    member.address() + "," + 
+                    member.postcode() + "," + 
+                    member.phoneNumber() + "," + 
+                    member.emailAddress() + "," + 
+                    member.password() + System.lineSeparator());
             }
-        
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
                 if (bw != null) {
-                    
                     bw.close();
                 }
             } catch (Exception e){
-                ;
             }
         }
     }
     
-    private void readMember() throws IOException {
+    private void readMember() throws IOException
+    {
         /* read Member.csv */
         List<String> memberLineList = Files.readAllLines(Paths.get("Member.csv"), Charset.defaultCharset());
         
@@ -447,7 +449,8 @@ public class DBManager
         }
     }
 
-    private void readRentalObjectSizeInfo() throws IOException {
+    private void readRentalObjectSizeInfo() throws IOException
+    {
         List<String> sizeInfoLineList = Files.readAllLines(Paths.get("RentalObjectSizeInfo.csv"));
         for(String sizeInfoLine : sizeInfoLineList) {
             String[] valueArray = sizeInfoLine.split(",");
@@ -462,7 +465,8 @@ public class DBManager
         }
     }
     
-    private void readRentalObject() throws IOException {
+    private void readRentalObject() throws IOException
+    {
         List<String> rentalObjectLineList = Files.readAllLines(Paths.get("RentalObject.csv"));
         
         for (String rentalObjectLine : rentalObjectLineList) {
@@ -488,7 +492,8 @@ public class DBManager
         }
     }
     
-    private void readReservation() throws IOException {
+    private void readReservation() throws IOException
+    {
         List<String> reservationLineList = Files.readAllLines(Paths.get("Reservation.csv"));
         for (String reservationLine : reservationLineList) {
             String[] valueArray = reservationLine.split(",");
@@ -509,7 +514,8 @@ public class DBManager
         }
     }
     
-    private void readRental() throws IOException {
+    private void readRental() throws IOException
+    {
         List<String> rentalLineList = Files.readAllLines(Paths.get("Rental.csv"));
         
         for (String rentalLine : rentalLineList) {
@@ -530,14 +536,14 @@ public class DBManager
         }
     }
     
-    public void readData() {
+    public void readData()
+    {
         try {
             this.readMember();
             this.readRentalObjectSizeInfo();
             this.readRentalObject();
             this.readReservation();
             this.readRental();
-            
         } catch (IOException e) {
             e.printStackTrace();
         }
