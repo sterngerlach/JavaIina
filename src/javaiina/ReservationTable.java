@@ -29,7 +29,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public void reservationInsert(Reservation res) throws SQLException
+    public void insert(Reservation res) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -45,7 +45,7 @@ public class ReservationTable
         stmt.close();
     }
 
-    public void reservationDelete(Reservation res) throws SQLException
+    public void delete(Reservation res) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -54,7 +54,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public void reservationUpdate(String columnName, String newValue, String conditionWhere) throws SQLException
+    public void update(String columnName, String newValue, String conditionWhere) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -66,7 +66,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public void reservationUpdate(String columnName, Date newValue, String conditionWhere) throws SQLException
+    public void update(String columnName, Date newValue, String conditionWhere) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -78,7 +78,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public void reservationUpdate(String columnName, long newValue, String conditionWhere) throws SQLException
+    public void update(String columnName, long newValue, String conditionWhere) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -90,7 +90,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public void reservationUpdateMember(Reservation res) throws SQLException
+    public void updateMember(Reservation res) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -102,7 +102,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public void reservationUpdateRentalObject(Reservation res) throws SQLException
+    public void updateRentalObject(Reservation res) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -114,7 +114,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public void reservationUpdateSizeInfo(Reservation res) throws SQLException
+    public void updateSizeInfo(Reservation res) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -126,7 +126,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public void reservationUpdateReservationDate(Reservation res) throws SQLException
+    public void updateReservationDate(Reservation res) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -138,7 +138,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public void reservationUpdateDone(Reservation res) throws SQLException
+    public void updateDone(Reservation res) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -150,7 +150,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public List<Reservation> reservationSelectAll(
+    public List<Reservation> select(
         List<Member> members,
         List<RentalObject> rentalObjects,
         List<RentalObjectSizeInfo> sizeInfos) throws SQLException
