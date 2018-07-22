@@ -105,7 +105,7 @@ public class RegisterMemberView extends DialogBase
         super.initializeComponent();
         
         /* Insets */
-        Insets defaultInsets = new Insets(5, 5, 5, 5);
+        Insets defaultInsets = new Insets(3, 3, 3, 3);
         Insets emptyInsets = new Insets(0, 0, 0, 0);
         Insets rightInsets = new Insets(0, 0, 0, 5);
         Insets leftInsets = new Insets(0, 5, 0, 0);

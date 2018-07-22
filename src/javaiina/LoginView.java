@@ -49,7 +49,7 @@ public class LoginView extends DialogBase
         super.initializeComponent();
         
         /* Insets */
-        Insets defaultInsets = new Insets(5, 5, 5, 5);
+        Insets defaultInsets = new Insets(3, 3, 3, 3);
         Insets emptyInsets = new Insets(0, 0, 0, 0);
         
         /* Header */
