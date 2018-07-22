@@ -233,12 +233,6 @@ public class DBManager
         this.readData();
     }
     
-    @Override
-    public void finalize()
-    {
-        // this.saveData();
-    }
-    
     public int generateMemberId()
     {
         return this.mDb.selectMember().size();
