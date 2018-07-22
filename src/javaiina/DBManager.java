@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,11 @@ public class DBManager {
         
         public List<RentalObject> selectRentalObject() { 
             return this.mRentalObjectList; 
+        }
+        
+        public List<RentalObject> selectRentalObjectWhereId(int id) {
+            return this.mRentalObjectList.stream()
+                    .filter(rentalObject -> rentalObject.id() == id).collect(Collectors.toList());
         }
         
         public List<RentalObject> selectRentalObjectWhereCategory(String categoryName) {
@@ -195,6 +201,11 @@ public class DBManager {
         this.readData();
     }
     
+    @Override
+    public void finalize () {
+        this.saveData();
+    }
+    
     public int generateMemberId() {
         return this.db.selectMember().size();
     }
@@ -282,7 +293,6 @@ public class DBManager {
         }
     }
     
-    
     public List<Reservation> ReservedRentalObjectList(Member member) {
         return this.db.selectReservationWhereMember(member);
     }
@@ -301,7 +311,6 @@ public class DBManager {
         
     }
     
-    
     public int generateRentalId() {
         return this.db.selectRental().size();
     }
@@ -311,8 +320,8 @@ public class DBManager {
         try {
             
             bw = Files.newBufferedWriter(Paths.get("Rental.csv"), Charset.defaultCharset());
-            
-            for (Rental rental : this.db.mRentalList) {
+            for (Rental rental : this.db.selectRental()) {
+                System.out.println(rental.toString());
                 bw.write(rental.getId() + "," + 
                         rental.getMember().id() + "," + 
                         rental.getRentalObject().id() + "," + 
@@ -327,7 +336,7 @@ public class DBManager {
             
             bw = Files.newBufferedWriter(Paths.get("Reservation.csv"), Charset.defaultCharset());
            
-            for ( Reservation res : this.db.mReservationList) {
+            for ( Reservation res : this.db.selectReservation()) {
                 bw.write(res.id() + "," + 
                         res.member().id() +"," + 
                         res.rentalObject().id() +"," + 
@@ -397,9 +406,7 @@ public class DBManager {
 
     private void readRentalObjectSizeInfo() throws IOException {
         List<String> sizeInfoLineList = Files.readAllLines(Paths.get("RentalObjectSizeInfo.csv"));
-        //System.out.println(sizeInfoLineList.size());
         for(String sizeInfoLine : sizeInfoLineList) {
-            //System.out.println(sizeInfoLine);
             String[] valueArray = sizeInfoLine.split(",");
             RentalObjectSizeInfo sizeInfo = new RentalObjectSizeInfo(
                     Integer.valueOf(valueArray[0]), valueArray[1],
@@ -429,8 +436,6 @@ public class DBManager {
             }
             RentalObjectSizeInfo[] availableSizeInfoArray = availableSizeInfoList.toArray(new RentalObjectSizeInfo[availableSizeInfoList.size()]);
             
-            //availableSizeInfoList.forEach(sizeInfo -> System.out.println(sizeInfo.toString()));
-            //System.out.println(availableSizeInfoList.size());
             RentalObject rentalObject = new RentalObject(
                     id, name, categoryName,
                     availableSizeInfoArray, cost
@@ -438,7 +443,48 @@ public class DBManager {
             
             this.db.insertRentalObject(rentalObject);
         }
+    }
+    
+    private void readReservation() throws IOException {
+        List<String> reservationLineList = Files.readAllLines(Paths.get("Reservation.csv"));
+        for (String reservationLine : reservationLineList) {
+            String[] valueArray = reservationLine.split(",");
+            int id = Integer.valueOf(valueArray[0]);
+            Member member = this.db.selectMemberWhereId(Integer.valueOf(valueArray[1])).get(0);
+            
+            RentalObject rentalObject = this.db.selectRentalObjectWhereId(Integer.valueOf(valueArray[2])).get(0);
+            RentalObjectSizeInfo sizeInfo = this.db.selectRentalObjectSizeInfoWhereId(Integer.valueOf(valueArray[3])).get(0);
+            LocalDate reservationDate = LocalDate.parse(valueArray[4], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            boolean done = Boolean.valueOf(valueArray[5]);
+            
+            Reservation reservation = new Reservation(
+                    id, member,
+                    rentalObject, sizeInfo,
+                    reservationDate, done
+                    );
+            this.db.insertReservation(reservation);
+        }
+    }
+    
+    private void readRental() throws IOException {
+        List<String> rentalLineList = Files.readAllLines(Paths.get("Rental.csv"));
         
+        for (String rentalLine : rentalLineList) {
+            String[] valueArray = rentalLine.split(",");
+            int id = Integer.valueOf(valueArray[0]);
+            Member member = this.db.selectMemberWhereId((long)Integer.valueOf(valueArray[1])).get(0);
+            RentalObject rentalObject = this.db.selectRentalObjectWhereId(Integer.valueOf(valueArray[2])).get(0);
+            RentalObjectSizeInfo sizeInfo = this.db.selectRentalObjectSizeInfoWhereId(Integer.valueOf(valueArray[3])).get(0);
+            LocalDate beginDate = LocalDate.parse(valueArray[4], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate desiredReturnDate = LocalDate.parse(valueArray[5], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate actualReturnDate = valueArray[6].equals("") ? null : LocalDate.parse(valueArray[6], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            int overduePayment = Integer.valueOf(valueArray[7]);
+            Rental rental = new Rental(
+                    id, member, rentalObject,
+                    sizeInfo, beginDate, desiredReturnDate,
+                    actualReturnDate, overduePayment);
+            this.db.insertRental(rental);
+        }
     }
     
     public void readData() {
@@ -446,6 +492,8 @@ public class DBManager {
             this.readMember();
             this.readRentalObjectSizeInfo();
             this.readRentalObject();
+            this.readReservation();
+            this.readRental();
             
         } catch (IOException e) {
             e.printStackTrace();
