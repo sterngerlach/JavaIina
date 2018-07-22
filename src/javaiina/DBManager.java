@@ -309,6 +309,14 @@ public class DBManager
         this.mDb.insertReservation(reservation);
     }
     
+    public List<Reservation> getReservations(Member member)
+    {
+        return this.mDb.mReservationList.stream()
+            .filter(reservation -> reservation.member().id() == member.id())
+            .filter(reservation -> reservation.isDone() == false)
+            .collect(Collectors.toList());
+    }
+    
     public boolean processRental(
         Member member, RentalObject rentalObject, RentalObjectSizeInfo sizeInfo,
         LocalDate beginDate, LocalDate desiredDate)
