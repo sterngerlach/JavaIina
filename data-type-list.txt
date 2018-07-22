@@ -1,0 +1,57 @@
+
+----------Reservation----------
+reservationId     : long(bigint)
+memberId          : long(bigint)
+rentalId          : long(bigint)
+reservationDate   : date
+sizeId            : int
+done              : boolean(bit)
+
+----------Rental----------
+rentalId          : long(bigint)
+memberId          : long(bigint)
+rentalObject      : String(varchar)
+sizeId            : int
+beginDate         : date
+desiredReturnDate : date
+actualReturnDate  : date
+overduePayment    : int
+
+----------RentalObject----------
+rentalObjectId    : int
+rentalObjectName  : String(varchar)
+categoryName      : String(varchar)
+cost              : int
+
+----------AvailableSizeInfo----------
+rentalObjectId    : long(bigint)
+sizeId            : int
+
+----------SizeInfo----------
+sizeId            : int
+sizeName          : String(varchar)
+height            : int
+weight            : int
+waistMin          : int
+waistMax          : int
+chestMeasure      : int
+shoulderWidth     : int
+lenSleeve         : int
+inseam            : int
+
+
+----------Member----------
+memberId          : long(bigint)
+firstName         : String(varchar)
+secondName        : String(varchar)
+firstNameKana     : String(varchar)
+secondNameKana    : String(varchar)
+nickName          : String(varchar)
+birthDate         : date
+registerDate      : date
+gender            : String(varchar)
+address           : String(varchar)
+postCode          : String(varchar)
+phoneNumber       : String(varchar)
+emailAddress      : String(varchar)
+
