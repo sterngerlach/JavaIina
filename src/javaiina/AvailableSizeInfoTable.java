@@ -68,7 +68,7 @@ public class AvailableSizeInfoTable
         stmt.close();
     }
 
-    public void updateAvailableSizeInfo(String columnName, long newValue, String conditionWhere) throws SQLException
+    public void update(String columnName, long newValue, String conditionWhere) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
@@ -80,7 +80,7 @@ public class AvailableSizeInfoTable
         stmt.close();
     }
     
-    public List<AvailableSize> availableSizeSelectAll(
+    public List<AvailableSize> select(
         List<RentalObject> rentalObjects, List<RentalObjectSizeInfo> sizeInfos) throws SQLException
     {   
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
