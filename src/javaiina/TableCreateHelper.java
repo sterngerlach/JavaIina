@@ -3,19 +3,36 @@
 
 package javaiina;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class TableCreateMethod{    
-    private TableCreateMethod() throws SQLException, ClassNotFoundException{
-        if(!(tableExist("Member"))) createMemberTable();
-        if(!(tableExist("Rental"))) createRentalTable();
-        if(!(tableExist("Reservation"))) createReservationTable();
-        if(!(tableExist("RentalObject"))) createRentalObjectTable();
-        if(!(tableExist("AvailableSizeInfo"))) createAvailableSizeInfoTable();
-        if(!(tableExist("SizeInfo"))) createSizeInfoTable();
-    }    
+public class TableCreateHelper
+{
+    public TableCreateHelper() throws SQLException, ClassNotFoundException
+    {
+        if (!(checkTableExists("Member")))
+            createMemberTable();
+        
+        if (!(checkTableExists("Rental")))
+            createRentalTable();
+        
+        if (!(checkTableExists("Reservation")))
+            createReservationTable();
+        
+        if (!(checkTableExists("RentalObject")))
+            createRentalObjectTable();
+        
+        if (!(checkTableExists("AvailableSizeInfo")))
+            createAvailableSizeInfoTable();
+        
+        if (!(checkTableExists("SizeInfo")))
+            createSizeInfoTable();
+    }
     
-    private void createMemberTable() throws SQLException,ClassNotFoundException{
+    private void createMemberTable() throws SQLException, ClassNotFoundException
+    {
         String memberTable = 
             "create table Member ("
             + "memberId bigint primary key,"
@@ -31,14 +48,15 @@ public class TableCreateMethod{
             + "postCode varchar(128)"
             + "phoneNumber varchar(128)," 
             + "emailAddress varchar(128),"
-            + ")";        
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+            + ")";
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(memberTable);
         stmt.close();
     }
 
-    private void createRentalTable() throws SQLException, ClassNotFoundException{
+    private void createRentalTable() throws SQLException, ClassNotFoundException
+    {
         String rentalObjectTable = 
             "create table RentalObject ("
             + "rentalId bigint primary key,"
@@ -50,13 +68,14 @@ public class TableCreateMethod{
             + "actualReturnDate date," 
             + "overduePayment int"
             + ")";        
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(rentalObjectTable);
         stmt.close();
     }
 
-    private void createReservationTable() throws SQLException, ClassNotFoundException{
+    private void createReservationTable() throws SQLException, ClassNotFoundException
+    {
         String reservationTable =
             "create table Reservation ("
             + "reservationId bigint primary key"
@@ -65,14 +84,15 @@ public class TableCreateMethod{
             + "reservationDate date,"
             + "sizeId int,"
             + "done bit,"
-            + ")";       
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+            + ")";
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(reservationTable);
         stmt.close();
     }
     
-    private void createRentalObjectTable() throws SQLException, ClassNotFoundException{
+    private void createRentalObjectTable() throws SQLException, ClassNotFoundException
+    {
         String rentalTable =
             "create table RentalObject ("
             + "rentalObjectId int primary key,"
@@ -80,13 +100,14 @@ public class TableCreateMethod{
             + "categoryName varchar(256),"
             + "cost int"
             + ")";
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(rentalTable);
         stmt.close();
     }
 
-    private void createSizeInfoTable() throws SQLException, ClassNotFoundException{
+    private void createSizeInfoTable() throws SQLException, ClassNotFoundException
+    {
         String sizeInfoTable =
             "create table SizeInfo ("
             + "sizeId int primary key,"
@@ -99,37 +120,37 @@ public class TableCreateMethod{
             + "shoulderWidth int,"
             + "lenSleeve int,"
             + "inseam int"
-            + ")";        
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+            + ")";
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(sizeInfoTable);
         stmt.close();
     }
     
-    private void createAvailableSizeInfoTable() throws SQLException, ClassNotFoundException{
+    private void createAvailableSizeInfoTable() throws SQLException, ClassNotFoundException
+    {
         String availableSizeInfoTable =
             "create table AvailableSizeInfo("
             + "rentalObjectId bigint primary key,"
             + "sizeId int"
             + ")";        
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
         stmt.execute(availableSizeInfoTable);
         stmt.close();
    }
     
-   public boolean tableExist (String tableName) throws SQLException, ClassNotFoundException{
-       boolean tExists = false;
-       Connection conn = DatabaseAccess.getInstance().getConnection();
-       try (ResultSet rs = conn.getMetaData().getTables(null, null, tableName, null)){
-           while(rs.next()) {
-               String tName = rs.getString("TABLE_NAME");
-               if (tName != null && tName.equals(tableName)){
-                   tExists = true;
-                   break;
-               }
-           }
+   public boolean checkTableExists(String tableName) throws SQLException, ClassNotFoundException
+   {
+       Connection conn = DatabaseAccessManager.getInstance().getConnection();
+       ResultSet resultSet = conn.getMetaData().getTables(null, null, tableName, null);
+       
+       while (resultSet.next()) {
+           String name = resultSet.getString("TABLE_NAME");
+           if (name != null && name.equals(tableName))
+               return true;
        }
-       return tExists;
+       
+       return false;
    }
 }
