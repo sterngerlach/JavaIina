@@ -10,137 +10,145 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.ArrayList;
 
-public class RentalObjectTableMethod {
-    private RentalObjectTableMethod() throws SQLException, ClassNotFoundException{
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+public class RentalObjectTable
+{
+    public RentalObjectTable() throws SQLException
+    {
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
-        if(tableExist("RentalObject"))
-            stmt.executeUpdate("insert into RentalObject values" 
-                + "(0, 'スーツレンタル', 'スーツ', 2000)"
-                + ",(1, '制服レンタル', 'スカート', 4000)"
-                + ",(2, 'コスプレレンタル', 'コスプレ衣装', 10000)"
-            );
-        stmt.close();
-    }
-    
-    public void rentalObjectInsert(RentalObject ro) throws SQLException{
-        Connection conn = DatabaseAccess.getInstance().getConnection();
-        Statement stmt = conn.createStatement();
-        stmt.executeUpdate("insert into RentalObject values("
-            + ro.id() + ","
-            + "'" + ro.name() + "',"
-            + "'" + ro.categoryName() + "',"
-            + ro.cost() + ","
-            + ")"
-        );
+        
+        if (TableCreateHelper.checkTableExists("RentalObject"))
+            stmt.executeUpdate("insert into RentalObject values" +
+                "(0, 'スーツレンタル', 'スーツ', 2000)" +
+                ",(1, '制服レンタル', 'スカート', 4000)" +
+                ",(2, 'コスプレレンタル', 'コスプレ衣装', 10000)");
+        
         stmt.close();
     }
 
-    public void rentalObjectDelete(RentalObject ro) throws SQLException{
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+    public void insert(RentalObject ro) throws SQLException
+    {
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        
+        stmt.executeUpdate("insert into RentalObject values(" +
+            ro.id() + "," +
+            "'" + ro.name() + "'," +
+            "'" + ro.categoryName() + "'," +
+            ro.cost() + "," + ")");
+        stmt.close();
+    }
+
+    public void delete(RentalObject ro) throws SQLException
+    {
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        
         stmt.executeUpdate("delete from RentalObject where rentalObjectId = " + ro.id());
         stmt.close();
     }
-    public void rentalObjectUpdate(String column, String updateData, String condition) throws SQLException{
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+    
+    public void update(String columnName, String newValue, String conditionWhere) throws SQLException
+    {
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        
         stmt.executeUpdate(
-            "update RentalObject "
-            + "set " + column + " = " + "'" + updateData + "' "
-            + condition
-        );
+            "update RentalObject " +
+                "set " + columnName + " = " + "'" + newValue + "' " +
+                "where " + conditionWhere);
         stmt.close();
     }
-    
-    public void rentalObjectUpdate(String column, int updateData, String condition) throws SQLException {
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+
+    public void update(String columnName, int newValue, String conditionWhere) throws SQLException
+    {
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        
         stmt.executeUpdate(
-            "update RentalObject "
-            + "set " + column + " = " + updateData + " "
-            + condition
-        );
+            "update RentalObject " +
+                "set " + columnName + " = " + newValue + " " +
+                "where " + conditionWhere);
         stmt.close();
     }
-    
-    public void rentalObjectUpdate(String column, long updateData, String condition) throws SQLException{
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+
+    public void update(String columnName, long newValue, String conditionWhere) throws SQLException
+    {
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        
         stmt.executeUpdate(
-            "update RentalObject "
-            +"set " + column + " = " + updateData + " " 
-            + condition
-        );
+            "update RentalObject " +
+                "set " + columnName + " = " + newValue + " " +
+                "where " + conditionWhere);
         stmt.close();
     }
-    
-    public void rentalObjectUpdateRentalObjectName(RentalObject ro) throws SQLException{
-        Connection conn = DatabaseAccess.getInstance().getConnetion();
+
+    public void updateName(RentalObject ro) throws SQLException
+    {
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        
         stmt.executeUpdate(
-            "update RentalObject "
-            + "set rentalObjectName = '" + ro.name() + "' " 
-            + "where rentalObjectId = " + ro.id()
-        ); 
+            "update RentalObject " +
+                "set rentalObjectName = '" + ro.name() + "' " +
+                "where rentalObjectId = " + ro.id()); 
         stmt.close();
     }
-    
-    public void rentalObjectUpdateCategoryName(RentalObject ro) throws SQLException{
-        Connection conn = DatabaseAccess.getInstance().getConnection();
+
+    public void updateCategoryName(RentalObject ro) throws SQLException
+    {
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        
         stmt.executeUpdate(
-            "update RentalObject "
-            + "set categoryName = " + ro.categoryName() + " "  
-            + "where rentalObjectId = " + ro.id()
-         ); 
+            "update RentalObject " +
+                "set categoryName = '" + ro.categoryName() + "' "  +
+                "where rentalObjectId = " + ro.id());
         stmt.close();
     }
-    
-    public void rentalObjectUpdateCost(RentalObject ro) throws SQLException{
-        Connection conn = DatabaseAccess.getInstance().getConnetion();
+
+    public void updateCost(RentalObject ro) throws SQLException
+    {
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
+        
         stmt.executeUpdate(
-            "update RentalObject"
-            +" set cost = " + ro.cost() + " "
-            + "where rentalObjectId = " + ro.id()
-         ); 
+            "update RentalObject " +
+                "set cost = " + ro.cost() + " " +
+                "where rentalObjectId = " + ro.id()); 
         stmt.close();
     }
-    
-    public List<RentalObject> rentalObjectSelectAll(RentalObject ro) throws SQLException{
+
+    public List<RentalObject> select(
+        List<AvailableSize> availableSizes,
+        List<RentalObjectSizeInfo> sizeInfos) throws SQLException
+    {
+        Connection conn = DatabaseAccessManager.getInstance().getConnection();
+        Statement stmt = conn.createStatement();
+        
+        ResultSet resultSet = stmt.executeQuery("select * from RentalObject");
         List<RentalObject> resultList = new ArrayList<RentalObject>();
-        Connection conn = DatabaseAccess.getInstance().getConnection();
-        Statement stmt = conn.createStatement();
-        ResultSet rosiRs = stmt.executeQuery("select s.* from SizeInfo s, AvailableSizeinfo a where a.rentalObjectId = " + ro.id());
-        ResultSet rs = stmt.executeQuery("select * from RentalObject where rentalObjectId = " + ro.id());        
-        RentalObjectSizeInfo[] rosi;
         
-        for (int i = 0; rosiRs.next(); i++)
-            rosi[i] = new RentalObjectSizeInfo(
-                rs.getLong("sizeId"),
-                rs.getString("sizeName"),
-                rs.getInt("height"),
-                rs.getInt("weight"),
-                rs.getInt("waistMin"),
-                rs.getInt("waistMax"),
-                rs.getInt("chestWidth"),
-                rs.getInt("shoulderLength"),
-                rs.getInt("sleeveLength"),
-                rs.getInt("inseam")
-            );
-        
-        while(rs.next()) {
+        while (resultSet.next()) {
+            long rentalObjectId = resultSet.getLong("rentalObjectId");
+            
+            RentalObjectSizeInfo[] foundAvailableSizes = availableSizes.stream()
+                .filter(availableSize -> availableSize.getRentalObject().id() == rentalObjectId)
+                .map(availableSize -> availableSize.getSizeInfo())
+                .toArray(RentalObjectSizeInfo[]::new);
+                
             resultList.add(new RentalObject(
-                rs.getLong("rentalObjectId"),
-                rs.getString("rentalObjectName"),
-                rs.getString("categoryName"),
-                rosi,
-                rs.getInt("cost"))
-            );
+                rentalObjectId,
+                resultSet.getString("rentalObjectName"),
+                resultSet.getString("categoryName"),
+                foundAvailableSizes,
+                resultSet.getInt("cost")));
         }
-        rs.close();
+        
+        resultSet.close();
         stmt.close();
+        
         return resultList;
     }
 }
