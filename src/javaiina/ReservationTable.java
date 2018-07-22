@@ -4,10 +4,10 @@
 package javaiina;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -66,7 +66,7 @@ public class ReservationTable
         stmt.close();
     }
     
-    public void update(String columnName, Date newValue, String conditionWhere) throws SQLException
+    public void update(String columnName, LocalDate newValue, String conditionWhere) throws SQLException
     {
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
