@@ -4,3 +4,8 @@
 
 # Compiled class file
 *.class
+
+# Generated files
+Member.csv
+Rental.csv
+Reservation.csv
