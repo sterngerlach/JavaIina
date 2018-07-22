@@ -48,6 +48,7 @@ public class TableCreateHelper
                 + "postCode varchar(128)"
                 + "phoneNumber varchar(128)," 
                 + "emailAddress varchar(128),"
+                + "password varchar(128)"
                 + ")";
         Connection conn = DatabaseAccessManager.getInstance().getConnection();
         Statement stmt = conn.createStatement();
