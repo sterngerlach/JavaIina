@@ -1,6 +1,43 @@
 # JavaIina
 プログラミング第2同演習 最終課題
 
+## 動作環境
+Javaのバージョン8以降であればコンパイルすることが可能です。以下の環境で動作確認済みです。
+
+- Java SE Development Kit 8, Update 162 (JDK 8u162), CentOS 6.9
+- Java SE Development Kit 10.0.1 (JDK 10.0.1), Windows 10
+
+## 起動方法
+### コマンドライン
+コマンドライン(Linux)での起動方法を以下に示します。初回起動時には`Member.csv`が作成されていないため`java.nio.file.NoSuchFileException`が発生しますが、気にせずそのまま実行してください。
+
+```
+$ wget https://github.com/sterngerlach/JavaIina/archive/v1.0.zip
+$ unzip v1.0.zip
+$ cd JavaIina-1.0
+$ mkdir bin
+$ javac -d bin ./src/javaiina/*.java
+$ java -cp "bin:lib/derby" javaiina.App
+```
+
+### Eclipse
+Eclipseでプロジェクトをビルドする場合は以下のように操作します。
+
+1. 以下のコマンドを実行します。
+```
+$ wget https://github.com/sterngerlach/JavaIina/archive/v1.0.zip
+$ unzip v1.0.zip
+```
+
+2. Eclipseを起動します。
+3. `File`メニューから`Open Projects from File System...`を選択して`Import Projects from File System or Archive`というダイアログを表示します。`Import source: `の部分に、上記のコマンドにより作成されたディレクトリ`JavaIina-1.0`への絶対パスを指定して`Finish`ボタンを押すと、プロジェクトをEclipseで読み込むことができます。
+4. プロジェクトはJava SE Development Kit 10を使用する設定になっていますが、コンピュータによってはJava 10がインストールされていない場合があります。`The project cannot be built until build path errors are resolved`と`Unbound classpath container: 'JRE System Library [JavaSE-10]' in project 'JavaIina'`というエラーが表示される場合は、Javaのビルドパスを変更する必要があります。
+
+    1. `Package Explorer`上で`JavaIina`を選択し、`Project`メニューから`Properties`を選択してプロジェクトの設定画面を開きます。続いて画面左側から`Java Build Path`を選択し、画面上部の`Libraries`タブをクリックします。画面右側の`Add Library...`ボタンをクリックしてダイアログを開き、`JRE System Library`を選択して`Next`を押します。`System library`から適切なライブラリ(例えば`Workspace default JRE`など)を選択して`Finish`を押します。`JRE System Library [JavaSE-10] (unbound)`を一覧から選択して、画面右側の`Remove`ボタンをクリックします。
+    2. 画面上部の`Order and Export`タブをクリックして先ほど追加したJDKのライブラリを選択し、チェックを入れ、右側の`Top`ボタンを押して最上部に移動させます。最後に`Apply and Close`を押してプロパティ画面を閉じます。これでプロジェクトが使用するJavaのバージョンを変更することができます。
+
+5. `Project`メニューから`Properties`を選択してプロジェクトの設定画面を開きます。続いて画面左側から`Java Compiler`を選択し、`Compiler compliance level: `を1.8以降に設定します。そして`Use default compliance settings`にチェックを入れ、`Apply and Close`ボタンを押してプロパティ画面を閉じます。これでプロジェクトがビルドできる状態になります。
+
 ## 備考
 C#いいな!
 
