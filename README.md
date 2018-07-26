@@ -12,9 +12,9 @@ Javaのバージョン8以降であればコンパイルすることが可能で
 コマンドライン(Linux)での起動方法を以下に示します。初回起動時には`Member.csv`が作成されていないため`java.nio.file.NoSuchFileException`が発生しますが、気にせずそのまま実行してください。
 
 ```
-$ wget https://github.com/sterngerlach/JavaIina/archive/v1.0.zip
-$ unzip v1.0.zip
-$ cd JavaIina-1.0
+$ wget https://github.com/sterngerlach/JavaIina/archive/v1.01.zip
+$ unzip v1.01.zip
+$ cd JavaIina-1.01
 $ mkdir bin
 $ javac -d bin ./src/javaiina/*.java
 $ java -cp "bin:lib/derby" javaiina.App
@@ -25,12 +25,12 @@ Eclipseでプロジェクトをビルドする場合は以下のように操作�
 
 1. 以下のコマンドを実行します。
 ```
-$ wget https://github.com/sterngerlach/JavaIina/archive/v1.0.zip
-$ unzip v1.0.zip
+$ wget https://github.com/sterngerlach/JavaIina/archive/v1.01.zip
+$ unzip v1.01.zip
 ```
 
 2. Eclipseを起動します。
-3. `File`メニューから`Open Projects from File System...`を選択して`Import Projects from File System or Archive`というダイアログを表示します。`Import source: `の部分に、上記のコマンドにより作成されたディレクトリ`JavaIina-1.0`への絶対パスを指定して`Finish`ボタンを押すと、プロジェクトをEclipseで読み込むことができます。
+3. `File`メニューから`Open Projects from File System...`を選択して`Import Projects from File System or Archive`というダイアログを表示します。`Import source: `の部分に、上記のコマンドにより作成されたディレクトリ`JavaIina-1.01`への絶対パスを指定して`Finish`ボタンを押すと、プロジェクトをEclipseで読み込むことができます。
 4. プロジェクトはJava SE Development Kit 10を使用する設定になっていますが、コンピュータによってはJava 10がインストールされていない場合があります。`The project cannot be built until build path errors are resolved`と`Unbound classpath container: 'JRE System Library [JavaSE-10]' in project 'JavaIina'`というエラーが表示される場合は、Javaのビルドパスを変更する必要があります。
 
     1. `Package Explorer`上で`JavaIina`を選択し、`Project`メニューから`Properties`を選択してプロジェクトの設定画面を開きます。続いて画面左側から`Java Build Path`を選択し、画面上部の`Libraries`タブをクリックします。画面右側の`Add Library...`ボタンをクリックしてダイアログを開き、`JRE System Library`を選択して`Next`を押します。`System library`から適切なライブラリ(例えば`Workspace default JRE`など)を選択して`Finish`を押します。`JRE System Library [JavaSE-10] (unbound)`を一覧から選択して、画面右側の`Remove`ボタンをクリックします。
