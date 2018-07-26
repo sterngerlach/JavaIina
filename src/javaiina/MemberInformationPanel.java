@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import javaiina.RentalListViewRenderer.RenderMode;
 
@@ -157,6 +158,10 @@ public class MemberInformationPanel extends PanelBase
         this.addComponentLeft(layoutConstraints, 2, 0, defaultInsets, this.mLabelRecentlyBorrowedItems);
         
         this.mListViewRecentlyBorrowedItems = new JList<>();
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(this.mListViewRecentlyBorrowedItems);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.mRecentlyBorrowedItemsModel = new DefaultListModel<>();
         this.mListViewRecentlyBorrowedItems.setModel(this.mRecentlyBorrowedItemsModel);
         this.mListViewRecentlyBorrowedItems.setCellRenderer(
@@ -165,7 +170,7 @@ public class MemberInformationPanel extends PanelBase
         layoutConstraints.gridheight = 13;
         this.setLayoutConstraints(
             layoutConstraints, 2, 1, 1.0, 1.0, defaultInsets, GridBagConstraints.BOTH);
-        this.mPanelCenter.add(this.mListViewRecentlyBorrowedItems, layoutConstraints);
+        this.mPanelCenter.add(scrollPane, layoutConstraints);
     }
     
     @Override

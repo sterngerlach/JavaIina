@@ -150,10 +150,14 @@ public class ItemsPanel extends PanelBase
         
         /* Items ListView */
         this.mListViewItems = new JList<>();
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(this.mListViewItems);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.mListViewItemsModel = new DefaultListModel<>();
         this.mListViewItems.setModel(this.mListViewItemsModel);
         this.mListViewItems.setCellRenderer(new ItemsListViewRenderer());
-        this.mSplitPane.setRightComponent(this.mListViewItems);
+        this.mSplitPane.setRightComponent(scrollPane);
         
         /* Bottom Panel */
         this.mBottomPanel = new JPanel();

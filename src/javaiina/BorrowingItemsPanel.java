@@ -15,6 +15,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import javaiina.RentalListViewRenderer.RenderMode;
@@ -63,13 +64,17 @@ public class BorrowingItemsPanel extends PanelBase
         
         /* Items ListView */
         this.mListViewBorrowingItems = new JList<>();
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(this.mListViewBorrowingItems);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.mListViewBorrowingItemsModel = new DefaultListModel<>();
         this.mListViewBorrowingItems.setModel(this.mListViewBorrowingItemsModel);
         this.mListViewBorrowingItems.setCellRenderer(
             new RentalListViewRenderer(RenderMode.BorrowingItems));
         this.setLayoutConstraints(
             layoutConstraints, 0, 0, 1.0, 1.0, emptyInsets, GridBagConstraints.BOTH);
-        this.mPanelCenter.add(this.mListViewBorrowingItems, layoutConstraints);
+        this.mPanelCenter.add(scrollPane, layoutConstraints);
         
         /* Bottom Panel */
         this.mBottomPanel = new JPanel();

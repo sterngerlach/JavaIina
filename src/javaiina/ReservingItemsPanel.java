@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 public class ReservingItemsPanel extends PanelBase
 {
@@ -45,10 +46,14 @@ public class ReservingItemsPanel extends PanelBase
         
         /* Reservations ListView */
         this.mListViewReservingItems = new JList<>();
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(this.mListViewReservingItems);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.mListViewReservingItemsModel = new DefaultListModel<>();
         this.mListViewReservingItems.setModel(this.mListViewReservingItemsModel);
         this.mListViewReservingItems.setCellRenderer(new ReservationsListViewRenderer());
-        this.mPanelCenter.add(this.mListViewReservingItems, BorderLayout.CENTER);
+        this.mPanelCenter.add(scrollPane, BorderLayout.CENTER);
     }
     
     @Override
